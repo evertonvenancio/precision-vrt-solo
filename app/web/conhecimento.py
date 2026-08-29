@@ -68,10 +68,3 @@ async def bibliografia_page(request: Request, db: Session = Depends(get_db)):
             "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao.</p></div>"
         )
 
-
-@router.get("/nematoides")
-async def nematoides_page(request: Request, db: Session = Depends(get_db)):
-    return HTMLResponse(
-        "<div class='p-8'><h1 class='text-2xl font-bold mb-4'>Nematoides</h1>"
-        "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao. Aguarde as proximas atualizacoes.</p></div>"
-    )

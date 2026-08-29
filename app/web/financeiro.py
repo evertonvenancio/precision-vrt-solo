@@ -34,8 +34,29 @@ async def novo_orcamento_page(request: Request, db: Session = Depends(get_db)):
 
 @router.post("/financeiro/novo-orcamento")
 async def salvar_orcamento(request: Request, db: Session = Depends(get_db)):
-    service = FinanceiroService(db)
-    return service.salvar_orcamento_stub()
+    form_data = await request.form()
+    dados = dict(form_data)
+    cliente_id = dados.get("cliente_id")
+
+    # Converter valores numéricos
+    try:
+        dados["valor_total_bruto"] = float(dados.get("valor_total_bruto", 0))
+    except ValueError:
+        dados["valor_total_bruto"] = 0.0
+
+    try:
+        dados["desconto_percentual"] = float(dados.get("desconto_percentual", 0))
+    except ValueError:
+        dados["desconto_percentual"] = 0.0
+
+    service = FinanceiroService(db, user_data={"tenant_id": "default", "permissions": ["financeiro:write"], "user_id": 1})
+    resultado = service.salvar_orcamento(cliente_id, dados)
+
+    if resultado.get("success"):
+        return RedirectResponse(url="/financeiro", status_code=303)
+    else:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail=resultado.get("detail", "Erro ao salvar orçamento"))
 
 
 @router.get("/financeiro/caixa")

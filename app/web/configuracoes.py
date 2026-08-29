@@ -79,14 +79,6 @@ async def salvar_configuracoes(
     return RedirectResponse(url="/configuracoes", status_code=303)
 
 
-@router.get("/nematoides")
-async def nematoides_page(request: Request, db: Session = Depends(get_db)):
-    return HTMLResponse(
-        "<div class='p-8'><h1 class='text-2xl font-bold mb-4'>Nematoides</h1>"
-        "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao. Aguarde as proximas atualizacoes.</p></div>"
-    )
-
-
 @router.get("/api/configuracoes/clima")
 async def api_configuracoes_clima(request: Request):
     """
@@ -95,7 +87,7 @@ async def api_configuracoes_clima(request: Request):
     # Buscar cidade padrão do banco (tabela configuracoes ou similar)
     from db.database import SessionLocal
     db = SessionLocal()
-    
+
     try:
         from sqlalchemy import text
         # Buscar configuração de cidade
@@ -104,7 +96,7 @@ async def api_configuracoes_clima(request: Request):
         )
         cidade_config = result.fetchone()
         cidade = cidade_config[0] if cidade_config else "Itapetininga/SP"
-        
+
         # Se houver serviço de clima funcional no projeto, usá-lo
         clima_data = None
         try:
@@ -115,22 +107,22 @@ async def api_configuracoes_clima(request: Request):
         except Exception:
             # Se não houver serviço, usar fallback
             pass
-        
+
         # Se não encontrou clima via serviço, retorna null
         temperatura = None
         if clima_data and 'temp_min' in clima_data:
             temperatura = clima_data.get('temp_min')
-        
+
         return {
             "cidade": cidade,
             "temperatura": temperatura
         }
-        
+
     except Exception as e:
         print(f"Erro ao buscar configurações de clima: {e}")
         # Fallback caso erro
         return {
-            "cidade": "Itapetininga/SP", 
+            "cidade": "Itapetininga/SP",
             "temperatura": None
         }
     finally:
