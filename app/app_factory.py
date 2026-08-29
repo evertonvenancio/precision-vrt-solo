@@ -57,14 +57,9 @@ def create_app() -> FastAPI:
     # Registrar startup
     registrar_startup(app)
     print("[OK] Startup registered")
-    
+
     # Adicionar endpoints básicos
     _include_basic_endpoints(app)
-
-    # Incluir stubs de rotas
-    from app.web.stubs import router as stubs_router
-    app.include_router(stubs_router)
-    print("[OK] Stubs router included")
 
     print("[OK] API setup complete")
     print("[SERVER] Server ready to start")
@@ -141,6 +136,21 @@ def _include_web_routers(app: FastAPI) -> None:
     from app.web.compactacao import router as compactacao_router
     app.include_router(compactacao_router, prefix="/web/compactacao", tags=["web-compactacao"])
     print("[OK] Compactacao router included")
+
+    # Carregar fertirrigacao router
+    from app.web.fertirrigacao import router as fertirrigacao_router
+    app.include_router(fertirrigacao_router, prefix="/web/fertirrigacao", tags=["web-fertirrigacao"])
+    print("[OK] Fertirrigacao router included")
+
+    # Carregar sensoriamento router
+    from app.web.sensoriamento import router as sensoriamento_router
+    app.include_router(sensoriamento_router, prefix="/web/sensoriamento", tags=["web-sensoriamento"])
+    print("[OK] Sensoriamento router included")
+
+    # Carregar monitoramento router
+    from app.web.monitoramento import router as monitoramento_router
+    app.include_router(monitoramento_router, prefix="/web/monitoramento", tags=["web-monitoramento"])
+    print("[OK] Monitoramento router included")
 
     # Carregar financeiro router
     from app.web.financeiro import router as financeiro_router

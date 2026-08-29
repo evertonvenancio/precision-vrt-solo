@@ -1,12 +1,12 @@
 """
 Precision VRT Solo - Rotas do Módulo Conhecimento
-(Culturas, Metodologias, Bibliografia, Nematoides)
+(Culturas, Metodologias, Bibliografia)
 
 Responsabilidade exclusiva: receber requisição → chamar service → retornar response.
 Zero consulta ao banco. Zero regra de negócio.
 """
 from fastapi import APIRouter, Request, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -18,53 +18,53 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 
+# === Rotas canônicas (/base-tecnica/*) ===
+
 @router.get("/base-tecnica/culturas")
-async def culturas_page(request: Request, db: Session = Depends(get_db)):
+async def culturas_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
-    try:
-        return templates.TemplateResponse(
-            request=request,
-            name="base_tecnica.html",
-            context={"titulo_pagina": "Culturas", "permissoes": permissoes}
-        )
-    except:
-        return HTMLResponse(
-            "<div class='p-8'><h1 class='text-2xl font-bold mb-4'>Culturas</h1>"
-            "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao.</p></div>"
-        )
+    return templates.TemplateResponse(
+        request=request,
+        name="base_tecnica.html",
+        context={"titulo_pagina": "Culturas", "permissoes": permissoes}
+    )
 
 
 @router.get("/base-tecnica/metodologias")
-async def metodologias_page(request: Request, db: Session = Depends(get_db)):
+async def metodologias_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
-    try:
-        return templates.TemplateResponse(
-            request=request,
-            name="base_tecnica.html",
-            context={"titulo_pagina": "Metodologias e Formulas", "permissoes": permissoes}
-        )
-    except:
-        return HTMLResponse(
-            "<div class='p-8'><h1 class='text-2xl font-bold mb-4'>Metodologias e Formulas</h1>"
-            "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao.</p></div>"
-        )
+    return templates.TemplateResponse(
+        request=request,
+        name="base_tecnica.html",
+        context={"titulo_pagina": "Metodologias e Fórmulas", "permissoes": permissoes}
+    )
 
 
 @router.get("/base-tecnica/bibliografia")
-async def bibliografia_page(request: Request, db: Session = Depends(get_db)):
+async def bibliografia_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
-    try:
-        return templates.TemplateResponse(
-            request=request,
-            name="base_tecnica.html",
-            context={"titulo_pagina": "Bibliografia e Legislacao", "permissoes": permissoes}
-        )
-    except:
-        return HTMLResponse(
-            "<div class='p-8'><h1 class='text-2xl font-bold mb-4'>Bibliografia e Legislacao</h1>"
-            "<p class='text-gray-500 dark:text-gray-400'>Modulo em construcao.</p></div>"
-        )
+    return templates.TemplateResponse(
+        request=request,
+        name="base_tecnica.html",
+        context={"titulo_pagina": "Bibliografia e Legislação", "permissoes": permissoes}
+    )
 
+
+# === Rotas legadas compatíveis com sidebar (/culturas, /metodologias, /bibliografia) ===
+
+@router.get("/culturas")
+async def culturas_page(request: Request, db: Session = Depends(get_db)):
+    return RedirectResponse(url="/web/conhecimento/base-tecnica/culturas", status_code=302)
+
+
+@router.get("/metodologias")
+async def metodologias_page(request: Request, db: Session = Depends(get_db)):
+    return RedirectResponse(url="/web/conhecimento/base-tecnica/metodologias", status_code=302)
+
+
+@router.get("/bibliografia")
+async def bibliografia_page(request: Request, db: Session = Depends(get_db)):
+    return RedirectResponse(url="/web/conhecimento/base-tecnica/bibliografia", status_code=302)

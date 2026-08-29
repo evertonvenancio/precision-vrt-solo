@@ -194,9 +194,9 @@ SIDEBAR_MENU_STRUCTURE = [
     {
         "group": "CONHECIMENTO TÉCNICO",
         "items": [
-            {"key": "culturas", "label": "Culturas", "icon": "leaf", "perm": "culturas:read", "url": "/web/culturas"},
-            {"key": "metodologias", "label": "Metodologias", "icon": "book-open", "perm": "metodologias:read", "url": "/web/metodologias"},
-            {"key": "bibliografia", "label": "Bibliografia", "icon": "book", "perm": "bibliografia:read", "url": "/web/bibliografia"},
+            {"key": "culturas", "label": "Culturas", "icon": "leaf", "perm": "culturas:read", "url": "/web/conhecimento/base-tecnica/culturas"},
+            {"key": "metodologias", "label": "Metodologias", "icon": "book-open", "perm": "metodologias:read", "url": "/web/conhecimento/base-tecnica/metodologias"},
+            {"key": "bibliografia", "label": "Bibliografia", "icon": "book", "perm": "bibliografia:read", "url": "/web/conhecimento/base-tecnica/bibliografia"},
         ]
     },
     {
