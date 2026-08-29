@@ -1,0 +1,31 @@
+{
+  "status": "FAILED",
+  "passed": [
+    "Template existe: app/templates/dashboard.html",
+    "Template existe: app/templates/base.html",
+    "Template existe: app/components/card.html",
+    "Template existe: app/components/button.html",
+    "Template existe: app/components/table.html",
+    "Template existe: app/components/widget-clientes.html",
+    "Template existe: app/components/widget-fazendas.html",
+    "Template existe: app/components/widget-recebimentos.html",
+    "Template inclui: components/card.html",
+    "Template inclui: components/button.html",
+    "Template inclui: components/table.html",
+    "Template inclui: components/widget-clientes.html",
+    "Template inclui: components/widget-fazendas.html",
+    "Template inclui: components/widget-recebimentos.html",
+    "Dashboard tem Alpine.js",
+    "Dashboard tem Tailwind CSS"
+  ],
+  "failed": [
+    "N\u00e3o foi poss\u00edvel conectar ao servidor",
+    "Servidor n\u00e3o dispon\u00edvel para teste de endpoint",
+    "Dashboard config n\u00e3o dispon\u00edvel para teste de widgets"
+  ],
+  "errors": [],
+  "tests": {
+    "server_status": "FAILED",
+    "dashboard_config": "FAILED"
+  }
+}

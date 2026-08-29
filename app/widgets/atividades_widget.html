@@ -1,0 +1,207 @@
+<!-- Widget: Atividades Widget -->
+<div x-data="widgetManager('atividades_widget')" 
+     class="widget"
+     :class="[
+         'p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+         'transition-all duration-300 ease-in-out',
+         'transform hover:scale-[1.02]',
+         'opacity-50': !hasPermission,
+         'cursor-not-allowed': !hasPermission
+     ]">
+    
+    <!-- Header do Widget -->
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center" 
+                 :style="'background: linear-gradient(135deg, #' + widgetColor + ' 0%, #' + widgetColorDark + ' 100%)'">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-text="widgetIcon"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="widgetTitle"></h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400" x-text="widgetDescription"></p>
+            </div>
+        </div>
+        
+        <!-- Widget Actions -->
+        <div class="flex items-center space-x-2">
+            <!-- Minimize/Maximize -->
+            <button @click="minimized = !minimized" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path x-show="!minimized" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    <path x-show="minimized" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                </svg>
+            </button>
+            
+            <!-- Remove Widget -->
+            <button @click="removeWidget()" class="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Widget Content -->
+    <div x-show="!minimized" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+        
+        <!-- Loading State -->
+        <div x-show="state === 'loading'" class="py-8 text-center">
+            <div class="inline-flex items-center">
+                <svg class="animate-spin h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-3 text-secondary">Carregando...</span>
+            </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div x-show="state === 'empty'" class="py-8 text-center">
+            <div class="text-gray-400 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2" x-text="emptyTitle"></h4>
+            <p class="text-gray-500 dark:text-gray-400" x-text="emptyDescription"></p>
+        </div>
+        
+        <!-- Error State -->
+        <div x-show="state === 'error'" class="py-8 text-center">
+            <div class="text-red-400 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h4 class="text-lg font-medium text-red-900 dark:text-red-100 mb-2">Erro ao carregar</h4>
+            <p class="text-red-600 dark:text-red-400" x-text="errorMessage"></p>
+        </div>
+        
+        <!-- No Permission State -->
+        <div x-show="state === 'no-permission'" class="py-8 text-center">
+            <div class="text-yellow-400 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h4 class="text-lg font-medium text-yellow-900 dark:text-yellow-100 mb-2">Sem permissão</h4>
+            <p class="text-yellow-600 dark:text-yellow-400" x-text="noPermissionMessage"></p>
+        </div>
+        
+        <!-- Loaded Content -->
+        <div x-show="state === 'loaded'">
+            <!-- Widget Specific Content -->
+            <div class="widget-content">
+                <!-- Placeholder para conteúdo específico do widget -->
+                <div class="text-center py-8">
+                    <p class="text-gray-500 dark:text-gray-400">Conteúdo do widget será carregado via API</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Minimized State -->
+    <div x-show="minimized" class="text-center py-2">
+        <p class="text-sm text-gray-500 dark:text-gray-400" x-text="widgetTitle"></p>
+    </div>
+</div>
+
+<script>
+function widgetManager(widgetId) {
+    return {
+        // Widget Configuration
+        widgetId: 'atividades_widget',
+        widgetTitle: 'Widget Title',
+        widgetDescription: 'Widget description',
+        widgetIcon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+        widgetColor: '3b82f6',
+        widgetColorDark: '1e40af',
+        
+        // Widget State
+        state: 'loading', // loading, loaded, empty, error, no-permission
+        minimized: false,
+        hasPermission: true,
+        
+        // Messages
+        emptyTitle: 'Sem dados',
+        emptyDescription: 'Não há dados disponíveis no momento.',
+        errorMessage: 'Não foi possível carregar este indicador.',
+        noPermissionMessage: 'Você não possui permissão para visualizar este indicador.',
+        
+        // Widget Methods
+        init() {
+            // Initialize widget
+            this.loadWidget();
+        },
+        
+        async loadWidget() {
+            try {
+                this.state = 'loading';
+                
+                // Check permissions
+                if (!await this.checkPermissions()) {
+                    this.state = 'no-permission';
+                    return;
+                }
+                
+                // Load data from backend
+                const data = await this.fetchData();
+                
+                if (data && data.length > 0) {
+                    this.state = 'loaded';
+                    this.widgetData = data;
+                } else {
+                    this.state = 'empty';
+                }
+                
+            } catch (error) {
+                console.error('Error loading widget:', error);
+                this.state = 'error';
+            }
+        },
+        
+        async checkPermissions() {
+            // Check user permissions
+            const response = await fetch('/api/v1/auth/check-permission', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({
+                    resource: this.widgetId,
+                    action: 'read'
+                })
+            });
+            
+            return response.ok;
+        },
+        
+        async fetchData() {
+            // Fetch widget data from backend
+            const response = await fetch('/api/v1/dashboard/widgets/' + this.widgetId, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            
+            if (response.ok) {
+                return await response.json();
+            }
+            
+            throw new Error('Failed to fetch data');
+        },
+        
+        removeWidget() {
+            // Remove widget from dashboard
+            this.$dispatch('widget-removed', { widgetId: this.widgetId });
+        },
+        
+        toggleMinimize() {
+            this.minimized = !this.minimized;
+        }
+    }
+}
+</script>

@@ -1,0 +1,228 @@
+
+                <!-- Componentes Globais -->
+                {% include "components/card.html" %}
+                {% include "components/button.html" %}
+                {% include "components/table.html" %}
+                {% include "components/loading.html" %}
+                {% include "components/message.html" %}
+                {% include "components/empty-state.html" %}
+            
+
+{# extends "base.html" #}
+
+{% extends 'base.html' %}
+
+<script>
+function pageData() {
+    return {
+        pageTitle: 'Novo Orçamento',
+        pageDescription: 'Monte o orçamento com itens e valores - Sistema de gestão financeira',
+        breadcrumbs: [
+            { name: 'Dashboard', url: '/dashboard' },
+            { name: 'Financeiro', url: '/financeiro' },
+            { name: 'Novo Orçamento', url: '#' }
+        ],
+        pageContent: `
+<div x-data="orcamentoApp()" class="h-full flex flex-col">
+
+    <!-- CABEÇALHO FIXO -->
+    <div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/financeiro" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Novo Orçamento</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Criação de orçamentos para serviços agrícolas e insumos.</p>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Monte o orçamento com itens e valores.</p>
+                </div>
+            </div>
+
+            <!-- Card Resumo Financeiro -->
+            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 border border-gray-200 dark:border-gray-600 min-w-[320px]">
+                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Resumo Financeiro</h3>
+                <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Valor Bruto:</span>
+                        <span class="font-mono font-medium text-gray-800 dark:text-gray-100">R$ <span x-text="valorBruto.toFixed(2)"></span></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Desconto:</span>
+                        <input type="number" step="0.01" min="0" x-model.number="descontoReais"
+                               class="w-20 text-right text-sm font-mono bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-1 text-red-600 dark:text-red-400">
+                    </div>
+                    <div class="flex justify-between col-span-2 border-t border-gray-200 dark:border-gray-600 pt-2 mt-1">
+                        <span class="text-gray-800 dark:text-gray-200 font-semibold">Valor Líquido:</span>
+                        <span class="font-mono font-bold text-green-600 dark:text-green-400">R$ <span x-text="valorLiquido.toFixed(2)"></span></span>
+                    </div>
+                    <div class="flex justify-between col-span-2">
+                        <span class="text-gray-500 dark:text-gray-400">Comissão (R$):</span>
+                        <span class="font-mono font-medium text-gray-600 dark:text-gray-300">R$ <span x-text="comissaoReais.toFixed(2)"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campos do Cabeçalho -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+                <label for="cliente_id" class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">Cliente</label>
+                <select id="cliente_id" name="cliente_id" x-model="clienteId" required
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                    <option value="" disabled selected>Selecione um cliente</option>
+                    {% for c in clientes %}
+                    <option value="{{ c.id }}">{{ c.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="data_orcamento" class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">Data</label>
+                <input type="date" id="data_orcamento" name="data_orcamento" x-model="dataOrcamento" required
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+            </div>
+            <div>
+                <label for="comissao_pct" class="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">Comissão (%)</label>
+                <input type="number" id="comissao_pct" name="comissao_pct" step="0.01" min="0" max="100" x-model.number="comissaoPct"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+            </div>
+        </div>
+    </div>
+
+    <!-- CENTRO SCROLLÁVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">Itens do Orçamento</h3>
+                <button type="button" @click="adicionarItem()"
+                        class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Adicionar Item
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+                            <th class="px-4 py-3">Serviço</th>
+                            <th class="px-4 py-3 w-28">Qtd.</th>
+                            <th class="px-4 py-3 w-36">Preço Unit. (R$)</th>
+                            <th class="px-4 py-3 w-32">Subtotal (R$)</th>
+                            <th class="px-4 py-3 w-16 text-center">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <template x-for="(item, index) in itens" :key="index">
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                                <td class="px-4 py-3">
+                                    <select x-model="item.servico" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-2 py-1.5 focus:ring-1 focus:ring-green-500 outline-none">
+                                        <option value="">Selecione...</option>
+                                        <option value="amostragem_solo">Amostragem de Solo</option>
+                                        <option value="analise_laboratorial">Análise Laboratorial</option>
+                                        <option value="prescricao_vrt">Prescrição VRT</option>
+                                        <option value="consultoria_agronomica">Consultoria Agronômica</option>
+                                        <option value="mapeamento_precisao">Mapeamento de Precisão</option>
+                                        <option value="compactacao_solo">Análise de Compactação</option>
+                                    </select>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input type="number" step="0.01" min="0" x-model.number="item.quantidade"
+                                           class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-2 py-1.5 focus:ring-1 focus:ring-green-500 outline-none text-right font-mono">
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input type="number" step="0.01" min="0" x-model.number="item.preco_unitario"
+                                           class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-2 py-1.5 focus:ring-1 focus:ring-green-500 outline-none text-right font-mono">
+                                </td>
+                                <td class="px-4 py-3 text-sm font-mono font-medium text-gray-900 dark:text-gray-100 text-right" x-text="item.subtotal.toFixed(2)"></td>
+                                <td class="px-4 py-3 text-center">
+                                    <button type="button" @click="removerItem(index)"
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="itens.length === 0">
+                            <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+                                Nenhum item adicionado. Clique em "Adicionar Item" para começar.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Alerta de Comissão -->
+        <div x-show="descontoReais > 0" x-transition class="mt-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 flex items-start gap-3">
+            <svg class="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <p class="text-yellow-700 dark:text-yellow-200 text-sm">
+                <span class="font-semibold">Atenção:</span> O desconto de R$ <span x-text="descontoReais.toFixed(2)"></span> reduzirá proporcionalmente a sua comissão.
+                A comissão final é calculada sobre o valor líquido.
+            </p>
+        </div>
+    </div>
+
+    <!-- RODAPÉ FIXO -->
+    <div class="flex-shrink-0 px-8 py-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-end gap-3">
+            <a href="/financeiro" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-6 rounded-lg transition">
+                Cancelar
+            </a>
+            <button type="button" @click="salvar()" :disabled="itens.length === 0 || !clienteId"
+                    class="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-lg transition">
+                Salvar Orçamento
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function orcamentoApp() {
+    return {
+        clienteId: '',
+        dataOrcamento: new Date().toISOString().split('T')[0],
+        comissaoPct: 0,
+        descontoReais: 0,
+        itens: [{ servico: '', quantidade: 1, preco_unitario: 0 }],
+
+        get valorBruto() {
+            return this.itens.reduce((s, i) => s + (i.quantidade * i.preco_unitario), 0);
+        },
+        get valorLiquido() {
+            return Math.max(0, this.valorBruto - this.descontoReais);
+        },
+        get comissaoReais() {
+            return this.valorLiquido * (this.comissaoPct / 100);
+        },
+
+        adicionarItem() {
+            this.itens.push({ servico: '', quantidade: 1, preco_unitario: 0 });
+        },
+        removerItem(index) {
+            this.itens.splice(index, 1);
+        },
+        salvar() {
+            // Build form data and submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/financeiro/novo-orcamento';
+            const add = (n, v) => { const i = document.createElement('input'); i.name = n; i.value = v; form.appendChild(i); };
+            add('cliente_id', this.clienteId);
+            add('data_orcamento', this.dataOrcamento);
+            add('valor_bruto', this.valorBruto.toFixed(2));
+            add('desconto_reais', this.descontoReais.toFixed(2));
+            add('comissao_pct', this.comissaoPct);
+            add('itens', JSON.stringify(this.itens.map(it => ({...it, subtotal: it.quantidade * it.preco_unitario}))));
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+}
+</script>
+        `
+    }
+}
+</script>

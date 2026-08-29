@@ -1,0 +1,172 @@
+<!-- Componente Tabela Genérica Reutilizável com API Clara -->
+<div class="table-container {{ container_classes || 'overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700' }}" 
+     x-data="tableData({{ table_props | tojson | default('{}') }})">
+
+    <table class="table-component {{ table_classes || 'min-w-full divide-y divide-gray-200 dark:divide-gray-700' }}">
+        <!-- Cabeçalho configurável -->
+        <thead class="{{ header_classes || 'bg-gray-50 dark:bg-gray-800' }}">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" 
+                    x-show="showHeaders">
+                    <template x-for="(header, index) in headers" :key="index">
+                        <div x-text="header" :class="headerClasses || ''"></div>
+                    </template>
+                </th>
+                <!-- Slot personalizado para cabeçalhos complexos -->
+                <slot name="headers" x-show="!showHeaders"></slot>
+            </tr>
+        </thead>
+        
+        <!-- Corpo da tabela -->
+        <tbody class="{{ body_classes || 'bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700' }}">
+            <!-- Linhas de dados -->
+            <template x-for="(row, rowIndex) in data" :key="rowIndex">
+                <tr class="{{ row_classes || 'hover:bg-gray-50 dark:hover:bg-gray-700/30 transition' }}">
+                    <!-- Conteúdo padrão para células simples -->
+                    <td x-show="showContent" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                        <template x-for="(header, headerIndex) in headers" :key="headerIndex">
+                            <div x-text="row[header]" :class="cellClasses || ''"></div>
+                        </template>
+                    </td>
+                    
+                    <!-- Slot personalizado para linhas complexas -->
+                    <slot name="rows" :row="row" :index="rowIndex" x-show="!showContent"></slot>
+                </tr>
+            </template>
+            
+            <!-- Estado vazio (opcional) -->
+            <tr x-show="!data || data.length === 0" class="{{ empty_classes || '' }}">
+                <td colspan="100%" class="{{ empty_cell_classes || 'px-6 py-12 text-center' }}">
+                    <div class="empty-state">
+                        <slot name="empty">
+                            <!-- Conteúdo padrão para estado vazio -->
+                            <div class="flex flex-col items-center justify-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                                </svg>
+                                <p class="text-gray-500 text-lg">{{ emptyText || 'Nenhum dado disponível' }}</p>
+                                <button type="button" x-show="showEmptyAction" 
+                                        @click="emptyAction"
+                                        class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition text-sm">
+                                    {{ emptyButtonText || 'Adicionar primeiro item' }}
+                                </button>
+                            </div>
+                        </slot>
+                    </div>
+                </td>
+            </tr>
+            
+            <!-- Loading state (opcional) -->
+            <tr x-show="loading" class="{{ loading_classes || '' }}">
+                <td colspan="100%" class="px-6 py-12 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <svg class="animate-spin h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="text-gray-600 dark:text-gray-400">{{ loadingText || 'Carregando dados...' }}</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Rodapé com ações (opcional) -->
+    <div x-show="showFooter" class="{{ footer_classes || 'px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700' }}">
+        <slot name="footer">
+            <!-- Ações padrão de paginação -->
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700 dark:text-gray-300">
+                    Mostrando <span x-text="showingFrom || 0"></span> a <span x-text="showingTo || 0"></span> 
+                    de <span x-text="totalItems || 0"></span> itens
+                </div>
+                <div class="flex gap-2">
+                    <button type="button" @click="prevPage" :disabled="currentPage === 1" 
+                            class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50">
+                        Anterior
+                    </button>
+                    <button type="button" @click="nextPage" :disabled="currentPage >= totalPages" 
+                            class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50">
+                        Próximo
+                    </button>
+                </div>
+            </div>
+        </slot>
+    </div>
+</div>
+
+<script>
+function tableData(props = {}) {
+    return {
+        // Dados da tabela
+        headers: props.headers || ['Coluna 1', 'Coluna 2', 'Coluna 3'],
+        data: props.data || [],
+        loading: props.loading || false,
+        
+        // Configurações de exibição
+        showHeaders: props.showHeaders !== false,
+        showContent: props.showContent !== false,
+        showFooter: props.showFooter || false,
+        showEmptyAction: props.showEmptyAction || false,
+        
+        // Textos personalizados
+        emptyText: props.emptyText || 'Nenhum dado disponível',
+        emptyButtonText: props.emptyButtonText || 'Adicionar primeiro item',
+        loadingText: props.loadingText || 'Carregando dados...',
+        
+        // Classes CSS personalizáveis
+        headerClasses: props.headerClasses,
+        cellClasses: props.cellClasses,
+        rowClasses: props.rowClasses,
+        emptyClasses: props.emptyClasses,
+        emptyCellClasses: props.emptyCellClasses,
+        loadingClasses: props.loadingClasses,
+        footerClasses: props.footerClasses,
+        
+        // Propriedades de paginação
+        currentPage: props.currentPage || 1,
+        itemsPerPage: props.itemsPerPage || 10,
+        totalItems: props.totalItems || 0,
+        
+        // Métodos
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                if (props.onPageChange) {
+                    props.onPageChange(this.currentPage);
+                }
+            }
+        },
+        
+        nextPage() {
+            const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                if (props.onPageChange) {
+                    props.onPageChange(this.currentPage);
+                }
+            }
+        },
+        
+        emptyAction() {
+            if (props.onEmptyAction) {
+                props.onEmptyAction();
+            }
+        },
+        
+        // Propriedades computadas
+        get showingFrom() {
+            return (this.currentPage - 1) * this.itemsPerPage + 1;
+        },
+        
+        get showingTo() {
+            const end = this.currentPage * this.itemsPerPage;
+            return end > this.totalItems ? this.totalItems : end;
+        },
+        
+        get totalPages() {
+            return Math.ceil(this.totalItems / this.itemsPerPage);
+        }
+    };
+}
+</script>

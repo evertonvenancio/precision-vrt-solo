@@ -1,0 +1,74 @@
+{# extends "base.html" #}
+
+{% extends 'base.html' %}
+
+
+        <!-- Componentes Globais -->
+        {% include "components/card.html" %}
+        {% include "components/button.html" %}
+        {% include "components/table.html" %}
+        {% include "components/loading.html" %}
+        {% include "components/message.html" %}
+        {% include "components/empty-state.html" %}
+        
+<script>
+function pageData() {
+    return {
+        pageTitle: 'Novo Artigo Técnico',
+        pageDescription: 'Criar novo artigo técnico para biblioteca do sistema',
+        breadcrumbs: [
+            { name: 'Dashboard', url: '/dashboard' },
+            { name: 'Conhecimento', url: '/conhecimento' },
+            { name: 'Novo Artigo', url: '#' }
+        ],
+        pageContent: `
+<div class="max-w-2xl mx-auto md:max-w-4xl lg:max-w-6xl">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Novo Artigo Técnico</h1>
+                    <p class="text-secondary mt-2">Criação e gestão de conteúdo técnico e artigos científicos.</p>
+
+    <form method="POST" action="/conhecimento/novo-artigo" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 space-y-5" class="space-y-6 md:space-y-8">
+        <div>
+            <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Título</label>
+            <input type="text" id="titulo" name="titulo" required
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" class="w-full px-4 py-2.5 md:px-6 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+        </div>
+
+        <div>
+            <label for="categoria" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Categoria</label>
+            <select id="categoria" name="categoria" required
+                    class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                <option value="" disabled selected>Selecione a categoria</option>
+                <option value="Metodologia">Metodologia</option>
+                <option value="Cultura">Cultura</option>
+                <option value="Bibliografia">Bibliografia</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="conteudo" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Conteúdo</label>
+            <textarea id="conteudo" name="conteudo" rows="8" required
+                      class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-y"></textarea>
+        </div>
+
+        <div>
+            <label for="referencias" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Referências</label>
+            <textarea id="referencias" name="referencias" rows="3" required
+                      class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-y"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <a href="/conhecimento"
+               class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition">
+                Cancelar
+            </a>
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition" class="px-4 py-2 text-sm font-medium rounded-md"
+                Salvar Artigo
+            </button>
+        </div>
+    </form>
+</div>
+        `
+    }
+}
+</script>

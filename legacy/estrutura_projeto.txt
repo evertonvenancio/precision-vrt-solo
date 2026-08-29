@@ -1,0 +1,1058 @@
+﻿==============================================================
+PRECISION VRT SOLO - ESTRUTURA COMPLETA
+Gerado em: 07/09/2026 20:29:42
+Projeto: C:\precision_vrt_solo
+==============================================================
+
+Listagem de caminhos de pasta para o volume Acer
+O n·mero de sÚrie do volume Ú 00000216 3298:DCFF
+C:\PRECISION_VRT_SOLO
+|   app.py
+|   cliente_manager.py
+|   equipe_manager.py
+|   estrutura_projeto.txt
+|   exportador_tecnico.py
+|   export_manager.py
+|   financeiro_manager.py
+|   iniciar_sistema.bat
+|   leitor_amostras.py
+|   main.py
+|   mapa_rotas.txt
+|   migrate_schema.py
+|   motor_calculo.py
+|   precision_vrt.db
+|   projeto.txt
+|   requirements.txt
+|   testar_import.py
+|   test_end_to_end.py
+|   vrt_pipeline.py
+|   vulture.txt
+|   
++---.ruff_cache
+|   |   .gitignore
+|   |   CACHEDIR.TAG
+|   |   
+|   \---0.15.20
+|           10360553388471225640
+|           11780591564315517703
+|           11984685624930885703
+|           12337990935815797966
+|           13793679603529233580
+|           14776484261297916387
+|           15441312407995293532
+|           17527096378157920806
+|           17915034512639691561
+|           3494010827406918145
+|           4909297874273921888
+|           6402136098004715502
+|           8335552331943254691
+|           9233943402001165928
+|           
++---.streamlit
++---api
+|   |   __init__.py
+|   |   
+|   +---v1
+|   |   |   __init__.py
+|   |   |   
+|   |   +---endpoints
+|   |   |   |   ativos.py
+|   |   |   |   bulk_blend.py
+|   |   |   |   clima.py
+|   |   |   |   compactacao.py
+|   |   |   |   comunicacao.py
+|   |   |   |   conhecimento.py
+|   |   |   |   extrator.py
+|   |   |   |   fiscal.py
+|   |   |   |   laudos_export.py
+|   |   |   |   prescricao.py
+|   |   |   |   vendas.py
+|   |   |   |   __init__.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           ativos.cpython-314.pyc
+|   |   |           bulk_blend.cpython-314.pyc
+|   |   |           clima.cpython-314.pyc
+|   |   |           compactacao.cpython-314.pyc
+|   |   |           comunicacao.cpython-314.pyc
+|   |   |           conhecimento.cpython-314.pyc
+|   |   |           extrator.cpython-314.pyc
+|   |   |           fiscal.cpython-314.pyc
+|   |   |           laudos_export.cpython-314.pyc
+|   |   |           prescricao.cpython-314.pyc
+|   |   |           vendas.cpython-314.pyc
+|   |   |           __init__.cpython-314.pyc
+|   |   |           
+|   |   \---__pycache__
+|   |           __init__.cpython-314.pyc
+|   |           
+|   \---__pycache__
+|           __init__.cpython-314.pyc
+|           
++---app
+|   |   cli.py
+|   |   __init__.py
+|   |   
+|   +---web
+|   |   |   ativos.py
+|   |   |   auth.py
+|   |   |   bulk_blend.py
+|   |   |   caixa.py
+|   |   |   clientes.py
+|   |   |   clima.py
+|   |   |   compactacao.py
+|   |   |   comunicacao.py
+|   |   |   configuracoes.py
+|   |   |   conhecimento.py
+|   |   |   cruzamento.py
+|   |   |   dashboard.py
+|   |   |   equipe.py
+|   |   |   extrator.py
+|   |   |   financeiro.py
+|   |   |   orcamentos.py
+|   |   |   permissoes.py
+|   |   |   prescricao.py
+|   |   |   tabela_precos.py
+|   |   |   
+|   |   \---__pycache__
+|   |           ativos.cpython-314.pyc
+|   |           auth.cpython-314.pyc
+|   |           bulk_blend.cpython-314.pyc
+|   |           caixa.cpython-314.pyc
+|   |           clientes.cpython-314.pyc
+|   |           clima.cpython-314.pyc
+|   |           compactacao.cpython-314.pyc
+|   |           comunicacao.cpython-314.pyc
+|   |           configuracoes.cpython-314.pyc
+|   |           conhecimento.cpython-314.pyc
+|   |           cruzamento.cpython-314.pyc
+|   |           dashboard.cpython-314.pyc
+|   |           equipe.cpython-314.pyc
+|   |           extrator.cpython-314.pyc
+|   |           financeiro.cpython-314.pyc
+|   |           orcamentos.cpython-314.pyc
+|   |           permissoes.cpython-314.pyc
+|   |           prescricao.cpython-314.pyc
+|   |           tabela_precos.cpython-314.pyc
+|   |           
+|   \---__pycache__
+|           cli.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---backups
++---clientes
+|   \---everton_antonio_rodrigues_venancio
+|       +---amostras
+|       +---historico
+|       +---mapas
+|       +---prescricoes
+|       +---relatorios
+|       \---talhoes
++---config
+|   |   branding.json
+|   |   branding.json_old
+|   |   clima_config.py
+|   |   comunicacao_config.py
+|   |   culturas.py
+|   |   custos_operacionais.json
+|   |   custos_operacionais.json_old
+|   |   fertilizantes.py
+|   |   fertilizantes_fisicos.py
+|   |   formulas.py
+|   |   guardrails_rules.py
+|   |   insumos_banco.json_old
+|   |   sais_solucao.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           clima_config.cpython-314.pyc
+|           comunicacao_config.cpython-314.pyc
+|           culturas.cpython-314.pyc
+|           fertilizantes.cpython-314.pyc
+|           fertilizantes_fisicos.cpython-314.pyc
+|           formulas.cpython-314.pyc
+|           guardrails_rules.cpython-314.pyc
+|           sais_solucao.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---core
+|   |   bulk_blend.py
+|   |   compactacao.py
+|   |   cruzamento_solo_planta.py
+|   |   exportacao.py
+|   |   guardrails.py
+|   |   helpers.py
+|   |   interpolacao.py
+|   |   monitoramento.py
+|   |   nematoides.py
+|   |   otimizacao_pulp.py
+|   |   permissions.py
+|   |   prescricao.py
+|   |   seguranca.py
+|   |   startup.py
+|   |   zoneamento.py
+|   |   __init__.py
+|   |   
+|   +---exportacao
+|   |   |   configuracao.py
+|   |   |   motor.py
+|   |   |   validacao.py
+|   |   |   __init__.py
+|   |   |   
+|   |   +---formatos
+|   |   |       __init__.py
+|   |   |       
+|   |   +---maquinas
+|   |   |       __init__.py
+|   |   |       
+|   |   +---relatorios
+|   |   |       __init__.py
+|   |   |       
+|   |   \---utils
+|   |           __init__.py
+|   |           
+|   +---interpolacao
+|   |   |   configuracao.py
+|   |   |   estatisticas.py
+|   |   |   grade.py
+|   |   |   motor.py
+|   |   |   raster.py
+|   |   |   validacao.py
+|   |   |   __init__.py
+|   |   |   
+|   |   +---algoritmos
+|   |   |       __init__.py
+|   |   |       
+|   |   \---utils
+|   |           __init__.py
+|   |           
+|   +---prescricao
+|   |   |   configuracao.py
+|   |   |   contratos.py
+|   |   |   motor.py
+|   |   |   prescricao.py
+|   |   |   prescricao_legacy.py
+|   |   |   validacao.py
+|   |   |   __init__.py
+|   |   |   
+|   |   +---bulkblend
+|   |   |       __init__.py
+|   |   |       
+|   |   +---calculos
+|   |   |       __init__.py
+|   |   |       
+|   |   +---culturas
+|   |   |       __init__.py
+|   |   |       
+|   |   +---mapas
+|   |   |       __init__.py
+|   |   |       
+|   |   +---metodologias
+|   |   |       __init__.py
+|   |   |       
+|   |   +---regras
+|   |   |       __init__.py
+|   |   |       
+|   |   \---utils
+|   |           __init__.py
+|   |           
+|   +---zoneamento
+|   |   |   classificacao.py
+|   |   |   configuracao.py
+|   |   |   estatisticas.py
+|   |   |   motor.py
+|   |   |   perfis.py
+|   |   |   raster.py
+|   |   |   validacao.py
+|   |   |   __init__.py
+|   |   |   
+|   |   +---algoritmos
+|   |   |       __init__.py
+|   |   |       
+|   |   \---utils
+|   |           __init__.py
+|   |           
+|   \---__pycache__
+|           bulk_blend.cpython-314.pyc
+|           compactacao.cpython-314.pyc
+|           cruzamento_solo_planta.cpython-314.pyc
+|           exportacao.cpython-314.pyc
+|           guardrails.cpython-314.pyc
+|           helpers.cpython-314.pyc
+|           interpolacao.cpython-314.pyc
+|           nematoides.cpython-314.pyc
+|           otimizacao_pulp.cpython-314.pyc
+|           permissions.cpython-314.pyc
+|           prescricao.cpython-314.pyc
+|           seguranca.cpython-314.pyc
+|           startup.cpython-314.pyc
+|           zoneamento.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---data
+|   +---input
+|   +---output
+|   |       resultado_temp.json
+|   |       
+|   \---uploads
+|           00135e9621b54aa3aee42f0e1ecac569_teste_everton_53_pontos.geojson
+|           058b9a255d614392999e41d0ed107384_teste_everton_53_amostras.xlsx
+|           10457c28a5b040958de86109b210cf80_teste_everton_53_amostras.xlsx
+|           1889b70f5dfc4a4f9f60e401a05a8b8d_teste_everton_53_amostras.xlsx
+|           260180b65f72426197165071aa931839_teste_everton_53_pontos.geojson
+|           29694b995ec0447187be6818c2b0301c_teste_everton_53_pontos.geojson
+|           3261c710ebe645eeab582f75998fc5fd_teste_everton_53_pontos.geojson
+|           3baa7834ff544611bdf2a27183074dc7_teste_everton_53_amostras.xlsx
+|           3f866498594944f28e4d253b7039277d_teste_everton_53_pontos.geojson
+|           45b413a58ba24e1cb5513d3dca3cb3f5_teste_everton_53_pontos.geojson
+|           4d2dd8e8b1654637875b2b8a9d63b1d9_teste_everton_53_pontos.geojson
+|           515363fb0b2846dbbf17092c8e5ad973_teste_everton_53_amostras.xlsx
+|           52f00a9d43b64bf584a29dba8bda5d80_teste_everton_53_pontos.geojson
+|           543ec601db244bf28e0a43ed228dd868_teste_everton_53_pontos.geojson
+|           55888a53409f44e8b50eccc05390517c_teste_everton_53_pontos.geojson
+|           55bee1462823462996c1b10f9d3bacfb_teste_everton_53_pontos.geojson
+|           653e4eb484c244b0a2accbb52c367d2e_teste_everton_53_amostras.xlsx
+|           6a6402a88e114c50aa0f267782a4c9a4_teste_everton_53_amostras.xlsx
+|           6b04971c08a844a7a6156ab1b37e0706_teste_everton_53_pontos.geojson
+|           70fb5368b73846ecac24b5501d34f3e6_teste_everton_53_pontos.geojson
+|           7403c1719f844b54983842e32b29ba8b_teste_everton_53_pontos.geojson
+|           745ff39e7ac44df6beb091e14b9fba41_teste_everton_53_amostras.xlsx
+|           77bc1352c09440b2ab529523e9eeb4d5_teste_everton_53_amostras.xlsx
+|           7a725001a65443d6a8c6de13b41961cf_teste_everton_53_pontos.geojson
+|           843608b8bc5c47deb43619adc8eba133_teste_everton_53_pontos.geojson
+|           89fb607e98f441deaab66f2acd1066c1_teste_everton_53_amostras.xlsx
+|           a5c6145fc1f346ae86b819725db51686_teste_everton_53_amostras.xlsx
+|           b5721f759f9d4760955abeb963bbc21d_teste_everton_53_amostras.xlsx
+|           bced4bd3634c4dcdb74bee4eecd58597_teste_everton_53_amostras.xlsx
+|           c4167c1e7db14e9881501ff9de4a5d7f_teste_everton_53_pontos.geojson
+|           c508c2d01b0c45c8a8b6b44f35c78458_teste_everton_53_amostras.xlsx
+|           c53e86ae557a4898af57dfd0c83f7e99_teste_everton_53_amostras.xlsx
+|           ce35448c4ee04a509e31f006d2234711_teste_everton_53_pontos.geojson
+|           d29f81e63dca48de88656aaa3bd23edc_teste_everton_53_pontos.geojson
+|           de826a34bd9d433da7b771b7d9baff4e_teste_everton_53_pontos.geojson
+|           e320c6b2c18b4f7b832b12c4169435c4_teste_everton_53_amostras.xlsx
+|           f1e451d2ad6c43bab779dc7a8a887fb5_teste_everton_53_amostras.xlsx
+|           f25213173faf47768a8ccd162fa5802b_teste_everton_53_amostras.xlsx
+|           
++---db
+|   |   database.py
+|   |   precision_vrt.db
+|   |   
+|   \---__pycache__
+|           database.cpython-314.pyc
+|           db_schema.cpython-314.pyc
+|           
++---frontend
+|   +---static
+|   |   +---css
+|   |   |       style.css
+|   |   |       
+|   |   +---img
+|   |   \---js
+|   |           app.js
+|   |           theme.js
+|   |           
+|   \---templates
+|           ativos.html
+|           base.html
+|           base_tecnica.html
+|           bulk_blend.html
+|           caixa.html
+|           clientes.html
+|           clima.html
+|           compactacao.html
+|           compactacao_nova.html
+|           configuracoes.html
+|           conhecimento.html
+|           cruzamento.html
+|           dashboard.html
+|           equipe.html
+|           extrator.html
+|           financeiro.html
+|           login.html
+|           nematoides.html
+|           novo_artigo.html
+|           novo_ativo.html
+|           novo_cliente.html
+|           novo_funcionario.html
+|           novo_orcamento.html
+|           novo_ponto_extrator.html
+|           permissoes.html
+|           prescricao.html
+|           prescricao_nova.html
+|           prescricao_resultado.html
+|           tabela_precos.html
+|           
++---insumos_comerciais
++---legacy
+|   |   app_backup_20260612_235418.py
+|   |   atualizar_schema.py
+|   |   busca_db_schema.py
+|   |   dados_agri.db
+|   |   db_schema_backup_20260612_235341.py
+|   |   db_schema_oficial.py
+|   |   diagnostico_contexto.py
+|   |   diagnostico_db.py
+|   |   insumos_manager.py
+|   |   main_extrator.py
+|   |   main_prescricao.py
+|   |   migrar_json_para_sqlite.py
+|   |   novo_app.py
+|   |   recomendacao_db.py
+|   |   teste_minimo.py
+|   |   teste_puro.py
+|   |   verificar_conflitos.py
+|   |   verify_update.py
+|   |   
+|   \---__pycache__
+|           atualizar_schema.cpython-314.pyc
+|           busca_db_schema.cpython-314.pyc
+|           db_schema_backup_20260612_235341.cpython-314.pyc
+|           db_schema_oficial.cpython-314.pyc
+|           diagnostico_contexto.cpython-314.pyc
+|           diagnostico_db.cpython-314.pyc
+|           insumos_manager.cpython-314.pyc
+|           main_extrator.cpython-314.pyc
+|           main_prescricao.cpython-314.pyc
+|           migrar_json_para_sqlite.cpython-314.pyc
+|           novo_app.cpython-314.pyc
+|           recomendacao_db.cpython-314.pyc
+|           teste_minimo.cpython-314.pyc
+|           teste_puro.cpython-314.pyc
+|           verificar_conflitos.cpython-314.pyc
+|           verify_update.cpython-314.pyc
+|           
++---logs
+|   |   main.py
+|   |   
+|   \---__pycache__
+|           main.cpython-314.pyc
+|           
++---models
+|   |   ativos.py
+|   |   clima.py
+|   |   compactacao.py
+|   |   comunicacao.py
+|   |   config.py
+|   |   conhecimento.py
+|   |   core_models.py
+|   |   extrator.py
+|   |   financeiro.py
+|   |   financeiro_service.py
+|   |   fiscal.py
+|   |   migrar_config_sistema.py
+|   |   prescricao.py
+|   |   vendas.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           ativos.cpython-314.pyc
+|           clima.cpython-314.pyc
+|           compactacao.cpython-314.pyc
+|           comunicacao.cpython-314.pyc
+|           config.cpython-314.pyc
+|           conhecimento.cpython-314.pyc
+|           core_models.cpython-314.pyc
+|           extrator.cpython-314.pyc
+|           financeiro.cpython-314.pyc
+|           financeiro_service.cpython-314.pyc
+|           fiscal.cpython-314.pyc
+|           prescricao.cpython-314.pyc
+|           vendas.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---modules
++---notebooks
++---pages
+|   |   2_Configuracoes.py
+|   |   
+|   \---__pycache__
+|           2_Configuracoes.cpython-314.pyc
+|           
++---relatorios
++---schemas
+|   |   ativos.py
+|   |   clima.py
+|   |   compactacao.py
+|   |   comunicacao.py
+|   |   configuracao.py
+|   |   cruzamento.py
+|   |   extrator.py
+|   |   financeiro.py
+|   |   guardrail.py
+|   |   laudo_export.py
+|   |   vendas.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           ativos.cpython-314.pyc
+|           clima.cpython-314.pyc
+|           compactacao.cpython-314.pyc
+|           comunicacao.cpython-314.pyc
+|           cruzamento.cpython-314.pyc
+|           extrator.cpython-314.pyc
+|           financeiro.cpython-314.pyc
+|           guardrail.cpython-314.pyc
+|           laudo_export.cpython-314.pyc
+|           vendas.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---services
+|   |   ativos_service.py
+|   |   auth_service.py
+|   |   bulk_blend_service.py
+|   |   caixa_service.py
+|   |   clientes_service.py
+|   |   clima_service.py
+|   |   comissao_service.py
+|   |   compactacao_service.py
+|   |   comunicacao_service.py
+|   |   configuracoes_service.py
+|   |   conhecimento_service.py
+|   |   cruzamento_service.py
+|   |   dashboard_service.py
+|   |   equipe_service.py
+|   |   extrator_service.py
+|   |   financeiro_service.py
+|   |   fiscal_service.py
+|   |   geo_parser_service.py
+|   |   laudo_export_service.py
+|   |   orcamentos_service.py
+|   |   permissoes_service.py
+|   |   precificacao_service.py
+|   |   prescricao_service.py
+|   |   tabela_precos_service.py
+|   |   vendas_service.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           ativos_service.cpython-314.pyc
+|           auth_service.cpython-314.pyc
+|           bulk_blend_service.cpython-314.pyc
+|           caixa_service.cpython-314.pyc
+|           clientes_service.cpython-314.pyc
+|           clima_service.cpython-314.pyc
+|           comissao_service.cpython-314.pyc
+|           compactacao_service.cpython-314.pyc
+|           comunicacao_service.cpython-314.pyc
+|           configuracoes_service.cpython-314.pyc
+|           conhecimento_service.cpython-314.pyc
+|           cruzamento_service.cpython-314.pyc
+|           dashboard_service.cpython-314.pyc
+|           equipe_service.cpython-314.pyc
+|           extrator_service.cpython-314.pyc
+|           financeiro_service.cpython-314.pyc
+|           fiscal_service.cpython-314.pyc
+|           geo_parser_service.cpython-314.pyc
+|           laudo_export_service.cpython-314.pyc
+|           orcamentos_service.cpython-314.pyc
+|           permissoes_service.cpython-314.pyc
+|           precificacao_service.cpython-314.pyc
+|           prescricao_service.cpython-314.pyc
+|           tabela_precos_service.cpython-314.pyc
+|           vendas_service.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---storage
+|   \---exports
+|           Everton_Venancio_teste_53_21-06-2026.pdf
+|           Everton_Venancio_teste_53_21-06-2026_cartao.pdf
+|           mapa_zonas.png
+|           
++---tests
+|   |   tests_compactacao_service.py
+|   |   test_bulk_blend.py
+|   |   test_clima_service.py
+|   |   test_cruzamento.py
+|   |   test_extrator_service.py
+|   |   test_guardrails.py
+|   |   test_otimizacao_pulp.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           tests_compactacao_service.cpython-314.pyc
+|           test_clima_service.cpython-314.pyc
+|           test_cruzamento.cpython-314.pyc
+|           test_extrator_service.cpython-314.pyc
+|           test_guardrails.cpython-314.pyc
+|           test_otimizacao_pulp.cpython-314.pyc
+|           __init__.cpython-314.pyc
+|           
++---uploads
++---utils
+|   |   geojson.py
+|   |   
+|   \---__pycache__
+|           geojson.cpython-314.pyc
+|           
+\---__pycache__
+        app.cpython-314.pyc
+        cliente_manager.cpython-314.pyc
+        equipe_manager.cpython-314.pyc
+        exportador_tecnico.cpython-314.pyc
+        export_manager.cpython-314.pyc
+        financeiro_manager.cpython-314.pyc
+        leitor_amostras.cpython-314.pyc
+        main.cpython-314.pyc
+        migrate_schema.cpython-314.pyc
+        motor_calculo.cpython-314.pyc
+        testar_import.cpython-314.pyc
+        test_end_to_end.cpython-314.pyc
+        vrt_pipeline.cpython-314.pyc
+        
+
+==============================================================
+LISTAGEM COMPLETA DOS ARQUIVOS
+==============================================================
+
+C:\precision_vrt_solo\.ruff_cache\.gitignore	0,03 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\.ruff_cache\0.15.20\10360553388471225640	0,35 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\11780591564315517703	0,67 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\11984685624930885703	0,06 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\12337990935815797966	0,49 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\13793679603529233580	0,38 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\14776484261297916387	0,48 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\15441312407995293532	0,07 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\17527096378157920806	0,63 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\17915034512639691561	0,7 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\3494010827406918145	0,08 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\4909297874273921888	0,05 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\6402136098004715502	0,48 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\8335552331943254691	0,06 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\0.15.20\9233943402001165928	0,35 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\.ruff_cache\CACHEDIR.TAG	0,04 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\__pycache__\app.cpython-314.pyc	84,18 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\__pycache__\cliente_manager.cpython-314.pyc	3,63 KB	03/07/2026 16:57:28
+C:\precision_vrt_solo\__pycache__\equipe_manager.cpython-314.pyc	8,24 KB	03/07/2026 16:57:28
+C:\precision_vrt_solo\__pycache__\export_manager.cpython-314.pyc	19,04 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\__pycache__\exportador_tecnico.cpython-314.pyc	9,24 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\__pycache__\financeiro_manager.cpython-314.pyc	20,6 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\__pycache__\leitor_amostras.cpython-314.pyc	4,35 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\__pycache__\main.cpython-314.pyc	4,37 KB	04/07/2026 15:01:17
+C:\precision_vrt_solo\__pycache__\migrate_schema.cpython-314.pyc	1,63 KB	03/07/2026 16:57:29
+C:\precision_vrt_solo\__pycache__\motor_calculo.cpython-314.pyc	11,13 KB	03/07/2026 23:22:05
+C:\precision_vrt_solo\__pycache__\test_end_to_end.cpython-314.pyc	19,23 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\__pycache__\testar_import.cpython-314.pyc	3,98 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\__pycache__\vrt_pipeline.cpython-314.pyc	20,6 KB	03/07/2026 16:57:30
+C:\precision_vrt_solo\api\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\api\__pycache__\__init__.cpython-314.pyc	0,13 KB	03/07/2026 16:57:30
+C:\precision_vrt_solo\api\v1\__init__.py	0 KB	17/06/2026 13:44:36
+C:\precision_vrt_solo\api\v1\__pycache__\__init__.cpython-314.pyc	0,14 KB	03/07/2026 16:57:30
+C:\precision_vrt_solo\api\v1\endpoints\__init__.py	0 KB	17/06/2026 13:44:36
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\__init__.cpython-314.pyc	0,15 KB	03/07/2026 16:57:32
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\ativos.cpython-314.pyc	10,16 KB	03/07/2026 16:57:30
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\bulk_blend.cpython-314.pyc	11,32 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\clima.cpython-314.pyc	11,03 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\compactacao.cpython-314.pyc	2,97 KB	03/07/2026 16:57:31
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\comunicacao.cpython-314.pyc	4,78 KB	03/07/2026 16:57:31
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\conhecimento.cpython-314.pyc	7,82 KB	03/07/2026 16:57:31
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\extrator.cpython-314.pyc	31,76 KB	03/07/2026 16:57:31
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\fiscal.cpython-314.pyc	3 KB	03/07/2026 16:57:32
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\laudos_export.cpython-314.pyc	2,89 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\prescricao.cpython-314.pyc	12,35 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\api\v1\endpoints\__pycache__\vendas.cpython-314.pyc	12,88 KB	03/07/2026 16:57:32
+C:\precision_vrt_solo\api\v1\endpoints\ativos.py	7,17 KB	17/06/2026 16:15:00
+C:\precision_vrt_solo\api\v1\endpoints\bulk_blend.py	7,58 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\api\v1\endpoints\clima.py	10,73 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\api\v1\endpoints\compactacao.py	2,02 KB	19/06/2026 22:48:52
+C:\precision_vrt_solo\api\v1\endpoints\comunicacao.py	3,34 KB	17/06/2026 16:16:52
+C:\precision_vrt_solo\api\v1\endpoints\conhecimento.py	4,24 KB	17/06/2026 16:17:18
+C:\precision_vrt_solo\api\v1\endpoints\extrator.py	20,71 KB	19/06/2026 22:52:24
+C:\precision_vrt_solo\api\v1\endpoints\fiscal.py	1,68 KB	17/06/2026 16:18:15
+C:\precision_vrt_solo\api\v1\endpoints\laudos_export.py	1,86 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\api\v1\endpoints\prescricao.py	13,01 KB	09/07/2026 15:33:08
+C:\precision_vrt_solo\api\v1\endpoints\vendas.py	9,16 KB	17/06/2026 16:15:27
+C:\precision_vrt_solo\app.py	68,18 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\app\__init__.py	0 KB	11/06/2026 19:03:38
+C:\precision_vrt_solo\app\__pycache__\__init__.cpython-314.pyc	0,13 KB	03/07/2026 16:57:33
+C:\precision_vrt_solo\app\__pycache__\cli.cpython-314.pyc	16,88 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\app\cli.py	11,62 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\app\web\__pycache__\ativos.cpython-314.pyc	1,96 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\auth.cpython-314.pyc	2,12 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\app\web\__pycache__\bulk_blend.cpython-314.pyc	1,33 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\caixa.cpython-314.pyc	1,5 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\app\web\__pycache__\clientes.cpython-314.pyc	5,75 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\app\web\__pycache__\clima.cpython-314.pyc	1,53 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\compactacao.cpython-314.pyc	2,02 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\comunicacao.cpython-314.pyc	1,2 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\configuracoes.cpython-314.pyc	4,79 KB	07/07/2026 13:36:52
+C:\precision_vrt_solo\app\web\__pycache__\conhecimento.cpython-314.pyc	4,04 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\cruzamento.cpython-314.pyc	1,43 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\dashboard.cpython-314.pyc	2,59 KB	07/07/2026 14:46:41
+C:\precision_vrt_solo\app\web\__pycache__\equipe.cpython-314.pyc	2,75 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\extrator.cpython-314.pyc	1,41 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\financeiro.cpython-314.pyc	3,33 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\app\web\__pycache__\orcamentos.cpython-314.pyc	2,04 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\app\web\__pycache__\permissoes.cpython-314.pyc	1,37 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\__pycache__\prescricao.cpython-314.pyc	4,59 KB	09/07/2026 00:36:27
+C:\precision_vrt_solo\app\web\__pycache__\tabela_precos.cpython-314.pyc	1,46 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\app\web\ativos.py	1,1 KB	04/07/2026 14:53:23
+C:\precision_vrt_solo\app\web\auth.py	1,09 KB	04/07/2026 14:50:58
+C:\precision_vrt_solo\app\web\bulk_blend.py	0,71 KB	04/07/2026 14:53:49
+C:\precision_vrt_solo\app\web\caixa.py	0,81 KB	04/07/2026 14:51:28
+C:\precision_vrt_solo\app\web\clientes.py	2,81 KB	04/07/2026 14:51:05
+C:\precision_vrt_solo\app\web\clima.py	0,87 KB	04/07/2026 14:53:17
+C:\precision_vrt_solo\app\web\compactacao.py	1,16 KB	04/07/2026 14:53:30
+C:\precision_vrt_solo\app\web\comunicacao.py	0,57 KB	04/07/2026 00:36:26
+C:\precision_vrt_solo\app\web\configuracoes.py	2,99 KB	07/07/2026 13:36:24
+C:\precision_vrt_solo\app\web\conhecimento.py	2,82 KB	04/07/2026 14:52:54
+C:\precision_vrt_solo\app\web\cruzamento.py	0,81 KB	04/07/2026 14:53:37
+C:\precision_vrt_solo\app\web\dashboard.py	1,94 KB	07/07/2026 14:43:51
+C:\precision_vrt_solo\app\web\equipe.py	1,39 KB	04/07/2026 14:52:10
+C:\precision_vrt_solo\app\web\extrator.py	0,8 KB	04/07/2026 14:52:21
+C:\precision_vrt_solo\app\web\financeiro.py	1,73 KB	04/07/2026 14:51:10
+C:\precision_vrt_solo\app\web\orcamentos.py	1,07 KB	04/07/2026 14:51:18
+C:\precision_vrt_solo\app\web\permissoes.py	0,81 KB	04/07/2026 14:52:37
+C:\precision_vrt_solo\app\web\prescricao.py	2,73 KB	09/07/2026 00:34:13
+C:\precision_vrt_solo\app\web\tabela_precos.py	0,81 KB	04/07/2026 14:52:03
+C:\precision_vrt_solo\cliente_manager.py	1,94 KB	15/06/2026 22:52:14
+C:\precision_vrt_solo\config\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\config\__pycache__\__init__.cpython-314.pyc	0,14 KB	03/07/2026 16:57:34
+C:\precision_vrt_solo\config\__pycache__\clima_config.cpython-314.pyc	4,01 KB	03/07/2026 16:57:33
+C:\precision_vrt_solo\config\__pycache__\comunicacao_config.cpython-314.pyc	6,17 KB	03/07/2026 16:57:33
+C:\precision_vrt_solo\config\__pycache__\culturas.cpython-314.pyc	19,71 KB	03/07/2026 16:57:33
+C:\precision_vrt_solo\config\__pycache__\fertilizantes.cpython-314.pyc	3,4 KB	03/07/2026 16:57:33
+C:\precision_vrt_solo\config\__pycache__\fertilizantes_fisicos.cpython-314.pyc	19 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\config\__pycache__\formulas.cpython-314.pyc	15,37 KB	03/07/2026 16:57:34
+C:\precision_vrt_solo\config\__pycache__\guardrails_rules.cpython-314.pyc	19,4 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\config\__pycache__\sais_solucao.cpython-314.pyc	18,84 KB	03/07/2026 16:57:34
+C:\precision_vrt_solo\config\branding.json	0,78 KB	12/06/2026 06:55:03
+C:\precision_vrt_solo\config\branding.json_old	0,77 KB	12/06/2026 02:18:44
+C:\precision_vrt_solo\config\clima_config.py	2,74 KB	17/06/2026 12:53:34
+C:\precision_vrt_solo\config\comunicacao_config.py	3,53 KB	17/06/2026 14:22:15
+C:\precision_vrt_solo\config\culturas.py	30,29 KB	19/06/2026 22:03:31
+C:\precision_vrt_solo\config\custos_operacionais.json	0,22 KB	12/06/2026 06:47:47
+C:\precision_vrt_solo\config\custos_operacionais.json_old	0,22 KB	12/06/2026 02:39:56
+C:\precision_vrt_solo\config\fertilizantes.py	3,33 KB	12/06/2026 19:40:40
+C:\precision_vrt_solo\config\fertilizantes_fisicos.py	17,94 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\config\formulas.py	22,23 KB	19/06/2026 22:04:37
+C:\precision_vrt_solo\config\guardrails_rules.py	18,93 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\config\insumos_banco.json_old	6,46 KB	11/06/2026 22:36:54
+C:\precision_vrt_solo\config\sais_solucao.py	22,53 KB	17/06/2026 16:30:49
+C:\precision_vrt_solo\core\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\core\__pycache__\__init__.cpython-314.pyc	0,13 KB	03/07/2026 16:57:36
+C:\precision_vrt_solo\core\__pycache__\bulk_blend.cpython-314.pyc	20,88 KB	03/07/2026 16:57:34
+C:\precision_vrt_solo\core\__pycache__\compactacao.cpython-314.pyc	18,17 KB	03/07/2026 16:57:35
+C:\precision_vrt_solo\core\__pycache__\cruzamento_solo_planta.cpython-314.pyc	20,95 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\core\__pycache__\exportacao.cpython-314.pyc	23,06 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\core\__pycache__\guardrails.cpython-314.pyc	21,58 KB	03/07/2026 23:22:03
+C:\precision_vrt_solo\core\__pycache__\helpers.cpython-314.pyc	6,69 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\core\__pycache__\interpolacao.cpython-314.pyc	6,37 KB	09/07/2026 00:37:29
+C:\precision_vrt_solo\core\__pycache__\nematoides.cpython-314.pyc	24,46 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\core\__pycache__\otimizacao_pulp.cpython-314.pyc	11,33 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\core\__pycache__\permissions.cpython-314.pyc	1,02 KB	04/07/2026 15:01:19
+C:\precision_vrt_solo\core\__pycache__\prescricao.cpython-314.pyc	23,18 KB	09/07/2026 13:31:13
+C:\precision_vrt_solo\core\__pycache__\seguranca.cpython-314.pyc	9,43 KB	03/07/2026 16:57:36
+C:\precision_vrt_solo\core\__pycache__\startup.cpython-314.pyc	2,24 KB	04/07/2026 15:01:18
+C:\precision_vrt_solo\core\__pycache__\zoneamento.cpython-314.pyc	7,51 KB	09/07/2026 13:30:53
+C:\precision_vrt_solo\core\bulk_blend.py	16,96 KB	18/06/2026 13:32:52
+C:\precision_vrt_solo\core\compactacao.py	14,62 KB	19/06/2026 23:30:02
+C:\precision_vrt_solo\core\cruzamento_solo_planta.py	15,72 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\core\exportacao.py	35,26 KB	09/07/2026 15:32:53
+C:\precision_vrt_solo\core\exportacao\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\configuracao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\formatos\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\maquinas\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\motor.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\relatorios\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\utils\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\exportacao\validacao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\guardrails.py	16,95 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\core\helpers.py	3,92 KB	03/07/2026 23:16:45
+C:\precision_vrt_solo\core\interpolacao.py	22,38 KB	09/07/2026 15:33:18
+C:\precision_vrt_solo\core\interpolacao\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\algoritmos\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\configuracao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\estatisticas.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\grade.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\motor.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\raster.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\utils\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\interpolacao\validacao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\monitoramento.py	43,53 KB	18/06/2026 22:43:53
+C:\precision_vrt_solo\core\nematoides.py	19,22 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\core\otimizacao_pulp.py	8,28 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\core\permissions.py	0,42 KB	03/07/2026 23:17:07
+C:\precision_vrt_solo\core\prescricao.py	46,48 KB	09/07/2026 18:00:57
+C:\precision_vrt_solo\core\prescricao\__init__.py	1,76 KB	09/07/2026 20:02:47
+C:\precision_vrt_solo\core\prescricao\bulkblend\__init__.py	0,11 KB	09/07/2026 19:39:20
+C:\precision_vrt_solo\core\prescricao\calculos\__init__.py	0,11 KB	09/07/2026 19:38:55
+C:\precision_vrt_solo\core\prescricao\configuracao.py	10,62 KB	09/07/2026 20:02:22
+C:\precision_vrt_solo\core\prescricao\contratos.py	5,09 KB	09/07/2026 20:02:29
+C:\precision_vrt_solo\core\prescricao\culturas\__init__.py	0,11 KB	09/07/2026 19:39:38
+C:\precision_vrt_solo\core\prescricao\mapas\__init__.py	0,11 KB	09/07/2026 19:40:28
+C:\precision_vrt_solo\core\prescricao\metodologias\__init__.py	0,11 KB	09/07/2026 19:39:59
+C:\precision_vrt_solo\core\prescricao\motor.py	28,18 KB	09/07/2026 20:02:11
+C:\precision_vrt_solo\core\prescricao\prescricao.py	1,15 KB	09/07/2026 20:02:55
+C:\precision_vrt_solo\core\prescricao\prescricao_legacy.py	46,48 KB	09/07/2026 19:36:13
+C:\precision_vrt_solo\core\prescricao\regras\__init__.py	0,11 KB	09/07/2026 19:40:50
+C:\precision_vrt_solo\core\prescricao\utils\__init__.py	0,11 KB	09/07/2026 19:41:06
+C:\precision_vrt_solo\core\prescricao\validacao.py	3,72 KB	09/07/2026 20:02:37
+C:\precision_vrt_solo\core\seguranca.py	6,85 KB	17/06/2026 22:49:40
+C:\precision_vrt_solo\core\startup.py	1,01 KB	03/07/2026 23:16:32
+C:\precision_vrt_solo\core\zoneamento.py	34,12 KB	09/07/2026 15:32:45
+C:\precision_vrt_solo\core\zoneamento\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\algoritmos\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\classificacao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\configuracao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\estatisticas.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\motor.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\perfis.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\raster.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\utils\__init__.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\core\zoneamento\validacao.py	0 KB	09/07/2026 19:03:37
+C:\precision_vrt_solo\data\output\resultado_temp.json	45,39 KB	04/07/2026 16:03:12
+C:\precision_vrt_solo\data\uploads\00135e9621b54aa3aee42f0e1ecac569_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 04:17:02
+C:\precision_vrt_solo\data\uploads\058b9a255d614392999e41d0ed107384_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 20:02:07
+C:\precision_vrt_solo\data\uploads\10457c28a5b040958de86109b210cf80_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 20:55:45
+C:\precision_vrt_solo\data\uploads\1889b70f5dfc4a4f9f60e401a05a8b8d_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 20:17:52
+C:\precision_vrt_solo\data\uploads\260180b65f72426197165071aa931839_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 20:55:45
+C:\precision_vrt_solo\data\uploads\29694b995ec0447187be6818c2b0301c_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 04:14:04
+C:\precision_vrt_solo\data\uploads\3261c710ebe645eeab582f75998fc5fd_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 21:10:47
+C:\precision_vrt_solo\data\uploads\3baa7834ff544611bdf2a27183074dc7_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 15:32:51
+C:\precision_vrt_solo\data\uploads\3f866498594944f28e4d253b7039277d_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 23:01:37
+C:\precision_vrt_solo\data\uploads\45b413a58ba24e1cb5513d3dca3cb3f5_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 20:27:49
+C:\precision_vrt_solo\data\uploads\4d2dd8e8b1654637875b2b8a9d63b1d9_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 20:17:52
+C:\precision_vrt_solo\data\uploads\515363fb0b2846dbbf17092c8e5ad973_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 20:13:33
+C:\precision_vrt_solo\data\uploads\52f00a9d43b64bf584a29dba8bda5d80_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 20:13:33
+C:\precision_vrt_solo\data\uploads\543ec601db244bf28e0a43ed228dd868_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 04:10:42
+C:\precision_vrt_solo\data\uploads\55888a53409f44e8b50eccc05390517c_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 23:00:25
+C:\precision_vrt_solo\data\uploads\55bee1462823462996c1b10f9d3bacfb_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 22:42:53
+C:\precision_vrt_solo\data\uploads\653e4eb484c244b0a2accbb52c367d2e_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 19:00:34
+C:\precision_vrt_solo\data\uploads\6a6402a88e114c50aa0f267782a4c9a4_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 23:01:37
+C:\precision_vrt_solo\data\uploads\6b04971c08a844a7a6156ab1b37e0706_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 20:02:07
+C:\precision_vrt_solo\data\uploads\70fb5368b73846ecac24b5501d34f3e6_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 19:49:48
+C:\precision_vrt_solo\data\uploads\7403c1719f844b54983842e32b29ba8b_teste_everton_53_pontos.geojson	73,01 KB	04/07/2026 16:01:44
+C:\precision_vrt_solo\data\uploads\745ff39e7ac44df6beb091e14b9fba41_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 20:27:49
+C:\precision_vrt_solo\data\uploads\77bc1352c09440b2ab529523e9eeb4d5_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 04:10:42
+C:\precision_vrt_solo\data\uploads\7a725001a65443d6a8c6de13b41961cf_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 16:34:36
+C:\precision_vrt_solo\data\uploads\843608b8bc5c47deb43619adc8eba133_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 23:00:25
+C:\precision_vrt_solo\data\uploads\89fb607e98f441deaab66f2acd1066c1_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 23:52:17
+C:\precision_vrt_solo\data\uploads\a5c6145fc1f346ae86b819725db51686_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 19:49:48
+C:\precision_vrt_solo\data\uploads\b5721f759f9d4760955abeb963bbc21d_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 04:14:04
+C:\precision_vrt_solo\data\uploads\bced4bd3634c4dcdb74bee4eecd58597_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 22:42:53
+C:\precision_vrt_solo\data\uploads\c4167c1e7db14e9881501ff9de4a5d7f_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 00:35:06
+C:\precision_vrt_solo\data\uploads\c508c2d01b0c45c8a8b6b44f35c78458_teste_everton_53_amostras.xlsx	18,22 KB	04/07/2026 16:01:44
+C:\precision_vrt_solo\data\uploads\c53e86ae557a4898af57dfd0c83f7e99_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 00:35:06
+C:\precision_vrt_solo\data\uploads\ce35448c4ee04a509e31f006d2234711_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 19:00:34
+C:\precision_vrt_solo\data\uploads\d29f81e63dca48de88656aaa3bd23edc_teste_everton_53_pontos.geojson	73,01 KB	29/06/2026 15:32:51
+C:\precision_vrt_solo\data\uploads\de826a34bd9d433da7b771b7d9baff4e_teste_everton_53_pontos.geojson	73,01 KB	28/06/2026 23:52:17
+C:\precision_vrt_solo\data\uploads\e320c6b2c18b4f7b832b12c4169435c4_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 04:17:02
+C:\precision_vrt_solo\data\uploads\f1e451d2ad6c43bab779dc7a8a887fb5_teste_everton_53_amostras.xlsx	18,22 KB	28/06/2026 21:10:47
+C:\precision_vrt_solo\data\uploads\f25213173faf47768a8ccd162fa5802b_teste_everton_53_amostras.xlsx	18,22 KB	29/06/2026 16:34:36
+C:\precision_vrt_solo\db\__pycache__\database.cpython-314.pyc	2,36 KB	03/07/2026 16:57:37
+C:\precision_vrt_solo\db\__pycache__\db_schema.cpython-314.pyc	16,9 KB	18/06/2026 18:11:53
+C:\precision_vrt_solo\db\database.py	2,1 KB	18/06/2026 22:43:42
+C:\precision_vrt_solo\db\precision_vrt.db	188 KB	18/06/2026 18:13:02
+C:\precision_vrt_solo\equipe_manager.py	4,48 KB	16/06/2026 00:00:11
+C:\precision_vrt_solo\estrutura_projeto.txt	19 KB	09/07/2026 20:29:43
+C:\precision_vrt_solo\export_manager.py	15,77 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\exportador_tecnico.py	7,3 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\financeiro_manager.py	14,03 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\frontend\static\css\style.css	0 KB	17/06/2026 19:06:57
+C:\precision_vrt_solo\frontend\static\js\app.js	0,47 KB	08/07/2026 13:57:20
+C:\precision_vrt_solo\frontend\static\js\theme.js	0,78 KB	07/07/2026 18:12:55
+C:\precision_vrt_solo\frontend\templates\ativos.html	3,73 KB	20/06/2026 19:08:06
+C:\precision_vrt_solo\frontend\templates\base.html	36 KB	08/07/2026 14:34:17
+C:\precision_vrt_solo\frontend\templates\base_tecnica.html	7,5 KB	20/06/2026 11:36:32
+C:\precision_vrt_solo\frontend\templates\bulk_blend.html	21,68 KB	21/06/2026 00:02:48
+C:\precision_vrt_solo\frontend\templates\caixa.html	0,58 KB	20/06/2026 22:25:04
+C:\precision_vrt_solo\frontend\templates\clientes.html	7,91 KB	20/06/2026 21:47:09
+C:\precision_vrt_solo\frontend\templates\clima.html	12,55 KB	08/07/2026 20:42:02
+C:\precision_vrt_solo\frontend\templates\compactacao.html	2,92 KB	08/07/2026 21:25:27
+C:\precision_vrt_solo\frontend\templates\compactacao_nova.html	3,06 KB	08/07/2026 21:27:06
+C:\precision_vrt_solo\frontend\templates\configuracoes.html	15,48 KB	07/07/2026 12:38:16
+C:\precision_vrt_solo\frontend\templates\conhecimento.html	4,15 KB	20/06/2026 19:07:45
+C:\precision_vrt_solo\frontend\templates\cruzamento.html	0,59 KB	20/06/2026 22:25:04
+C:\precision_vrt_solo\frontend\templates\dashboard.html	24,62 KB	07/07/2026 16:11:21
+C:\precision_vrt_solo\frontend\templates\equipe.html	4,26 KB	20/06/2026 19:08:15
+C:\precision_vrt_solo\frontend\templates\extrator.html	8,49 KB	21/06/2026 00:21:13
+C:\precision_vrt_solo\frontend\templates\financeiro.html	5,62 KB	20/06/2026 19:31:33
+C:\precision_vrt_solo\frontend\templates\login.html	4,03 KB	07/07/2026 18:12:48
+C:\precision_vrt_solo\frontend\templates\nematoides.html	0,56 KB	20/06/2026 22:25:04
+C:\precision_vrt_solo\frontend\templates\novo_artigo.html	3,03 KB	20/06/2026 11:33:46
+C:\precision_vrt_solo\frontend\templates\novo_ativo.html	3,61 KB	20/06/2026 11:34:51
+C:\precision_vrt_solo\frontend\templates\novo_cliente.html	10,05 KB	20/06/2026 21:19:43
+C:\precision_vrt_solo\frontend\templates\novo_funcionario.html	5,68 KB	20/06/2026 11:35:58
+C:\precision_vrt_solo\frontend\templates\novo_orcamento.html	13,43 KB	20/06/2026 19:06:13
+C:\precision_vrt_solo\frontend\templates\novo_ponto_extrator.html	12,54 KB	21/06/2026 00:21:19
+C:\precision_vrt_solo\frontend\templates\permissoes.html	12,14 KB	20/06/2026 11:36:05
+C:\precision_vrt_solo\frontend\templates\prescricao.html	4,65 KB	09/07/2026 00:33:22
+C:\precision_vrt_solo\frontend\templates\prescricao_nova.html	25,57 KB	09/07/2026 00:33:44
+C:\precision_vrt_solo\frontend\templates\prescricao_resultado.html	28,3 KB	09/07/2026 00:33:52
+C:\precision_vrt_solo\frontend\templates\tabela_precos.html	5,7 KB	20/06/2026 21:03:40
+C:\precision_vrt_solo\iniciar_sistema.bat	0,42 KB	18/06/2026 18:27:06
+C:\precision_vrt_solo\legacy\__pycache__\atualizar_schema.cpython-314.pyc	2,5 KB	03/07/2026 16:57:37
+C:\precision_vrt_solo\legacy\__pycache__\busca_db_schema.cpython-314.pyc	3,16 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\db_schema_backup_20260612_235341.cpython-314.pyc	11,81 KB	03/07/2026 16:57:37
+C:\precision_vrt_solo\legacy\__pycache__\db_schema_oficial.cpython-314.pyc	3,55 KB	03/07/2026 16:57:37
+C:\precision_vrt_solo\legacy\__pycache__\diagnostico_contexto.cpython-314.pyc	4,24 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\diagnostico_db.cpython-314.pyc	4,71 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\insumos_manager.cpython-314.pyc	5,24 KB	03/07/2026 16:57:38
+C:\precision_vrt_solo\legacy\__pycache__\main_extrator.cpython-314.pyc	28,87 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\main_prescricao.cpython-314.pyc	30,85 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\migrar_json_para_sqlite.cpython-314.pyc	12,46 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\novo_app.cpython-314.pyc	4,1 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\recomendacao_db.cpython-314.pyc	4,74 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\teste_minimo.cpython-314.pyc	0,23 KB	03/07/2026 16:57:39
+C:\precision_vrt_solo\legacy\__pycache__\teste_puro.cpython-314.pyc	1,01 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\verificar_conflitos.cpython-314.pyc	3,46 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\legacy\__pycache__\verify_update.cpython-314.pyc	0,73 KB	03/07/2026 16:57:40
+C:\precision_vrt_solo\legacy\app_backup_20260612_235418.py	51,01 KB	12/06/2026 22:39:36
+C:\precision_vrt_solo\legacy\atualizar_schema.py	1,5 KB	18/06/2026 22:43:48
+C:\precision_vrt_solo\legacy\busca_db_schema.py	1,81 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\dados_agri.db	52 KB	12/06/2026 09:52:38
+C:\precision_vrt_solo\legacy\db_schema_backup_20260612_235341.py	10,19 KB	18/06/2026 22:43:48
+C:\precision_vrt_solo\legacy\db_schema_oficial.py	2,79 KB	18/06/2026 22:43:48
+C:\precision_vrt_solo\legacy\diagnostico_contexto.py	2,49 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\diagnostico_db.py	2,41 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\insumos_manager.py	3,05 KB	12/06/2026 19:40:40
+C:\precision_vrt_solo\legacy\main_extrator.py	14,58 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\main_prescricao.py	15,96 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\migrar_json_para_sqlite.py	8,37 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\novo_app.py	2,6 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\recomendacao_db.py	3,26 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\teste_minimo.py	0,05 KB	12/06/2026 19:40:40
+C:\precision_vrt_solo\legacy\teste_puro.py	0,41 KB	03/07/2026 18:43:13
+C:\precision_vrt_solo\legacy\verificar_conflitos.py	1,87 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\legacy\verify_update.py	0,32 KB	18/06/2026 22:43:50
+C:\precision_vrt_solo\leitor_amostras.py	3,65 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\logs\__pycache__\main.cpython-314.pyc	48,17 KB	03/07/2026 23:22:04
+C:\precision_vrt_solo\logs\main.py	31,98 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\main.py	3,39 KB	04/07/2026 14:59:09
+C:\precision_vrt_solo\mapa_rotas.txt	68,94 KB	08/07/2026 23:15:55
+C:\precision_vrt_solo\migrate_schema.py	0,92 KB	18/06/2026 22:43:49
+C:\precision_vrt_solo\models\__init__.py	0,18 KB	07/07/2026 11:52:02
+C:\precision_vrt_solo\models\__pycache__\__init__.cpython-314.pyc	0,33 KB	07/07/2026 12:39:13
+C:\precision_vrt_solo\models\__pycache__\ativos.cpython-314.pyc	7,61 KB	03/07/2026 16:57:40
+C:\precision_vrt_solo\models\__pycache__\clima.cpython-314.pyc	4,73 KB	03/07/2026 16:57:40
+C:\precision_vrt_solo\models\__pycache__\compactacao.cpython-314.pyc	12,17 KB	03/07/2026 16:57:40
+C:\precision_vrt_solo\models\__pycache__\comunicacao.cpython-314.pyc	6,25 KB	03/07/2026 23:22:05
+C:\precision_vrt_solo\models\__pycache__\config.cpython-314.pyc	2,67 KB	07/07/2026 14:20:06
+C:\precision_vrt_solo\models\__pycache__\conhecimento.cpython-314.pyc	3,36 KB	03/07/2026 16:57:41
+C:\precision_vrt_solo\models\__pycache__\core_models.cpython-314.pyc	9,94 KB	03/07/2026 16:57:41
+C:\precision_vrt_solo\models\__pycache__\extrator.cpython-314.pyc	19,54 KB	03/07/2026 16:57:41
+C:\precision_vrt_solo\models\__pycache__\financeiro.cpython-314.pyc	14,3 KB	03/07/2026 16:57:41
+C:\precision_vrt_solo\models\__pycache__\financeiro_service.cpython-314.pyc	0,15 KB	03/07/2026 16:57:41
+C:\precision_vrt_solo\models\__pycache__\fiscal.cpython-314.pyc	5,85 KB	03/07/2026 16:57:42
+C:\precision_vrt_solo\models\__pycache__\prescricao.cpython-314.pyc	1,83 KB	03/07/2026 16:57:42
+C:\precision_vrt_solo\models\__pycache__\vendas.cpython-314.pyc	13,36 KB	03/07/2026 16:57:42
+C:\precision_vrt_solo\models\ativos.py	5,3 KB	17/06/2026 16:12:09
+C:\precision_vrt_solo\models\clima.py	3,32 KB	17/06/2026 15:32:47
+C:\precision_vrt_solo\models\compactacao.py	8,46 KB	17/06/2026 15:33:36
+C:\precision_vrt_solo\models\comunicacao.py	4,21 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\models\config.py	1,94 KB	07/07/2026 14:19:27
+C:\precision_vrt_solo\models\conhecimento.py	2,33 KB	17/06/2026 16:12:33
+C:\precision_vrt_solo\models\core_models.py	4,59 KB	19/06/2026 23:44:04
+C:\precision_vrt_solo\models\extrator.py	15,67 KB	17/06/2026 18:14:07
+C:\precision_vrt_solo\models\financeiro.py	9,86 KB	17/06/2026 16:11:35
+C:\precision_vrt_solo\models\financeiro_service.py	0,05 KB	17/06/2026 16:31:48
+C:\precision_vrt_solo\models\fiscal.py	4,29 KB	17/06/2026 18:32:35
+C:\precision_vrt_solo\models\migrar_config_sistema.py	5,54 KB	07/07/2026 13:33:01
+C:\precision_vrt_solo\models\prescricao.py	0,77 KB	17/06/2026 19:23:06
+C:\precision_vrt_solo\models\vendas.py	9,35 KB	17/06/2026 13:57:02
+C:\precision_vrt_solo\motor_calculo.py	11,81 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\pages\__pycache__\2_Configuracoes.cpython-314.pyc	8,6 KB	03/07/2026 16:57:42
+C:\precision_vrt_solo\pages\2_Configuracoes.py	3,89 KB	16/06/2026 00:00:26
+C:\precision_vrt_solo\precision_vrt.db	372 KB	08/07/2026 13:14:56
+C:\precision_vrt_solo\projeto.txt	1216,74 KB	06/07/2026 23:54:16
+C:\precision_vrt_solo\requirements.txt	0,15 KB	17/06/2026 16:35:57
+C:\precision_vrt_solo\schemas\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\schemas\__pycache__\__init__.cpython-314.pyc	0,14 KB	03/07/2026 16:57:44
+C:\precision_vrt_solo\schemas\__pycache__\ativos.cpython-314.pyc	12,62 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\clima.cpython-314.pyc	8,25 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\compactacao.cpython-314.pyc	15,65 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\comunicacao.cpython-314.pyc	3,85 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\cruzamento.cpython-314.pyc	14,28 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\extrator.cpython-314.pyc	25,51 KB	03/07/2026 16:57:43
+C:\precision_vrt_solo\schemas\__pycache__\financeiro.cpython-314.pyc	16,27 KB	03/07/2026 16:57:44
+C:\precision_vrt_solo\schemas\__pycache__\guardrail.cpython-314.pyc	22,23 KB	03/07/2026 16:57:44
+C:\precision_vrt_solo\schemas\__pycache__\laudo_export.cpython-314.pyc	5,78 KB	03/07/2026 16:57:44
+C:\precision_vrt_solo\schemas\__pycache__\vendas.cpython-314.pyc	14,82 KB	03/07/2026 23:22:05
+C:\precision_vrt_solo\schemas\ativos.py	8,87 KB	17/06/2026 14:09:58
+C:\precision_vrt_solo\schemas\clima.py	4,13 KB	17/06/2026 12:55:04
+C:\precision_vrt_solo\schemas\compactacao.py	7,11 KB	17/06/2026 11:09:36
+C:\precision_vrt_solo\schemas\comunicacao.py	2,06 KB	17/06/2026 14:27:44
+C:\precision_vrt_solo\schemas\configuracao.py	4,77 KB	07/07/2026 11:52:09
+C:\precision_vrt_solo\schemas\cruzamento.py	8,46 KB	16/06/2026 20:14:51
+C:\precision_vrt_solo\schemas\extrator.py	14,82 KB	17/06/2026 18:15:10
+C:\precision_vrt_solo\schemas\financeiro.py	10,61 KB	17/06/2026 13:45:29
+C:\precision_vrt_solo\schemas\guardrail.py	11,55 KB	16/06/2026 17:12:46
+C:\precision_vrt_solo\schemas\laudo_export.py	3,64 KB	17/06/2026 14:34:32
+C:\precision_vrt_solo\schemas\vendas.py	9,37 KB	03/07/2026 18:43:11
+C:\precision_vrt_solo\services\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\services\__pycache__\__init__.cpython-314.pyc	0,14 KB	03/07/2026 16:57:47
+C:\precision_vrt_solo\services\__pycache__\ativos_service.cpython-314.pyc	18,37 KB	04/07/2026 15:01:19
+C:\precision_vrt_solo\services\__pycache__\auth_service.cpython-314.pyc	2,45 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\bulk_blend_service.cpython-314.pyc	28,1 KB	04/07/2026 15:05:05
+C:\precision_vrt_solo\services\__pycache__\caixa_service.cpython-314.pyc	1,92 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\clientes_service.cpython-314.pyc	3,52 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\clima_service.cpython-314.pyc	27,21 KB	04/07/2026 15:01:19
+C:\precision_vrt_solo\services\__pycache__\comissao_service.cpython-314.pyc	11,81 KB	03/07/2026 16:57:45
+C:\precision_vrt_solo\services\__pycache__\compactacao_service.cpython-314.pyc	1,54 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\services\__pycache__\comunicacao_service.cpython-314.pyc	21,62 KB	03/07/2026 16:57:45
+C:\precision_vrt_solo\services\__pycache__\configuracoes_service.cpython-314.pyc	7,59 KB	07/07/2026 14:19:58
+C:\precision_vrt_solo\services\__pycache__\conhecimento_service.cpython-314.pyc	5,92 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\cruzamento_service.cpython-314.pyc	1,52 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\services\__pycache__\dashboard_service.cpython-314.pyc	14,33 KB	07/07/2026 16:11:52
+C:\precision_vrt_solo\services\__pycache__\equipe_service.cpython-314.pyc	2,6 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\services\__pycache__\extrator_service.cpython-314.pyc	8,43 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\financeiro_service.cpython-314.pyc	2,65 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\fiscal_service.cpython-314.pyc	12,32 KB	03/07/2026 16:57:46
+C:\precision_vrt_solo\services\__pycache__\geo_parser_service.cpython-314.pyc	7,38 KB	03/07/2026 16:57:46
+C:\precision_vrt_solo\services\__pycache__\laudo_export_service.cpython-314.pyc	14,29 KB	03/07/2026 16:57:47
+C:\precision_vrt_solo\services\__pycache__\orcamentos_service.cpython-314.pyc	2,32 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\permissoes_service.cpython-314.pyc	1,06 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\services\__pycache__\precificacao_service.cpython-314.pyc	15,21 KB	03/07/2026 16:57:47
+C:\precision_vrt_solo\services\__pycache__\prescricao_service.cpython-314.pyc	15,93 KB	04/07/2026 15:01:21
+C:\precision_vrt_solo\services\__pycache__\tabela_precos_service.cpython-314.pyc	1,55 KB	04/07/2026 15:01:24
+C:\precision_vrt_solo\services\__pycache__\vendas_service.cpython-314.pyc	19,64 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\services\ativos_service.py	16,32 KB	04/07/2026 14:58:40
+C:\precision_vrt_solo\services\auth_service.py	0,91 KB	04/07/2026 14:55:59
+C:\precision_vrt_solo\services\bulk_blend_service.py	20,34 KB	04/07/2026 15:04:28
+C:\precision_vrt_solo\services\caixa_service.py	0,8 KB	04/07/2026 14:56:42
+C:\precision_vrt_solo\services\clientes_service.py	1,64 KB	04/07/2026 14:56:18
+C:\precision_vrt_solo\services\clima_service.py	23,43 KB	04/07/2026 14:58:32
+C:\precision_vrt_solo\services\comissao_service.py	10,38 KB	18/06/2026 22:43:56
+C:\precision_vrt_solo\services\compactacao_service.py	0,54 KB	04/07/2026 14:58:46
+C:\precision_vrt_solo\services\comunicacao_service.py	17,25 KB	17/06/2026 14:34:36
+C:\precision_vrt_solo\services\configuracoes_service.py	5,38 KB	07/07/2026 14:19:33
+C:\precision_vrt_solo\services\conhecimento_service.py	3,55 KB	04/07/2026 14:58:22
+C:\precision_vrt_solo\services\cruzamento_service.py	0,54 KB	04/07/2026 14:58:55
+C:\precision_vrt_solo\services\dashboard_service.py	7,35 KB	07/07/2026 16:11:26
+C:\precision_vrt_solo\services\equipe_service.py	1,26 KB	04/07/2026 14:57:03
+C:\precision_vrt_solo\services\extrator_service.py	6,47 KB	04/07/2026 14:57:17
+C:\precision_vrt_solo\services\financeiro_service.py	1,25 KB	04/07/2026 14:56:26
+C:\precision_vrt_solo\services\fiscal_service.py	8,47 KB	17/06/2026 14:42:23
+C:\precision_vrt_solo\services\geo_parser_service.py	46,9 KB	09/07/2026 15:32:27
+C:\precision_vrt_solo\services\laudo_export_service.py	9,12 KB	21/06/2026 15:24:19
+C:\precision_vrt_solo\services\orcamentos_service.py	1,07 KB	04/07/2026 14:56:33
+C:\precision_vrt_solo\services\permissoes_service.py	0,36 KB	04/07/2026 14:58:15
+C:\precision_vrt_solo\services\precificacao_service.py	12,74 KB	18/06/2026 22:43:56
+C:\precision_vrt_solo\services\prescricao_service.py	12,53 KB	04/07/2026 14:56:49
+C:\precision_vrt_solo\services\tabela_precos_service.py	0,55 KB	04/07/2026 14:56:56
+C:\precision_vrt_solo\services\vendas_service.py	16,57 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\storage\exports\Everton_Venancio_teste_53_21-06-2026.pdf	4,92 KB	21/06/2026 22:29:26
+C:\precision_vrt_solo\storage\exports\Everton_Venancio_teste_53_21-06-2026_cartao.pdf	1,91 KB	21/06/2026 22:36:36
+C:\precision_vrt_solo\storage\exports\mapa_zonas.png	46,5 KB	04/07/2026 16:03:12
+C:\precision_vrt_solo\test_end_to_end.py	13,24 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\testar_import.py	2,27 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\__init__.py	0 KB	17/06/2026 13:44:35
+C:\precision_vrt_solo\tests\__pycache__\__init__.cpython-314.pyc	0,13 KB	03/07/2026 16:57:48
+C:\precision_vrt_solo\tests\__pycache__\test_clima_service.cpython-314.pyc	20,73 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\__pycache__\test_cruzamento.cpython-314.pyc	40,83 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\__pycache__\test_extrator_service.cpython-314.pyc	29,56 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\__pycache__\test_guardrails.cpython-314.pyc	33,05 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\__pycache__\test_otimizacao_pulp.cpython-314.pyc	4,52 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\__pycache__\tests_compactacao_service.cpython-314.pyc	30,99 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\tests\test_bulk_blend.py	13,56 KB	18/06/2026 22:43:56
+C:\precision_vrt_solo\tests\test_clima_service.py	12,16 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\test_cruzamento.py	27,07 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\test_extrator_service.py	19,77 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\test_guardrails.py	24,56 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\test_otimizacao_pulp.py	2,73 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\tests\tests_compactacao_service.py	22,05 KB	03/07/2026 18:43:12
+C:\precision_vrt_solo\utils\__pycache__\geojson.cpython-314.pyc	4,65 KB	03/07/2026 23:22:06
+C:\precision_vrt_solo\utils\geojson.py	20,91 KB	09/07/2026 15:33:37
+C:\precision_vrt_solo\vrt_pipeline.py	17,04 KB	18/06/2026 22:43:50
+C:\precision_vrt_solo\vulture.txt	9,69 KB	03/07/2026 17:09:41

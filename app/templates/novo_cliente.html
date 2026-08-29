@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_formulario %}
+
+{% block title %}{{ 'Editar' if client_id else 'Novo' }} Cliente{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col" x-data="{ cliente: { nome: '', cpf_cnpj: '', telefone: '', email: '', cidade: '', estado: '', area_total_hectares: 0 }, erro: '', carregando: false, modoEdicao: false }">
+
+    {{ header_formulario(
+        'Editar Cliente' if client_id else 'Novo Cliente',
+        '/clientes',
+        'Salvar Cliente',
+        'form-cliente'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <form id="form-cliente"
+              @submit.prevent="carregando = true; erro = ''; fetch('{% if cliente.id %}/clientes/' + cliente.id + '/editar{% else %}/clientes/novo{% endif %}', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ nome: cliente.nome, cpf_cnpj: cliente.cpf_cnpj, telefone: cliente.telefone, email: cliente.email, cidade: cliente.cidade, estado: cliente.estado, area_total_hectares: cliente.area_total_hectares }) }).then(r => r.json().then(data => ({ status: r.status, body: data }))).then(result => { carregando = false; if (result.body.success) { window.location.href = '/clientes'; } else { erro = result.body.detail || 'Erro desconhecido.'; } }).catch(e => { carregando = false; erro = 'Erro de comunicação com o servidor.'; })"
+              class="card p-6 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="form-label">Nome *</label>
+                    <input type="text" x-model="cliente.nome" required class="form-input" placeholder="Nome completo">
+                </div>
+
+                <div>
+                    <label class="form-label">CPF/CNPJ *</label>
+                    <input type="text" x-model="cliente.cpf_cnpj" required class="form-input" placeholder="123.456.789-00">
+                </div>
+
+                <div>
+                    <label class="form-label">Email *</label>
+                    <input type="email" x-model="cliente.email" required class="form-input" placeholder="cliente@example.com">
+                </div>
+
+                <div>
+                    <label class="form-label">Telefone</label>
+                    <input type="tel" x-model="cliente.telefone" class="form-input" placeholder="(11) 99999-0000">
+                </div>
+
+                <div>
+                    <label class="form-label">Cidade *</label>
+                    <input type="text" x-model="cliente.cidade" required class="form-input" placeholder="São Paulo">
+                </div>
+
+                <div>
+                    <label class="form-label">Estado *</label>
+                    <select x-model="cliente.estado" required class="form-input">
+                        <option value="">Selecione</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Área Total (ha)</label>
+                    <input type="number" x-model="cliente.area_total_hectares" step="0.01" min="0" class="form-input" placeholder="0.00">
+                </div>
+            </div>
+
+            <div x-show="erro" class="form-error bg-red-50 dark:bg-red-900/20 p-3 rounded-md mt-4" x-text="erro"></div>
+
+            <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <a href="/clientes" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" :disabled="carregando" :class="{ 'opacity-50 cursor-not-allowed': carregando }" class="btn btn-primary">
+                    <svg x-show="carregando" class="animate-spin -ml-1 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span x-text="carregando ? 'Salvando...' : (cliente.id ? 'Salvar Alterações' : 'Criar Cliente')"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

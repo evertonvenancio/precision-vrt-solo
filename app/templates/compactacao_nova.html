@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Upload de Penetrometria{% endblock %}
+
+{% block page_title %}Upload de Penetrometria{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+
+    <form method="POST" action="/api/v1/compactacao/upload" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 space-y-6">
+        <div>
+            <label for="csv_file" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Arquivo CSV do Penetrômetro</label>
+            <input type="file" id="csv_file" name="file" accept=".csv" required
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+        </div>
+
+        <div>
+            <label for="talhao_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Talhão ID (opcional)</label>
+            <input type="number" id="talhao_id" name="talhao_id" min="1"
+                   class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+        </div>
+
+        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Formato Esperado do CSV
+            </h3>
+            <p class="text-blue-700 dark:text-blue-300 text-sm mb-2">O arquivo deve conter as seguintes colunas:</p>
+            <code class="block bg-blue-100 dark:bg-blue-800 rounded px-3 py-2 text-blue-800 dark:text-blue-200 text-sm font-mono">
+                ponto_id,rp_0_10,rp_10_20,rp_20_30,rp_30_40
+            </code>
+            <p class="text-blue-600 dark:text-blue-400 text-xs mt-2">
+                Onde rp_X_Y representa a resistência à penetração (MPa) na camada de X a Y cm.
+            </p>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <a href="/compactacao"
+               class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition">
+                Cancelar
+            </a>
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
+                Processar Análise
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+
+
+
+/* Componente Button - Estilos Genéricos */
+.button-component {
+    /* Classes padrão que podem ser sobrescritas via data-attributes */
+    background-color: #2563eb;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: fit-content;
+}
+
+.button-component:hover {
+    background-color: #1d4ed8;
+}
+
+.button-component:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-component:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Light/Dark mode support */
+.dark .button-component {
+    background-color: #1e40af;
+}
+
+.dark .button-component:hover {
+    background-color: #1e3a8a;
+}
+
+.dark .button-component:focus {
+    outline-color: #60a5fa;
+}
+
+/* Variantes específicas via data-attributes */
+.button-component[data-variant="blue"] {
+    background-color: #2563eb;
+}
+
+.button-component[data-variant="green"] {
+    background-color: #16a34a;
+}
+
+.button-component[data-variant="red"] {
+    background-color: #dc2626;
+}
+
+.button-component[data-variant="gray"] {
+    background-color: #6b7280;
+    color: #f3f4f6;
+}
+
+.button-component[data-variant="gray"]:hover {
+    background-color: #4b5563;
+}
+
+/* Tamanho específico */
+.button-component[data-size="small"] {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.button-component[data-size="large"] {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+}
+
+/* Container dos componentes */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}

@@ -1,0 +1,178 @@
+{# ============================================================
+   COMPONENTES PADRONIZADOS — PRECISION VRT SOLO
+   Uso: {% from 'components/macros.html' import header_pagina, empty_state, ... %}
+   ============================================================ #}
+
+{# ------------------------------------------------------------------
+   HEADER DE PÁGINA — listagem
+   Uso: {{ header_pagina(titulo, subtitle, url_acao, texto_acao, icone_acao) }}
+   ------------------------------------------------------------------ #}
+{% macro header_pagina(titulo, subtitle='', url_acao='', texto_acao='', icone_acao='') %}
+<div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ titulo }}</h1>
+            {% if subtitle %}
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ subtitle }}</p>
+            {% endif %}
+        </div>
+        {% if url_acao %}
+        <a href="{{ url_acao }}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+           style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);"
+           onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            {% if icone_acao == 'plus' %}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            {% elif icone_acao == 'download' %}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            {% else %}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            {% endif %}
+            {{ texto_acao }}
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   HEADER DE PÁGINA — formulário (com botão voltar)
+   Uso: {{ header_formulario(titulo, url_voltar, texto_salvar, form_id) }}
+   ------------------------------------------------------------------ #}
+{% macro header_formulario(titulo, url_voltar='#', texto_salvar='Salvar', form_id='') %}
+<div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="{{ url_voltar }}"
+               class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ titulo }}</h1>
+            </div>
+        </div>
+        {% if form_id %}
+        <button type="submit" form="{{ form_id }}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+                style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);"
+                onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            {{ texto_salvar }}
+        </button>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   EMPTY STATE — estado vazio para listas
+   Uso: {{ empty_state('Nenhum cliente cadastrado.', 'Cadastrar o primeiro cliente →', '/clientes/novo', 'svg-class') }}
+   ------------------------------------------------------------------ #}
+{% macro empty_state(mensagem, texto_acao='', url_acao='', icone_svg='') %}
+<div class="p-12 text-center">
+    {% if icone_svg %}
+    <div class="mx-auto mb-4">{{ icone_svg|safe }}</div>
+    {% else %}
+    <svg class="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+    </svg>
+    {% endif %}
+    <p class="text-gray-500 dark:text-gray-400 text-lg">{{ mensagem }}</p>
+    {% if texto_acao %}
+    <a href="{{ url_acao }}" class="inline-block mt-4 font-medium transition-colors"
+       style="color: #2B6B3F;" onmouseover="this.style.color='#1a4a2a'" onmouseout="this.style.color='#2B6B3F'">
+        {{ texto_acao }}
+    </a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   BADGE DE STATUS
+   Uso: {{ badge_status('Aprovado', 'verde') }}
+   ------------------------------------------------------------------ #}
+{% macro badge_status(texto, variante='verde') %}
+{% set estilos = {
+    'verde': 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-400 border border-green-200 dark:border-green-700/30',
+    'amarelo': 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-700/30',
+    'azul': 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-400 border border-blue-200 dark:border-blue-700/30',
+    'vermelho': 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-400 border border-red-200 dark:border-red-700/30',
+    'cinza': 'bg-gray-100 dark:bg-gray-700/40 text-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-600/30',
+    'roxo': 'bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-400 border border-purple-200 dark:border-purple-700/30',
+} %}
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ estilos.get(variante, estilos.cinza) }}">
+    {{ texto }}
+</span>
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   CARD PADRÃO — wrapper para conteúdo
+   Uso: {{ card_inicio('título do card') }} ... {{ card_fim() }}
+   ------------------------------------------------------------------ #}
+{% macro card_inicio(titulo='') %}
+<div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+    {% if titulo %}
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+        <h3 class="text-base font-semibold text-gray-700 dark:text-gray-200">{{ titulo }}</h3>
+    </div>
+    {% endif %}
+    <div class="p-6">
+{% endmacro %}
+
+{% macro card_fim() %}
+    </div>
+</div>
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   BOTÃO — wrapper de botão padronizado
+   Uso: {{ botao('Salvar', 'submit', variante='verde') }}
+   ------------------------------------------------------------------ #}
+{% macro botao(texto, tipo='button', variante='verde', form_id='', icone='', attrs='') %}
+{% set estilos = {
+    'verde': 'text-white transition-colors',
+    'cinza': 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600',
+    'vermelho': 'bg-red-600 hover:bg-red-700 text-white',
+} %}
+{% if variante == 'verde' %}
+<button type="{{ tipo }}" {% if form_id %}form="{{ form_id }}"{% endif %} {{ attrs }}
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+        style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+    {% if icone == 'plus' %}
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    {% elif icone == 'save' %}
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    {% endif %}
+    {{ texto }}
+</button>
+{% else %}
+<button type="{{ tipo }}" {% if form_id %}form="{{ form_id }}"{% endif %} {{ attrs }}
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold {{ estilos.get(variante, estilos.cinza) }}">
+    {{ texto }}
+</button>
+{% endif %}
+{% endmacro %}
+
+{# ------------------------------------------------------------------
+   TABELA PADRÃO — wrapper com thead/tbody
+   Uso: {{ tabela_inicio(colunas) }} ... {{ tabela_fim() }}
+   colunas = [('Nome', 'left'), ('Ações', 'center')]
+   ------------------------------------------------------------------ #}
+{% macro tabela_inicio(colunas) %}
+<div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                {% for nome, alinhamento in colunas %}
+                <th class="px-6 py-3 text-{{ alinhamento }}">{{ nome }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+{% endmacro %}
+
+{% macro tabela_fim() %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}

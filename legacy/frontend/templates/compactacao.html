@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Análise de Compactação do Solo{% endblock %}
+
+{% block page_title %}Análise de Compactação do Solo{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    <!-- CABEÇALHO FIXO -->
+    <div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Avalie a resistência mecânica do solo por talhão.</p>
+            </div>
+            <a href="/compactacao/nova"
+               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Nova Análise
+            </a>
+        </div>
+    </div>
+
+    <!-- CENTRO SCROLLÁVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+                            <th class="px-6 py-3">Talhão</th>
+                            <th class="px-6 py-3">Data da Coleta</th>
+                            <th class="px-6 py-3">Classificação Geral</th>
+                            <th class="px-6 py-3">Necessita Escarificação?</th>
+                            <th class="px-6 py-3">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Loop Jinja2 será inserido aqui futuramente -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-12 text-center">
+                <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <p class="text-gray-500 text-lg">Nenhuma análise de compactação cadastrada.</p>
+                <a href="/compactacao/nova" class="inline-block mt-4 text-green-600 hover:text-green-700 font-medium">
+                    Cadastrar a primeira análise →
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

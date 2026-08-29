@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, card_inicio, card_fim, botao %}
+
+{% block title %}Relatórios do Sistema{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    {{ header_pagina(
+        'Relatórios do Sistema',
+        'Gere e visualize relatórios do sistema.'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {% for relatorio in relatorios_disponiveis %}
+            {{ card_inicio(relatorio.nome) }}
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ relatorio.descricao }}</p>
+
+                <div class="space-y-2 text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    <p>Filtros: {{ relatorio.filtros|join(', ') }}</p>
+                    <p>Exportar: {{ relatorio.formatos|join(', ') }}</p>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <button onclick="gerarRelatorio('{{ relatorio.id }}')"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+                            style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Gerar
+                    </button>
+                    <button onclick="visualizarRelatorio('{{ relatorio.id }}')"
+                            class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-bold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        Visualizar
+                    </button>
+                </div>
+            {{ card_fim() }}
+            {% endfor %}
+        </div>
+
+        <!-- Modal de Geração -->
+        <div id="modal-gerar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Gerar Relatório</h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="form-label">Relatório</label>
+                        <input type="text" id="modal-titulo" class="form-input" readonly>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Formato de Exportação</label>
+                        <select id="modal-formatos" class="form-select">
+                            <option value="csv">CSV</option>
+                            <option value="excel">Excel</option>
+                            <option value="pdf">PDF</option>
+                            <option value="csv,excel">CSV + Excel</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="form-label">Data Início (Opcional)</label>
+                            <input type="date" id="modal-data-inicio" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">Data Fim (Opcional)</label>
+                            <input type="date" id="modal-data-fim" class="form-input">
+                        </div>
+                    </div>
+
+                    <div id="modal-filtros-extra" class="space-y-2">
+                        <!-- Filtros adicionais inseridos dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button onclick="fecharModal()" class="btn btn-secondary">Cancelar</button>
+                    <button onclick="confirmarGeracao()" class="btn btn-danger">Gerar Relatório</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Visualização -->
+        <div id="modal-visualizar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Visualização do Relatório</h3>
+                    <button onclick="fecharVisualizacao()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <div id="conteudo-visualizacao">
+                    <!-- Conteúdo do relatório inserido aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="resultados" class="hidden mt-6">
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4 mb-4">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span class="text-green-800 dark:text-green-300" id="mensagem-sucesso"></span>
+                </div>
+            </div>
+
+            <div id="exportacoes" class="space-y-2">
+                <!-- Links de download inseridos aqui -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let relatorioAtual = null;
+
+function gerarRelatorio(relatorioId) {
+    relatorioAtual = relatorioId;
+
+    const relatorios = {
+        clientes: {
+            nome: 'Relatório de Clientes',
+            filtros: ['status', 'cidade', 'estado']
+        },
+        financeiro: {
+            nome: 'Relatório Financeiro',
+            filtros: ['data_inicio', 'data_fim', 'status']
+        },
+        operacional: {
+            nome: 'Relatório Operacional',
+            filtros: ['data_inicio', 'data_fim']
+        }
+    };
+
+    const relatorio = relatorios[relatorioId];
+    document.getElementById('modal-titulo').value = relatorio.nome;
+
+    const filtrosContainer = document.getElementById('modal-filtros-extra');
+    filtrosContainer.innerHTML = '';
+
+    relatorio.filtros.forEach(filtro => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+
+        let html = '';
+        if (filtro === 'status') {
+            html = `
+                <label class="form-label">Status:</label>
+                <select class="form-select" name="${filtro}">
+                    <option value="">Todos</option>
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                </select>
+            `;
+        } else if (filtro === 'cidade' || filtro === 'estado') {
+            const label = filtro.charAt(0).toUpperCase() + filtro.slice(1);
+            html = `
+                <label class="form-label">${label}:</label>
+                <input type="text" class="form-input" name="${filtro}" placeholder="${label}">
+            `;
+        }
+
+        div.innerHTML = html;
+        filtrosContainer.appendChild(div);
+    });
+
+    document.getElementById('modal-gerar').classList.remove('hidden');
+}
+
+function visualizarRelatorio(relatorioId) {
+    relatorioAtual = relatorioId;
+
+    const params = new URLSearchParams({
+        relatorio_id: relatorioId
+    });
+
+    const dataInicio = document.querySelector('[data-inicio]')?.value;
+    const dataFim = document.querySelector('[data-fim]')?.value;
+
+    if (dataInicio) params.append('data_inicio', dataInicio);
+    if (dataFim) params.append('data_fim', dataFim);
+
+    fetch(`/relatorios/visualizar/${relatorioId}?${params}`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('conteudo-visualizacao').innerHTML = html;
+            document.getElementById('modal-visualizar').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Erro ao carregar visualização:', error);
+            alert('Erro ao carregar visualização do relatório');
+        });
+}
+
+function fecharModal() {
+    document.getElementById('modal-gerar').classList.add('hidden');
+}
+
+function fecharVisualizacao() {
+    document.getElementById('modal-visualizar').classList.add('hidden');
+}
+
+function confirmarGeracao() {
+    const formData = new FormData();
+    formData.append('relatorio_id', relatorioAtual);
+    formData.append('formatos', document.getElementById('modal-formatos').value);
+
+    document.querySelectorAll('#modal-filtros-extra input, #modal-filtros-extra select').forEach(input => {
+        if (input.value) {
+            formData.append(input.name, input.value);
+        }
+    });
+
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Gerando...';
+
+    fetch(`/relatorios/gerar/${relatorioAtual}`, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = 'Gerar Relatório';
+            fecharModal();
+
+            if (data.success) {
+                mostrarResultados(data);
+            } else {
+                alert('Erro ao gerar relatório: ' + data.mensagem);
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = 'Gerar Relatório';
+            console.error('Erro ao gerar relatório:', error);
+            alert('Erro ao gerar relatório');
+        });
+}
+
+function mostrarResultados(data) {
+    const resultadosDiv = document.getElementById('resultados');
+    const mensagemSucesso = document.getElementById('mensagem-sucesso');
+    const exportacoesDiv = document.getElementById('exportacoes');
+
+    resultadosDiv.classList.remove('hidden');
+    mensagemSucesso.textContent = data.mensagem;
+    exportacoesDiv.innerHTML = '';
+
+    if (data.exportacao && data.exportacao.arquivos_exportados) {
+        Object.entries(data.exportacao.arquivos_exportados).forEach(([formato, caminho]) => {
+            const link = document.createElement('a');
+            link.href = caminho;
+            link.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors mr-2 mb-2';
+            link.style.background = 'linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%)';
+            link.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Baixar ' + formato.toUpperCase();
+            exportacoesDiv.appendChild(link);
+        });
+    }
+}
+
+document.addEventListener('click', function(event) {
+    if (event.target.id === 'modal-gerar') {
+        fecharModal();
+    }
+    if (event.target.id === 'modal-visualizar') {
+        fecharVisualizacao();
+    }
+});
+</script>
+{% endblock %}

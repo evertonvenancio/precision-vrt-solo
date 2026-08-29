@@ -1,0 +1,1346 @@
+[
+  {
+    "file": "ativos.html",
+    "categoria": "A",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 89,
+      "file_size": 4747
+    }
+  },
+  {
+    "file": "base_tecnica.html",
+    "categoria": "C",
+    "problema": "Poucos componentes globais",
+    "evidencia": "Apenas 0/8 componentes globais presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 0,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 151,
+      "file_size": 8088
+    }
+  },
+  {
+    "file": "bulk_blend.html",
+    "categoria": "?",
+    "problema": "Poucos componentes globais",
+    "evidencia": "Apenas 0/8 componentes globais presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": true,
+        "x-model": true,
+        "x-show": true,
+        "x-if": true,
+        "x-for": true,
+        "click": true,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 6,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": true,
+        "forms": false,
+        "tables": true,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 389,
+      "file_size": 22624
+    }
+  },
+  {
+    "file": "caixa.html",
+    "categoria": "B",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 39,
+      "file_size": 1551
+    }
+  },
+  {
+    "file": "clientes.html",
+    "categoria": "A",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 75,
+      "file_size": 3783
+    }
+  },
+  {
+    "file": "clima.html",
+    "categoria": "C",
+    "problema": "Poucos componentes globais",
+    "evidencia": "Apenas 0/8 componentes globais presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": true,
+        "x-model": true,
+        "x-show": true,
+        "x-if": false,
+        "x-for": true,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 4,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": true,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 198,
+      "file_size": 12762
+    }
+  },
+  {
+    "file": "compactacao.html",
+    "categoria": "C",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 81,
+      "file_size": 3969
+    }
+  },
+  {
+    "file": "compactacao_nova.html",
+    "categoria": "D",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": true,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 84,
+      "file_size": 4864
+    }
+  },
+  {
+    "file": "configuracoes.html",
+    "categoria": "A",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 75,
+      "file_size": 3846
+    }
+  },
+  {
+    "file": "conhecimento.html",
+    "categoria": "E",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 97,
+      "file_size": 5204
+    }
+  },
+  {
+    "file": "cruzamento.html",
+    "categoria": "C",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 39,
+      "file_size": 1607
+    }
+  },
+  {
+    "file": "equipe.html",
+    "categoria": "A",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 75,
+      "file_size": 3751
+    }
+  },
+  {
+    "file": "financeiro.html",
+    "categoria": "B",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 75,
+      "file_size": 3843
+    }
+  },
+  {
+    "file": "nematoides.html",
+    "categoria": "C",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 38,
+      "file_size": 1398
+    }
+  },
+  {
+    "file": "novo_artigo.html",
+    "categoria": "E",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 0/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 0,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 74,
+      "file_size": 4230
+    }
+  },
+  {
+    "file": "novo_ativo.html",
+    "categoria": "D",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 0/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 0,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 81,
+      "file_size": 5504
+    }
+  },
+  {
+    "file": "novo_funcionario.html",
+    "categoria": "A",
+    "problema": "Poucos componentes globais",
+    "evidencia": "Apenas 0/8 componentes globais presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 114,
+      "file_size": 6390
+    }
+  },
+  {
+    "file": "permissoes.html",
+    "categoria": "A",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 0/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 0,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 157,
+      "file_size": 13241
+    }
+  },
+  {
+    "file": "prescricao.html",
+    "categoria": "C",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": false
+      },
+      "line_count": 75,
+      "file_size": 3784
+    }
+  },
+  {
+    "file": "prescricao_nova.html",
+    "categoria": "C",
+    "problema": "Poucos componentes globais",
+    "evidencia": "Apenas 0/8 componentes globais presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": true,
+        "x-model": true,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": true,
+        "submit": false,
+        "change": true,
+        "input": false
+      },
+      "alpine_count": 5,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": true,
+        "forms": false,
+        "tables": false,
+        "upload": true,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 425,
+      "file_size": 26546
+    }
+  },
+  {
+    "file": "prescricao_resultado.html",
+    "categoria": "C",
+    "problema": "Sem pageData()",
+    "evidencia": "Aus\u00eancia de function pageData()",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": false,
+        "card": false,
+        "table": false,
+        "loading": false,
+        "message": false,
+        "empty-state": false,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 0,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": true,
+        "click": true,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 4,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": true,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 407,
+      "file_size": 30291
+    }
+  },
+  {
+    "file": "tabela_precos.html",
+    "categoria": "B",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": true,
+        "x-model": false,
+        "x-show": false,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": false,
+        "mobile": false,
+        "overflow_horizontal": true
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": false,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 113,
+      "file_size": 6858
+    }
+  },
+  {
+    "file": "upload.html",
+    "categoria": "D",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": true,
+        "tables": false,
+        "upload": true,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 203,
+      "file_size": 11498
+    }
+  },
+  {
+    "file": "upload_resultado.html",
+    "categoria": "D",
+    "problema": "Pouca integra\u00e7\u00e3o Alpine",
+    "evidencia": "Apenas 1/9 elementos Alpine presentes",
+    "tipo": "ERRO REAL",
+    "detalhes": {
+      "extends_base": true,
+      "has_pageData": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_header": false,
+      "components": {
+        "button": true,
+        "card": true,
+        "table": true,
+        "loading": true,
+        "message": true,
+        "empty-state": true,
+        "modal": false,
+        "breadcrumb": false
+      },
+      "components_count": 6,
+      "alpine": {
+        "x-data": false,
+        "x-model": false,
+        "x-show": true,
+        "x-if": false,
+        "x-for": false,
+        "click": false,
+        "submit": false,
+        "change": false,
+        "input": false
+      },
+      "alpine_count": 1,
+      "responsive": {
+        "desktop": true,
+        "tablet": true,
+        "mobile": false,
+        "overflow_horizontal": false
+      },
+      "functionality": {
+        "fetch": false,
+        "forms": false,
+        "tables": false,
+        "upload": true,
+        "filters": false,
+        "calculations": true,
+        "modals": false,
+        "navigation": true
+      },
+      "line_count": 212,
+      "file_size": 15217
+    }
+  }
+]

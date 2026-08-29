@@ -1,0 +1,440 @@
+<!-- Sistema de Identidade e Segurança Global -->
+<script src="/components/http-error-handler.html"></script>
+<script src="/components/http-error-handler.html"></script>
+
+<script>
+
+function identitySystem() {
+    return {
+        // Estado da aplicação
+        authenticated: false,
+        user: null,
+        token: null,
+        permissions: [],
+        loading: false,
+        error: null,
+        
+        // Configuração do sistema
+        config: {
+            empresa: {
+                nome: 'Precision VRT Solo',
+                logo: '/images/logo.png',
+                versao: '1.0.0',
+                desenvolvedor: 'Novaxis',
+                email: 'contato@precisionvrt.com.br'
+            },
+            sistema: {
+                nome: 'Precision VRT Solo',
+                versao: '1.0.0',
+                desenvolvedor: 'Novaxis'
+            }
+        },
+        
+        // Inicialização do sistema
+        async init() {
+            await this.checkAuthentication();
+            this.initEventListeners();
+        },
+        
+        // Verificar status de autenticação
+        async checkAuthentication() {
+            try {
+                // Verificar token nos cookies
+                const cookies = this.getCookies();
+                this.token = cookies.access_token;
+                
+                if (this.token) {
+                    // Validar token
+                    const response = await fetch('/web/auth/current-user', {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.authenticated = true;
+                        this.user = data.user;
+                        this.permissions = data.user.permissions;
+                        
+                        console.log('✅ Usuário autenticado:', this.user.username);
+                        return true;
+                    } else {
+                        const httpError = getHttpErrorMessage(response);
+                        if (window.messageSystem) {
+                            window.messageSystem.error(httpError.title, httpError.message);
+                        }
+                        // Token inválido, limpar sessão
+                        await this.logout();
+                    }
+                }
+                
+                return false;
+            } catch (error) {
+                const httpError = handleFetchError(error, 'Não foi possível verificar autenticação.');\n            if (window.messageSystem) {\n                window.messageSystem.error(httpError.title, httpError.message);\n            }\n            console.error('Erro ao verificar autenticação:', error);
+                await this.logout();
+                return false;
+            }
+        },
+        
+        // Obter cookies
+        getCookies() {
+            const cookies = {};
+            document.cookie.split(';').forEach(cookie => {
+                const [name, value] = cookie.trim().split('=');
+                if (name) {
+                    cookies[name] = value;
+                }
+            });
+            return cookies;
+        },
+        
+        // Login
+        async login(username, password, remember = false) {
+            this.loading = true;
+            this.error = null;
+            
+            try {
+                const formData = new FormData();
+                formData.append('usuario', username);
+                formData.append('senha', password);
+                formData.append('remember_me', remember);
+                
+                const response = await fetch('/web/auth/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    // Atualizar estado
+                    await this.checkAuthentication();
+                    
+                    // Emitir evento de login
+                    window.dispatchEvent(new CustomEvent('loginSuccess', {
+                        detail: { user: this.user }
+                    }));
+                    
+                    return true;
+                } else {
+                    const httpError = getHttpErrorMessage(response);
+                    if (window.messageSystem) {
+                        window.messageSystem.error(httpError.title, httpError.message);
+                    }
+                    
+                    const data = await response.json();
+                    this.error = data.detail || httpError.message;
+                    return false;
+                }
+            } catch (error) {
+
+                this.error = 'Erro ao conectar com o servidor. Tente novamente.';
+                return false;
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        // Logout
+        async logout() {
+            try {
+                // Obter token dos cookies
+                const cookies = this.getCookies();
+                const access_token = cookies.access_token;
+                const refresh_token = cookies.refresh_token;
+                
+                // Chamar endpoint de logout
+                if (access_token) {
+                    await fetch('/web/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${access_token}`
+                        }
+                    });
+                }
+                
+                // Limpar estado
+                this.authenticated = false;
+                this.user = null;
+                this.token = null;
+                this.permissions = [];
+                this.error = null;
+                
+                // Limpar cookies
+                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                
+                // Redirecionar para login
+                window.location.href = '/login';
+                
+            } catch (error) {
+
+                // Mesmo com erro, limpar estado local
+                this.authenticated = false;
+                this.user = null;
+                this.token = null;
+                this.permissions = [];
+                window.location.href = '/login';
+            }
+        },
+        
+        // Verificar permissão
+        hasPermission(permission) {
+            if (!this.authenticated || !this.permissions) return false;
+            
+            // Admin tem todas as permissões
+            if (this.permissions.includes('admin')) return true;
+            
+            return this.permissions.includes(permission);
+        },
+        
+        // Verificar se tem pelo menos uma permissão da lista
+        hasAnyPermission(permissions) {
+            if (!this.authenticated || !this.permissions) return false;
+            
+            // Admin tem todas as permissões
+            if (this.permissions.includes('admin')) return true;
+            
+            return permissions.some(permission => this.permissions.includes(permission));
+        },
+        
+        // Verificar se tem todas as permissões
+        hasAllPermissions(permissions) {
+            if (!this.authenticated || !this.permissions) return false;
+            
+            // Admin tem todas as permissões
+            if (this.permissions.includes('admin')) return true;
+            
+            return permissions.every(permission => this.permissions.includes(permission));
+        },
+        
+        // Obter role do usuário
+        getUserRole() {
+            return this.user?.role || null;
+        },
+        
+        // Verificar role
+        hasRole(role) {
+            return this.user?.role === role;
+        },
+        
+        // Verificar se usuário é administrador
+        isAdmin() {
+            return this.hasRole('admin');
+        },
+        
+        // Inicializar listeners de eventos
+        initEventListeners() {
+            // Escutar eventos globais
+            window.addEventListener('logout', () => {
+                this.logout();
+            });
+            
+            // Escutar eventos de erro
+            window.addEventListener('authError', (event) => {
+                this.error = event.detail.message;
+            });
+        },
+        
+        // Formatar data
+        formatDate(date) {
+            if (!date) return '';
+            
+            const dateObj = new Date(date);
+            return dateObj.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        },
+        
+        // Formatar hora
+        formatTime(date) {
+            if (!date) return '';
+            
+            const dateObj = new Date(date);
+            return dateObj.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        },
+        
+        // Formatar data completa
+        formatDateTime(date) {
+            if (!date) return '';
+            
+            const dateObj = new Date(date);
+            return dateObj.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        },
+        
+        // Obter iniciais do usuário
+        getUserInitials() {
+            if (!this.user) return '';
+            
+            const { nome } = this.user;
+            const names = nome.split(' ');
+            
+            if (names.length >= 2) {
+                return `${names[0][0]}${names[names.length - 1][0]}`;
+            } else if (names.length === 1) {
+                return names[0].substring(0, 2);
+            }
+            
+            return '';
+        },
+        
+        // Obter mensagem de boas-vindas
+        getWelcomeMessage() {
+            if (!this.user) return '';
+            
+            const now = new Date();
+            const hour = now.getHours();
+            
+            let greeting = 'Bem-vindo';
+            if (hour < 12) {
+                greeting = 'Bom dia';
+            } else if (hour < 18) {
+                greeting = 'Boa tarde';
+            } else {
+                greeting = 'Boa noite';
+            }
+            
+            return `${greeting}, ${this.user.username}!`;
+        },
+        
+        // Obter tempo restante da sessão
+        async getSessionTimeRemaining() {
+            if (!this.token) return 0;
+            
+            try {
+                const response = await fetch('/web/auth/check-auth', {
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.session_time_remaining || 30; // 30 minutos padrão
+                } else {
+                    const httpError = getHttpErrorMessage(response);
+                    if (window.messageSystem) {
+                        window.messageSystem.warning(httpError.title, httpError.message);
+                    }
+                    return 0;
+                }
+            } catch (error) {
+
+                return 0;
+            }
+        },
+        
+        // Verificar se sessão está prestes a expirar
+        async isSessionExpiring() {
+            const timeRemaining = await this.getSessionTimeRemaining();
+            return timeRemaining > 0 && timeRemaining <= 5; // 5 minutos ou menos
+        },
+        
+        // Renovar sessão
+        async renewSession() {
+            try {
+                const cookies = this.getCookies();
+                const refresh_token = cookies.refresh_token;
+                
+                if (refresh_token) {
+                    const response = await fetch('/web/auth/refresh-token', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            this.token = data.access_token;
+                            return true;
+                        }
+                    } else {
+                        const httpError = getHttpErrorMessage(response);
+                        if (window.messageSystem) {
+                            window.messageSystem.error(httpError.title, httpError.message);
+                        }
+                    }
+                }
+                
+                return false;
+            } catch (error) {
+
+                return false;
+            }
+        },
+        
+        // Verificar e renovar sessão periodicamente
+        startSessionCheck() {
+            setInterval(async () => {
+                if (this.authenticated) {
+                    const isExpiring = await this.isSessionExpiring();
+                    if (isExpiring) {
+                        console.log('Sessão expirando, tentando renovar...');
+                        const renewed = await this.renewSession();
+                        if (!renewed) {
+                            console.log('Não foi possível renovar sessão, realizando logout...');
+                            this.logout();
+                        }
+                    }
+                }
+            }, 60000); // Verificar a cada minuto
+        },
+        
+        // Obter informações do sistema
+        getSystemInfo() {
+            return {
+                ...this.config.sistema,
+                empresa: this.config.empresa,
+                usuario: this.user?.username || '',
+                role: this.user?.role || '',
+                permissions: this.permissions || [],
+                autenticado: this.authenticated
+            };
+        },
+        
+        // Verificar se está carregando
+        isLoading() {
+            return this.loading;
+        },
+        
+        // Definir erro
+        setError(message) {
+            this.error = message;
+        },
+        
+        // Limpar erro
+        clearError() {
+            this.error = null;
+        }
+    }
+}
+
+// Inicializar sistema de identidade quando DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    // Criar instância global
+    window.identitySystem = new identitySystem();
+    
+    // Inicializar sistema
+    window.identitySystem.init().then(() => {
+        // Emitir evento de inicialização
+        window.dispatchEvent(new CustomEvent('identityInitialized'));
+        
+        // Iniciar verificação de sessão
+        window.identitySystem.startSessionCheck();
+    });
+});
+</script>

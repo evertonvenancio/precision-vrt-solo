@@ -1,0 +1,161 @@
+<!-- Tratamento global de erros HTTP -->
+<script>
+function getHttpErrorMessage(response) {
+    let title = 'Erro';
+    let message = 'Ocorreu um erro inesperado.';
+    
+    switch(response.status) {
+        case 200:
+            title = 'OK';
+            message = 'Requisição realizada com sucesso.';
+            break;
+            
+        case 201:
+            title = 'Criado';
+            message = 'Recurso criado com sucesso.';
+            break;
+            
+        case 400:
+            title = 'Erro de Validação';
+            message = 'Os dados enviados estão incorretos. Verifique os campos e tente novamente.';
+            break;
+            
+        case 401:
+            title = 'Não Autorizado';
+            message = 'Sessão expirada. Por favor, faça login novamente.';
+            break;
+            
+        case 403:
+            title = 'Acesso Negado';
+            message = 'Você não tem permissão para realizar esta ação.';
+            break;
+            
+        case 404:
+            title = 'Não Encontrado';
+            message = 'O recurso solicitado não foi encontrado.';
+            break;
+            
+        case 409:
+            title = 'Conflito';
+            message = 'Conflito de dados. Por favor, atualize a página e tente novamente.';
+            break;
+            
+        case 422:
+            title = 'Erro de Validação';
+            message = 'Há erros nos dados enviados. Verifique os campos obrigatórios.';
+            break;
+            
+        case 429:
+            title = 'Muitas Requisições';
+            message = 'Você fez muitas requisições. Por favor, aguarde alguns instantes e tente novamente.';
+            break;
+            
+        case 500:
+            title = 'Erro Interno';
+            message = 'Ocorreu um erro no servidor. Nossa equipe já foi notificada.';
+            break;
+            
+        default:
+            if (response.status >= 400 && response.status < 500) {
+                title = 'Erro na Requisição';
+                message = `Erro ${response.status}: Falha na comunicação com o servidor.`;
+            } else {
+                title = 'Erro de Servidor';
+                message = `Erro ${response.status}: Ocorreu um erro inesperado no servidor.`;
+            }
+    }
+    
+    return { title, message };
+}
+
+function handleFetchError(error, defaultMessage = 'Não foi possível conectar ao servidor.') {
+    let title = 'Erro';
+    let message = defaultMessage;
+    
+    if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        title = 'Sem Conexão';
+        message = 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+    } else if (error.name === 'TypeError') {
+        title = 'Erro de Rede';
+        message = 'Ocorreu um erro de rede. Tente novamente.';
+    } else {
+        // Mensagens padronizadas específicas
+        title = 'Erro';
+        message = 'Ocorreu um erro inesperado. Tente novamente.';
+    }
+    
+    return { title, message };
+}
+
+// Funções utilitárias para mensagens específicas
+function showSuccessMessage(message) {
+    if (window.messageSystem) {
+        window.messageSystem.success('Sucesso', message);
+    }
+}
+
+function showErrorMessage(message) {
+    if (window.messageSystem) {
+        window.messageSystem.error('Erro', message);
+    }
+}
+
+function showWarningMessage(message) {
+    if (window.messageSystem) {
+        window.messageSystem.warning('Atenção', message);
+    }
+}
+
+function showInfoMessage(message) {
+    if (window.messageSystem) {
+        window.messageSystem.info('Informação', message);
+    }
+}
+
+// Mensagens específicas para diferentes cenários
+const MESSAGES = {
+    // Sucessos
+    CLIENTE_CADASTRADO: 'Cliente cadastrado com sucesso.',
+    SALVO_SUCESSO: 'Dados salvos com sucesso.',
+    ATUALIZADO_SUCESSO: 'Dados atualizados com sucesso.',
+    CLIENTE_SALVO: 'Cliente salvo com sucesso.',
+    
+    // Erros
+    NAO_FOI_POSSIVEL_SALVAR: 'Não foi possível salvar os dados.',
+    NAO_FOI_POSSIVEL_SALVAR_CLIENTE: 'Não foi possível salvar o cliente.',
+    CAMPO_OBRIGATORIO: 'Campo obrigatório: {field}',
+    NAO_FOI_POSSIVEL_CONECTAR: 'Não foi possível conectar ao servidor.',
+    SESSION_EXPIRADA: 'Sessão expirada. Por favor, faça login novamente.',
+    
+    // Validações
+    DADOS_INVALIDOS: 'Os dados enviados estão incorretos. Verifique os campos e tente novamente.',
+    ACESSO_NEGADO: 'Você não tem permissão para realizar esta ação.',
+    RECURSO_NAO_ENCONTRADO: 'O recurso solicitado não foi encontrado.',
+    CONFLITO_DADOS: 'Conflito de dados. Por favor, atualize a página e tente novamente.',
+    MUITAS_REQUISICOES: 'Você fez muitas requisições. Por favor, aguarde alguns instantes e tente novamente.'
+};
+
+function showSpecificMessage(type, messageKey, params = {}) {
+    let message = MESSAGES[messageKey] || messageKey;
+    
+    // Substituir parâmetros na mensagem
+    for (const [key, value] of Object.entries(params)) {
+        message = message.replace(`{${key}}`, value);
+    }
+    
+    switch(type) {
+        case 'success':
+            showSuccessMessage(message);
+            break;
+        case 'error':
+            showErrorMessage(message);
+            break;
+        case 'warning':
+            showWarningMessage(message);
+            break;
+        case 'info':
+            showInfoMessage(message);
+            break;
+    }
+}
+</script>

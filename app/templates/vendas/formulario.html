@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_formulario, card_inicio, card_fim, botao %}
+
+{% block title %}{{ titulo or 'Nova Venda' }}{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    {{ header_formulario(
+        titulo or 'Nova Venda',
+        '/web/vendas',
+        'Registrar',
+        'form-venda'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <form id="form-venda" method="POST" class="space-y-6">
+
+            {{ card_inicio('Dados da Venda') }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Cliente -->
+                <div>
+                    <label for="cliente_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cliente *</label>
+                    <select id="cliente_id" name="cliente_id" required
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                        <option value="">Selecione o cliente...</option>
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Orcamento Vinculado (opcional) -->
+                <div>
+                    <label for="orcamento_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Orcamento Vinculado</label>
+                    <select id="orcamento_id" name="orcamento_id"
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                        <option value="">Nenhum (venda direta)</option>
+                        {% for orc in orcamentos %}
+                        <option value="{{ orc.id }}">#{{ orc.id }} - R$ {{ '{:,.2f}'.format(orc.valor_total_liquido|float) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            {{ card_inicio('Tipo de Pagamento') }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Tipo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Tipo de Venda *</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipo_venda" value="avista" checked
+                                   class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500"
+                                   onchange="toggleParcelas(false)">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">A Vista</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipo_venda" value="aprazo"
+                                   class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500"
+                                   onchange="toggleParcelas(true)">
+                            <span class="text-sm text-gray-700 dark:text-gray-300">A Prazo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Metodo de Pagamento (a vista) -->
+                <div id="metodo-pagamento-section">
+                    <label for="metodo_pagamento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Metodo de Pagamento *</label>
+                    <select id="metodo_pagamento" name="metodo_pagamento"
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="pix">PIX</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                        <option value="cartao">Cartao</option>
+                        <option value="boleto">Boleto</option>
+                    </select>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Valores -->
+            {{ card_inicio('Valores') }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="valor_total" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Total (R$) *</label>
+                    <input type="number" step="0.01" id="valor_total" name="valor_total" required
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                           placeholder="0,00">
+                </div>
+                <div>
+                    <label for="data_venda" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data da Venda *</label>
+                    <input type="date" id="data_venda" name="data_venda" required
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                </div>
+                <div>
+                    <label for="data_vencimento" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data Vencimento</label>
+                    <input type="date" id="data_vencimento" name="data_vencimento"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                </div>
+            </div>
+
+            <!-- Parcelas (aprazo) -->
+            <div id="parcelas-section" class="hidden mt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Parcelas</p>
+                    <button type="button" onclick="addParcela()"
+                            class="text-xs font-medium px-3 py-1 rounded-lg transition-colors"
+                            style="color: #2B6B3F; background: rgba(43,107,63,0.1);">
+                        + Adicionar Parcela
+                    </button>
+                </div>
+                <div id="parcelas-container" class="space-y-2">
+                    <div class="flex items-center gap-2 parcela-row">
+                        <input type="number" name="parcela_valor" step="0.01" placeholder="Valor (R$)"
+                               class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100">
+                        <input type="date" name="parcela_data"
+                               class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100">
+                        <button type="button" onclick="this.closest('.parcela-row').remove()"
+                                class="text-red-400 hover:text-red-600 p-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Observacoes -->
+            {{ card_inicio('Observacoes') }}
+            <div>
+                <textarea id="observacoes" name="observacoes" rows="3"
+                          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                          placeholder="Observacoes sobre a venda..."></textarea>
+            </div>
+            {{ card_fim() }}
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('data_venda').value = new Date().toISOString().split('T')[0];
+});
+
+function toggleParcelas(show) {
+    document.getElementById('parcelas-section').classList.toggle('hidden', !show);
+    document.getElementById('metodo-pagamento-section').classList.toggle('hidden', show);
+}
+
+let parcelaCount = 1;
+function addParcela() {
+    parcelaCount++;
+    const container = document.getElementById('parcelas-container');
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-2 parcela-row';
+    row.innerHTML = `
+        <input type="number" name="parcela_valor" step="0.01" placeholder="Valor (R$)"
+               class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100">
+        <input type="date" name="parcela_data"
+               class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100">
+        <button type="button" onclick="this.closest('.parcela-row').remove()"
+                class="text-red-400 hover:text-red-600 p-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    `;
+    container.appendChild(row);
+}
+</script>
+{% endblock %}

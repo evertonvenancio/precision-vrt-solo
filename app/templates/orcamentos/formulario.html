@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_formulario, card_inicio, card_fim, botao %}
+
+{% block title %}{{ titulo or 'Novo Orcamento' }}{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    {{ header_formulario(
+        titulo or 'Novo Orcamento',
+        '/web/orcamentos',
+        'Salvar',
+        'form-orcamento'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <form id="form-orcamento" method="POST" action="/web/orcamentos/salvar" class="space-y-6">
+
+            {{ card_inicio('Dados do Orcamento') }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Cliente -->
+                <div>
+                    <label for="cliente_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cliente *</label>
+                    <select id="cliente_id" name="cliente_id" required
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                        <option value="">Selecione o cliente...</option>
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Data de Validade -->
+                <div>
+                    <label for="data_validade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data de Validade</label>
+                    <input type="date" id="data_validade" name="data_validade"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500">
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            {{ card_inicio('Valores') }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Valor Bruto -->
+                <div>
+                    <label for="valor_total_bruto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Bruto (R$) *</label>
+                    <input type="number" step="0.01" id="valor_total_bruto" name="valor_total_bruto" required
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                           placeholder="0,00">
+                </div>
+
+                <!-- Desconto % -->
+                <div>
+                    <label for="desconto_percentual" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Desconto (%)</label>
+                    <input type="number" step="0.01" id="desconto_percentual" name="desconto_percentual" value="0"
+                           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                           placeholder="0">
+                </div>
+
+                <!-- Valor Liquido (calculado) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Liquido (R$)</label>
+                    <input type="text" id="valor_total_liquido" disabled
+                           class="w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100"
+                           placeholder="Calculado automaticamente">
+                    <input type="hidden" id="valor_total_liquido_hidden" name="valor_total_liquido">
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            {{ card_inicio('Observacoes') }}
+            <div>
+                <textarea id="observacoes" name="observacoes" rows="4"
+                          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                          placeholder="Observacoes sobre o orcamento..."></textarea>
+            </div>
+            {{ card_fim() }}
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const brutoInput = document.getElementById('valor_total_bruto');
+    const descontoInput = document.getElementById('desconto_percentual');
+    const liquidoField = document.getElementById('valor_total_liquido');
+    const liquidoHidden = document.getElementById('valor_total_liquido_hidden');
+
+    function calcularLiquido() {
+        const bruto = parseFloat(brutoInput.value) || 0;
+        const desconto = parseFloat(descontoInput.value) || 0;
+        const liquido = bruto * (1 - desconto / 100);
+        const formatted = liquido.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        liquidoField.value = formatted;
+        liquidoHidden.value = liquido.toFixed(2);
+    }
+
+    brutoInput.addEventListener('input', calcularLiquido);
+    descontoInput.addEventListener('input', calcularLiquido);
+    calcularLiquido();
+});
+</script>
+{% endblock %}

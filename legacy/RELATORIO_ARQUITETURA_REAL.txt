@@ -1,0 +1,643 @@
+==========================================================================================
+RELATÓRIO DE ARQUITETURA REAL — Precision VRT Solo
+Gerado em: 2026-08-05 15:31:58
+Raiz: C:\precision_vrt_solo
+==========================================================================================
+
+📊 RESUMO EXECUTIVO
+------------------------------------------------------------------------------------------
+Total de pastas (excluindo lixo):     65
+Total de arquivos:                    388
+Arquivos Python (.py):                293
+Bancos de dados (.db):                5
+Stubs vazios (0 bytes):               15
+Monolitos Python (>20KB):             21
+
+📁 ESTRUTURA POR PASTA
+------------------------------------------------------------------------------------------
+
+[.]
+--------------------------------------------------------------------------------
+  cliente_manager.py                                          1.9 KB
+  equipe_manager.py                                           4.5 KB
+  estrutura_projeto.txt                                      58.5 KB
+  export_manager.py                                          15.8 KB
+  exportador_tecnico.py                                       7.3 KB
+  financeiro_manager.py                                      14.0 KB
+  iniciar_sistema.bat                                          449 B
+  leitor_amostras.py                                          3.7 KB
+  main.py                                                      210 B
+  main_simple.py                                              3.6 KB
+  mapa_rotas.txt                                             68.9 KB
+  mapear_estrutura.py                                         6.9 KB
+  migrate_schema.py                                            946 B
+  motor_calculo.py                                           11.8 KB
+  precision_vrt.db                                          372.0 KB
+  projeto.txt                                                 1.2 MB
+  requirements.txt                                             127 B
+  test_end_to_end.py                                         13.2 KB [TESTE]
+  testar_import.py                                            2.3 KB [TESTE]
+  vrt_pipeline.py                                            17.0 KB
+  vulture.txt                                                 9.7 KB
+
+[api]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+
+[api\v1]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+
+[api\v1\endpoints]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  ativos.py                                                   7.2 KB
+  bulk_blend.py                                               7.6 KB
+  clima.py                                                   10.7 KB
+  compactacao.py                                             12.9 KB
+  comunicacao.py                                              3.3 KB
+  conhecimento.py                                             4.2 KB
+  extrator.py                                                20.7 KB [MONOLITO]
+  fiscal.py                                                   1.7 KB
+  laudos_export.py                                            1.9 KB
+  prescricao.py                                              13.0 KB
+  upload.py                                                  15.7 KB
+  vendas.py                                                   9.2 KB
+
+[app]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  app_factory.py                                              5.0 KB
+  cli.py                                                     11.6 KB
+
+[app\web]
+--------------------------------------------------------------------------------
+  ativos.py                                                   1.1 KB
+  auth.py                                                     1.4 KB
+  bulk_blend.py                                                728 B
+  caixa.py                                                     832 B
+  clientes.py                                                 2.8 KB
+  clima.py                                                     890 B
+  compactacao.py                                              1.2 KB
+  comunicacao.py                                               590 B
+  configuracoes.py                                            3.0 KB
+  conhecimento.py                                             2.8 KB
+  cruzamento.py                                                831 B
+  dashboard.py                                                1.9 KB
+  equipe.py                                                   1.4 KB
+  extrator.py                                                  817 B
+  financeiro.py                                               1.7 KB
+  orcamentos.py                                               1.1 KB
+  permissoes.py                                                828 B
+  prescricao.py                                               2.7 KB
+  tabela_precos.py                                             827 B
+  upload.py                                                   1.6 KB
+
+[config]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  clima_config.py                                             2.7 KB
+  comunicacao_config.py                                       3.5 KB
+  culturas.py                                                30.3 KB [MONOLITO]
+  exportacao_nutrientes.py                                    1.6 KB
+  fertilizantes.py                                            2.2 KB
+  fertilizantes_fisicos.py                                   17.9 KB
+  formulas.py                                                55.1 KB [MONOLITO]
+  guardrails_rules.py                                        18.9 KB
+  metodologias.py                                             4.3 KB
+  sais_solucao.py                                            22.5 KB [MONOLITO]
+
+[core]
+--------------------------------------------------------------------------------
+  __init__.py                                                  382 B [PRIVADO | INIT]
+  precision_vrt.db                                       0 B  [STUB] [STUB_VAZIO]
+
+[core\agronomia]
+--------------------------------------------------------------------------------
+  __init__.py                                                 2.5 KB [PRIVADO | INIT]
+  balanco.py                                                  9.0 KB
+  configuracao.py                                               38 B
+  contratos.py                                                1.1 KB
+  exceptions.py                                                657 B
+  fertilidade.py                                              6.0 KB
+  motor.py                                                    9.6 KB
+  nutrientes.py                                               6.5 KB
+  recomendacao.py                                            12.2 KB
+  validacao.py                                                6.0 KB
+
+[core\exportacao]
+--------------------------------------------------------------------------------
+  __init__.py                                                  489 B [PRIVADO | INIT]
+  __init__.py.decompiled                                 0 B  [STUB] [STUB_VAZIO]
+  configuracao.py                                              438 B
+  contratos.py                                                3.1 KB
+  motor.py                                                   18.0 KB
+  validacao.py                                                 980 B
+
+[core\exportacao\formatos]
+--------------------------------------------------------------------------------
+  __init__.py                                                 2.6 KB [PRIVADO | INIT]
+  csv.py                                                      4.4 KB
+  geojson.py                                                   955 B
+  imagem.py                                                   2.5 KB
+  pdf.py                                                      1.2 KB
+  raster_utils.py                                             2.4 KB
+  shapefile.py                                                 972 B
+
+[core\exportacao\maquinas]
+--------------------------------------------------------------------------------
+  __init__.py                                                  142 B [PRIVADO | INIT]
+
+[core\exportacao\relatorios]
+--------------------------------------------------------------------------------
+  __init__.py                                                  312 B [PRIVADO | INIT]
+  cabine.py                                                   2.6 KB
+  laudo.py                                                    5.5 KB
+
+[core\exportacao\utils]
+--------------------------------------------------------------------------------
+  __init__.py                                                  146 B [PRIVADO | INIT]
+
+[core\interpolacao]
+--------------------------------------------------------------------------------
+  __init__.py                                                 2.3 KB [PRIVADO | INIT]
+  configuracao.py                                             2.0 KB
+  contratos.py                                                3.2 KB
+  estatistica.py                                              1.4 KB
+  grade.py                                                    1.9 KB
+  motor.py                                                   13.6 KB
+  validacao.py                                                5.0 KB
+
+[core\interpolacao\algoritmos]
+--------------------------------------------------------------------------------
+  __init__.py                                                  235 B [PRIVADO | INIT]
+  idw.py                                                      1.1 KB
+  rbf.py                                                      1.1 KB
+
+[core\otimizacao]
+--------------------------------------------------------------------------------
+  __init__.py                                                  184 B [PRIVADO | INIT]
+  bulk_blend.py                                              17.0 KB
+  contratos.py                                                1.3 KB
+  otimizacao_pulp.py                                          8.3 KB
+
+[core\prescricao]
+--------------------------------------------------------------------------------
+  __init__.py                                                 2.4 KB [PRIVADO | INIT]
+  configuracao.py                                             3.3 KB
+  contratos.py                                                8.2 KB
+  motor.py                                                   18.0 KB
+  prescricao.py                                               1.2 KB
+  validacao.py                                               10.2 KB
+
+[core\prescricao\calculos]
+--------------------------------------------------------------------------------
+  __init__.py                                                  826 B [PRIVADO | INIT]
+  dose.py                                                     9.7 KB
+  limitadores.py                                              1.0 KB
+  regras.py                                                   1.4 KB
+
+[core\prescricao\conversoes]
+--------------------------------------------------------------------------------
+  __init__.py                                                  106 B [PRIVADO | INIT]
+  densidade.py                                                 132 B
+  unidades.py                                                  104 B
+
+[core\prescricao\mapas]
+--------------------------------------------------------------------------------
+  __init__.py                                                  108 B [PRIVADO | INIT]
+
+[core\prescricao\saida]
+--------------------------------------------------------------------------------
+  __init__.py                                                  107 B [PRIVADO | INIT]
+  dataframe.py                                                 130 B
+  geojson.py                                                   126 B
+
+[core\seguranca]
+--------------------------------------------------------------------------------
+  __init__.py                                                  165 B [PRIVADO | INIT]
+  contratos.py                                                1.3 KB
+  guardrails.py                                              17.0 KB
+  permissions.py                                               426 B
+  seguranca.py                                                6.9 KB
+
+[core\tipos]
+--------------------------------------------------------------------------------
+  __init__.py                                                  881 B [PRIVADO | INIT]
+  base.py                                                     3.0 KB
+  execucao.py                                                  866 B
+  geoespacial.py                                              2.1 KB
+  protocols.py                                                1.1 KB
+
+[core\utilitarios]
+--------------------------------------------------------------------------------
+  __init__.py                                                  404 B [PRIVADO | INIT]
+  arquivos.py                                                  436 B
+  geo.py                                                      3.6 KB
+  helpers.py                                                   447 B
+  normalizacao.py                                              271 B
+
+[core\zoneamento]
+--------------------------------------------------------------------------------
+  __init__.py                                                 1.4 KB [PRIVADO | INIT]
+  configuracao.py                                             1.0 KB
+  contratos.py                                                2.4 KB
+  exceptions.py                                                794 B
+  motor.py                                                    8.7 KB
+  posprocessamento.py                                          999 B
+  qualidade.py                                                3.0 KB
+  relatorio.py                                                 885 B
+  validacao.py                                                4.3 KB
+
+[core\zoneamento\algoritmos]
+--------------------------------------------------------------------------------
+  __init__.py                                                  607 B [PRIVADO | INIT]
+  aglomerativo.py                                              875 B
+  base.py                                                     4.2 KB
+  dbscan.py                                                    845 B
+  fuzzy.py                                                     878 B
+  gaussian.py                                                  894 B
+  kmeans.py                                                   2.3 KB
+  spectral.py                                                  909 B
+
+[core\zoneamento\qualidade]
+--------------------------------------------------------------------------------
+  __init__.py                                                  560 B [PRIVADO | INIT]
+  calinski.py                                                 1.4 KB
+  davies_bouldin.py                                           1.4 KB
+  homogeneidade.py                                            2.7 KB
+  inercia.py                                                  1.8 KB
+  silhouette.py                                               1.2 KB
+
+[core\zoneamento\utils]
+--------------------------------------------------------------------------------
+  __init__.py                                                  609 B [PRIVADO | INIT]
+  estatistica.py                                              5.2 KB
+  matriz.py                                                   4.9 KB
+  normalizacao.py                                             6.0 KB
+
+[data\output]
+--------------------------------------------------------------------------------
+  resultado_temp.json                                        45.4 KB
+
+[data\uploads]
+--------------------------------------------------------------------------------
+  00135e9621b54aa3aee42f0e1ecac569_teste_everton_53_pontos.geojson         73.0 KB
+  058b9a255d614392999e41d0ed107384_teste_everton_53_amostras.xlsx         18.2 KB
+  10457c28a5b040958de86109b210cf80_teste_everton_53_amostras.xlsx         18.2 KB
+  1889b70f5dfc4a4f9f60e401a05a8b8d_teste_everton_53_amostras.xlsx         18.2 KB
+  260180b65f72426197165071aa931839_teste_everton_53_pontos.geojson         73.0 KB
+  29694b995ec0447187be6818c2b0301c_teste_everton_53_pontos.geojson         73.0 KB
+  3261c710ebe645eeab582f75998fc5fd_teste_everton_53_pontos.geojson         73.0 KB
+  3baa7834ff544611bdf2a27183074dc7_teste_everton_53_amostras.xlsx         18.2 KB
+  3f866498594944f28e4d253b7039277d_teste_everton_53_pontos.geojson         73.0 KB
+  45b413a58ba24e1cb5513d3dca3cb3f5_teste_everton_53_pontos.geojson         73.0 KB
+  4d2dd8e8b1654637875b2b8a9d63b1d9_teste_everton_53_pontos.geojson         73.0 KB
+  515363fb0b2846dbbf17092c8e5ad973_teste_everton_53_amostras.xlsx         18.2 KB
+  52f00a9d43b64bf584a29dba8bda5d80_teste_everton_53_pontos.geojson         73.0 KB
+  543ec601db244bf28e0a43ed228dd868_teste_everton_53_pontos.geojson         73.0 KB
+  55888a53409f44e8b50eccc05390517c_teste_everton_53_pontos.geojson         73.0 KB
+  55bee1462823462996c1b10f9d3bacfb_teste_everton_53_pontos.geojson         73.0 KB
+  653e4eb484c244b0a2accbb52c367d2e_teste_everton_53_amostras.xlsx         18.2 KB
+  6a6402a88e114c50aa0f267782a4c9a4_teste_everton_53_amostras.xlsx         18.2 KB
+  6b04971c08a844a7a6156ab1b37e0706_teste_everton_53_pontos.geojson         73.0 KB
+  70fb5368b73846ecac24b5501d34f3e6_teste_everton_53_pontos.geojson         73.0 KB
+  7403c1719f844b54983842e32b29ba8b_teste_everton_53_pontos.geojson         73.0 KB
+  745ff39e7ac44df6beb091e14b9fba41_teste_everton_53_amostras.xlsx         18.2 KB
+  77bc1352c09440b2ab529523e9eeb4d5_teste_everton_53_amostras.xlsx         18.2 KB
+  7a725001a65443d6a8c6de13b41961cf_teste_everton_53_pontos.geojson         73.0 KB
+  843608b8bc5c47deb43619adc8eba133_teste_everton_53_pontos.geojson         73.0 KB
+  89fb607e98f441deaab66f2acd1066c1_teste_everton_53_amostras.xlsx         18.2 KB
+  a5c6145fc1f346ae86b819725db51686_teste_everton_53_amostras.xlsx         18.2 KB
+  b5721f759f9d4760955abeb963bbc21d_teste_everton_53_amostras.xlsx         18.2 KB
+  bced4bd3634c4dcdb74bee4eecd58597_teste_everton_53_amostras.xlsx         18.2 KB
+  c4167c1e7db14e9881501ff9de4a5d7f_teste_everton_53_pontos.geojson         73.0 KB
+  c508c2d01b0c45c8a8b6b44f35c78458_teste_everton_53_amostras.xlsx         18.2 KB
+  c53e86ae557a4898af57dfd0c83f7e99_teste_everton_53_amostras.xlsx         18.2 KB
+  ce35448c4ee04a509e31f006d2234711_teste_everton_53_pontos.geojson         73.0 KB
+  d29f81e63dca48de88656aaa3bd23edc_teste_everton_53_pontos.geojson         73.0 KB
+  de826a34bd9d433da7b771b7d9baff4e_teste_everton_53_pontos.geojson         73.0 KB
+  e320c6b2c18b4f7b832b12c4169435c4_teste_everton_53_amostras.xlsx         18.2 KB
+  f1e451d2ad6c43bab779dc7a8a887fb5_teste_everton_53_amostras.xlsx         18.2 KB
+  f25213173faf47768a8ccd162fa5802b_teste_everton_53_amostras.xlsx         18.2 KB
+
+[db]
+--------------------------------------------------------------------------------
+  database.py                                                 2.1 KB
+  precision_vrt.db                                          188.0 KB
+
+[docs]
+--------------------------------------------------------------------------------
+  ARCHITECTURE.md                                             1.2 KB
+  AUDIT.md                                                    3.7 KB
+  CHANGELOG.md                                                1.1 KB
+  DECISIONS.md                                                 882 B
+  EXECUTOR.md                                                 4.4 KB
+  PRODUCT_RULES.md                                             710 B
+  ROADMAP.md                                                   979 B
+  TODO.md                                                      426 B
+  VISION.md                                                    358 B
+  modelo_domínio.md                                          10.2 KB
+
+[frontend\static\css]
+--------------------------------------------------------------------------------
+  style.css                                              0 B  [STUB] [STUB_VAZIO]
+
+[frontend\static\js]
+--------------------------------------------------------------------------------
+  app.js                                                       481 B
+  theme.js                                                     802 B
+
+[frontend\templates]
+--------------------------------------------------------------------------------
+  ativos.html                                                 3.7 KB
+  base.html                                                  36.0 KB
+  base_tecnica.html                                           7.5 KB
+  bulk_blend.html                                            21.7 KB
+  caixa.html                                                   590 B
+  clientes.html                                               7.9 KB
+  clima.html                                                 12.6 KB
+  compactacao.html                                            2.9 KB
+  compactacao_nova.html                                       3.1 KB
+  configuracoes.html                                         15.5 KB
+  conhecimento.html                                           4.2 KB
+  cruzamento.html                                              604 B
+  dashboard.html                                             24.6 KB
+  equipe.html                                                 4.3 KB
+  extrator.html                                               8.5 KB
+  financeiro.html                                             5.6 KB
+  login.html                                                  4.0 KB
+  nematoides.html                                              578 B
+  novo_artigo.html                                            3.0 KB
+  novo_ativo.html                                             3.6 KB
+  novo_cliente.html                                          10.0 KB
+  novo_funcionario.html                                       5.7 KB
+  novo_orcamento.html                                        13.4 KB
+  novo_ponto_extrator.html                                   12.5 KB
+  permissoes.html                                            12.1 KB
+  prescricao.html                                             4.7 KB
+  prescricao_nova.html                                       25.6 KB
+  prescricao_resultado.html                                  28.3 KB
+  tabela_precos.html                                          5.7 KB
+  upload.html                                                 5.7 KB
+  upload_resultado.html                                       7.8 KB
+
+[legacy]
+--------------------------------------------------------------------------------
+  atualizar_schema.py                                         1.5 KB
+  bulk_blend_service.py                                      20.3 KB [MONOLITO]
+  busca_db_schema.py                                          1.8 KB
+  core_agronomia_compactacao_legado.py                       14.6 KB
+  core_agronomia_cruzamento_legado.py                        15.7 KB
+  core_agronomia_monitoramento_legado.py                     43.5 KB [MONOLITO]
+  core_agronomia_nematoides_legado.py                        19.2 KB
+  core_exportacao_motor_monolitico_32kb.py                   31.9 KB [MONOLITO]
+  core_fase2_exceptions_extra_nao_solicitado.py               1.4 KB
+  core_fase2_exportacao_exceptions_extra_nao_solicitado.py           353 B
+  core_fase2_interpolacao_exceptions_extra_nao_solicitado.py           391 B
+  core_fase2_interpolacao_normalizacao_extra_nao_solicitado.py          1.9 KB
+  core_fase2_otimizacao_configuracao_extra_nao_solicitado.py           484 B
+  core_fase2_otimizacao_exceptions_extra_nao_solicitado.py           328 B
+  core_fase2_otimizacao_motor_extra_nao_solicitado.py          1.1 KB
+  core_fase2_qualidade_extra_nao_solicitado.py                2.4 KB
+  core_fase2_utilitarios_utils_extra_nao_solicitado.py          1.2 KB
+  core_fase3_script_extra_test_bulk_blend.py                 13.6 KB [TESTE]
+  core_fase3_script_extra_test_clima_service.py              12.2 KB [TESTE]
+  core_fase3_script_extra_test_cruzamento.py                 27.1 KB [MONOLITO | TESTE]
+  core_fase3_script_extra_test_end_to_end.py                 13.2 KB [TESTE]
+  core_fase3_script_extra_test_extrator_service.py           19.8 KB [TESTE]
+  core_fase3_script_extra_test_guardrails.py                 24.6 KB [MONOLITO | TESTE]
+  core_fase3_script_extra_test_otimizacao_pulp.py             2.7 KB [TESTE]
+  core_interpolacao_estatisticas_vazio.py                0 B  [STUB] [STUB_VAZIO]
+  core_interpolacao_grade_vazio.py                       0 B  [STUB] [STUB_VAZIO]
+  core_interpolacao_motor_monolitico_16kb_backup_final.py         15.9 KB
+  core_interpolacao_raster_vazio.py                      0 B  [STUB] [STUB_VAZIO]
+  core_otimizacao_init_imports_quebrados.py                   1.1 KB
+  core_prescricao_configuracao_com_dominio_extraido.py          7.9 KB
+  core_prescricao_culturas_init_vazio_111bytes.py              111 B
+  core_prescricao_metodologias_init_vazio.py                   115 B
+  core_prescricao_motor_composto.py                          20.5 KB [MONOLITO]
+  core_prescricao_motor_monolitico_28kb_backup_final.py         28.0 KB [MONOLITO]
+  core_raiz_contratos.py                                      1.2 KB
+  core_raiz_exceptions.py                                      491 B
+  core_raiz_precision_vrt.db                             0 B  [STUB] [STUB_VAZIO]
+  core_raiz_qualidade.py                                      1.5 KB
+  core_raiz_utils.py                                           551 B
+  core_seguranca_init_imports_quebrados.py                    1.1 KB
+  core_utilitarios_estatistica_vazio.py                       1.8 KB
+  core_utilitarios_startup.py                                 1.0 KB
+  core_zoneamento_caracterizacao_imports_quebrados.py          4.5 KB
+  core_zoneamento_metricas_imports_quebrados.py               5.5 KB
+  core_zoneamento_normalizacao_imports_quebrados.py           3.7 KB
+  dados_agri.db                                              52.0 KB
+  db_schema_backup_20260612_235341.py                        10.2 KB
+  db_schema_oficial.py                                        2.8 KB
+  diagnostico_contexto.py                                     2.5 KB
+  diagnostico_db.py                                           2.4 KB
+  insumos_manager.py                                          3.0 KB
+  main_extrator.py                                           14.6 KB
+  main_prescricao.py                                         16.0 KB
+  migrar_json_para_sqlite.py                                  8.4 KB
+  prescricao.py                                              46.5 KB [MONOLITO]
+  prescricao_legacy.py                                       46.5 KB [MONOLITO]
+  recomendacao_db.py                                          3.3 KB
+  verificar_conflitos.py                                      1.9 KB
+  verify_update.py                                             329 B
+
+[legacy\core_interpolacao_utils_vazio_final]
+--------------------------------------------------------------------------------
+  __init__.py                                                  150 B [PRIVADO | INIT]
+
+[legacy\core_prescricao_bulkblend_vazio]
+--------------------------------------------------------------------------------
+  __init__.py                                                  112 B [PRIVADO | INIT]
+
+[legacy\core_prescricao_calculos_vazio]
+--------------------------------------------------------------------------------
+  __init__.py                                                  111 B [PRIVADO | INIT]
+
+[legacy\core_prescricao_regras_vazio]
+--------------------------------------------------------------------------------
+  __init__.py                                                  109 B [PRIVADO | INIT]
+
+[legacy\core_prescricao_utils_vazio]
+--------------------------------------------------------------------------------
+  __init__.py                                                  108 B [PRIVADO | INIT]
+
+[legacy\core_utils]
+--------------------------------------------------------------------------------
+  __init__.py                                                  204 B [PRIVADO | INIT]
+  estatistica.py                                              1.8 KB
+
+[legacy\zoneamento]
+--------------------------------------------------------------------------------
+  normalizacao.py                                             1.0 KB
+
+[logs]
+--------------------------------------------------------------------------------
+  main.py                                                    32.0 KB [MONOLITO]
+
+[models]
+--------------------------------------------------------------------------------
+  __init__.py                                                  182 B [PRIVADO | INIT]
+  ativos.py                                                   5.3 KB
+  clima.py                                                    3.3 KB
+  compactacao.py                                              8.5 KB
+  comunicacao.py                                              4.2 KB
+  config.py                                                   1.9 KB
+  conhecimento.py                                             2.3 KB
+  core_models.py                                              4.6 KB
+  extrator.py                                                15.7 KB
+  financeiro.py                                               9.9 KB
+  financeiro_service.py                                         47 B
+  fiscal.py                                                   4.3 KB
+  migrar_config_sistema.py                                    5.5 KB
+  prescricao.py                                                791 B
+  vendas.py                                                   9.3 KB
+
+[schemas]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  ativos.py                                                   8.9 KB
+  clima.py                                                    4.1 KB
+  compactacao.py                                              7.1 KB
+  comunicacao.py                                              2.1 KB
+  configuracao.py                                             4.8 KB
+  cruzamento.py                                               8.5 KB
+  extrator.py                                                14.8 KB
+  financeiro.py                                              10.6 KB
+  guardrail.py                                               11.6 KB
+  laudo_export.py                                             3.6 KB
+  vendas.py                                                   9.4 KB
+
+[services]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  ativos_service.py                                          16.3 KB
+  auth_service.py                                              970 B
+  caixa_service.py                                             834 B
+  clientes_service.py                                         1.7 KB
+  clima_service.py                                           23.4 KB [MONOLITO]
+  comissao_service.py                                        10.4 KB
+  compactacao_service.py                                     17.8 KB
+  comunicacao_service.py                                     17.2 KB
+  configuracoes_service.py                                    5.4 KB
+  conhecimento_service.py                                     3.6 KB
+  cruzamento_service.py                                        561 B
+  dashboard_service.py                                        7.4 KB
+  equipe_service.py                                           1.3 KB
+  extrator_service.py                                         6.5 KB
+  financeiro_service.py                                       1.3 KB
+  fiscal_service.py                                           8.5 KB
+  geo_parser_service.py                                      46.9 KB [MONOLITO]
+  laudo_export_service.py                                     9.1 KB
+  orcamentos_service.py                                       1.1 KB
+  permissoes_service.py                                        370 B
+  precificacao_service.py                                    12.7 KB
+  prescricao_service.py                                      12.9 KB
+  tabela_precos_service.py                                     577 B
+  upload_service.py                                          26.5 KB [MONOLITO]
+  vendas_service.py                                          16.6 KB
+
+[tests]
+--------------------------------------------------------------------------------
+  __init__.py                                            0 B  [STUB] [STUB_VAZIO | PRIVADO | INIT]
+  test_bulk_blend.py                                         13.6 KB [TESTE]
+  test_clima_service.py                                      12.2 KB [TESTE]
+  test_cruzamento.py                                         27.1 KB [MONOLITO | TESTE]
+  test_extrator_service.py                                   19.8 KB [TESTE]
+  test_guardrails.py                                         24.6 KB [MONOLITO | TESTE]
+  test_otimizacao_pulp.py                                     2.7 KB [TESTE]
+  tests_compactacao_service.py                               22.1 KB [MONOLITO | TESTE]
+
+[utils]
+--------------------------------------------------------------------------------
+  geojson.py                                                 20.9 KB [MONOLITO]
+
+==========================================================================================
+📄 ARQUIVOS SOLTOS NA RAIZ DO PROJETO (não estão em pasta)
+------------------------------------------------------------------------------------------
+  cliente_manager.py                                          1.9 KB
+  equipe_manager.py                                           4.5 KB
+  estrutura_projeto.txt                                      58.5 KB
+  export_manager.py                                          15.8 KB
+  exportador_tecnico.py                                       7.3 KB
+  financeiro_manager.py                                      14.0 KB
+  iniciar_sistema.bat                                          449 B
+  leitor_amostras.py                                          3.7 KB
+  main.py                                                      210 B
+  main_simple.py                                              3.6 KB
+  mapa_rotas.txt                                             68.9 KB
+  mapear_estrutura.py                                         6.9 KB
+  migrate_schema.py                                            946 B
+  motor_calculo.py                                           11.8 KB
+  precision_vrt.db                                          372.0 KB
+  projeto.txt                                                 1.2 MB
+  requirements.txt                                             127 B
+  test_end_to_end.py                                         13.2 KB [TESTE]
+  testar_import.py                                            2.3 KB [TESTE]
+  vrt_pipeline.py                                            17.0 KB
+  vulture.txt                                                 9.7 KB
+
+==========================================================================================
+⚠️  STUBS VAZIOS (0 bytes)
+------------------------------------------------------------------------------------------
+  api/__init__.py
+  api\v1/__init__.py
+  api\v1\endpoints/__init__.py
+  app/__init__.py
+  config/__init__.py
+  core/precision_vrt.db
+  core\exportacao/__init__.py.decompiled
+  frontend\static\css/style.css
+  legacy/core_interpolacao_estatisticas_vazio.py
+  legacy/core_interpolacao_grade_vazio.py
+  legacy/core_interpolacao_raster_vazio.py
+  legacy/core_raiz_precision_vrt.db
+  schemas/__init__.py
+  services/__init__.py
+  tests/__init__.py
+
+==========================================================================================
+🐘 MONOLITOS PYTHON (>20KB)
+------------------------------------------------------------------------------------------
+  api\v1\endpoints/extrator.py                                                   20.7 KB
+  config/culturas.py                                                             30.3 KB
+  config/formulas.py                                                             55.1 KB
+  config/sais_solucao.py                                                         22.5 KB
+  legacy/bulk_blend_service.py                                                   20.3 KB
+  legacy/core_agronomia_monitoramento_legado.py                                  43.5 KB
+  legacy/core_exportacao_motor_monolitico_32kb.py                                31.9 KB
+  legacy/core_fase3_script_extra_test_cruzamento.py                              27.1 KB
+  legacy/core_fase3_script_extra_test_guardrails.py                              24.6 KB
+  legacy/core_prescricao_motor_composto.py                                       20.5 KB
+  legacy/core_prescricao_motor_monolitico_28kb_backup_final.py                   28.0 KB
+  legacy/prescricao.py                                                           46.5 KB
+  legacy/prescricao_legacy.py                                                    46.5 KB
+  logs/main.py                                                                   32.0 KB
+  services/clima_service.py                                                      23.4 KB
+  services/geo_parser_service.py                                                 46.9 KB
+  services/upload_service.py                                                     26.5 KB
+  tests/test_cruzamento.py                                                       27.1 KB
+  tests/test_guardrails.py                                                       24.6 KB
+  tests/tests_compactacao_service.py                                             22.1 KB
+  utils/geojson.py                                                               20.9 KB
+
+==========================================================================================
+🔍 PASTAS COM NOME DE SERVIÇO/MÓDULO (para análise de reaproveitamento)
+------------------------------------------------------------------------------------------
+  api                            →   15 arquivos .py
+  app                            →   23 arquivos .py
+  frontend                       →    0 arquivos .py
+  insumos_comerciais             →    0 arquivos .py
+  models                         →   15 arquivos .py
+  modules                        →    0 arquivos .py
+  pages                          →    0 arquivos .py
+  relatorios                     →    0 arquivos .py
+  schemas                        →   12 arquivos .py
+  services                       →   26 arquivos .py
+  utils                          →    1 arquivos .py
+
+==========================================================================================
+FIM DO RELATÓRIO
+==========================================================================================

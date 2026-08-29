@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Orçamentos e Vendas{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    <!-- CABEÇALHO FIXO -->
+    <div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Orçamentos e Vendas</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Acompanhe o fluxo comercial de propostas e contratos.</p>
+            </div>
+            <a href="/financeiro/novo-orcamento"
+               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Novo Orçamento
+            </a>
+        </div>
+    </div>
+
+    <!-- CENTRO SCROLLÁVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+            {% if orcamentos %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+                            <th class="px-6 py-3">Cliente</th>
+                            <th class="px-6 py-3">Data</th>
+                            <th class="px-6 py-3">Valor Total (R$)</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for orc in orcamentos %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-xs font-semibold text-blue-700 dark:text-blue-300">
+                                        {{ orc.cliente.nome[:2]|upper if orc.cliente.nome else 'CL' }}
+                                    </div>
+                                    <span class="text-sm text-gray-900 dark:text-gray-100 font-medium">{{ orc.cliente.nome }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ orc.data_criacao.strftime("%d/%m/%Y") }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono font-medium">R$ {{ "%.2f"|format(orc.valor_total) }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide
+                                    {% if orc.status == 'rascunho' %}bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300
+                                    {% elif orc.status == 'aprovado' %}bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300
+                                    {% elif orc.status == 'faturado' %}bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300
+                                    {% else %}bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-300{% endif %}">
+                                    {{ orc.status|capitalize }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                {% if orc.status == 'rascunho' %}
+                                <form method="post" action="/financeiro/{{ orc.id }}/aprovar" class="inline">
+                                    <button type="submit"
+                                            class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition">
+                                        Aprovar
+                                    </button>
+                                </form>
+                                {% else %}
+                                <a href="#" class="text-gray-400 dark:text-gray-500 text-sm">—</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-12 text-center">
+                <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-gray-500 text-lg">Nenhum orçamento cadastrado.</p>
+                <a href="/financeiro/novo-orcamento" class="inline-block mt-4 text-green-600 hover:text-green-700 font-medium">
+                    Criar o primeiro orçamento →
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

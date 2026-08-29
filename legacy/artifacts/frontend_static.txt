@@ -1,0 +1,3 @@
+frontend/static/css/style.css
+frontend/static/js/app.js
+frontend/static/js/theme.js

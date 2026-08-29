@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col h-full" x-data="novoPontoApp()">
+    <!-- CABECALHO FIXO -->
+    <header class="flex-shrink-0 bg-white dark:bg-gray-800 shadow-sm p-4">
+        <div class="flex items-center gap-3">
+            <a href="/extrator" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Novo Ponto de Monitoramento</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Cadastrar novo ponto de extracao de solucao</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- CENTRO SCROLLAVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <div x-show="erro" class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-800 dark:text-red-200" x-text="erro"></div>
+            <div x-show="sucesso" class="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg text-sm text-green-800 dark:text-green-200" x-text="sucesso"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Codigo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Codigo <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="form.codigo" placeholder="Ex: PT-001"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                           :class="erros.codigo ? 'border-red-500 dark:border-red-500' : ''">
+                    <p x-show="erros.codigo" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.codigo"></p>
+                </div>
+
+                <!-- Nome -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome <span class="text-red-500">*</span></label>
+                    <input type="text" x-model="form.nome" placeholder="Ex: Ponto Norte Talhao 1"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                           :class="erros.nome ? 'border-red-500 dark:border-red-500' : ''">
+                    <p x-show="erros.nome" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.nome"></p>
+                </div>
+
+                <!-- Latitude -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Latitude</label>
+                    <input type="number" x-model.number="form.latitude" step="0.000001" placeholder="-22.123456"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+
+                <!-- Longitude -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Longitude</label>
+                    <input type="number" x-model.number="form.longitude" step="0.000001" placeholder="-47.123456"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+
+                <!-- Profundidade -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profundidade (cm)</label>
+                    <input type="number" x-model.number="form.profundidade" step="1" min="0" placeholder="20"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+
+                <!-- Cultura -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cultura <span class="text-red-500">*</span></label>
+                    <select x-model="form.cultura"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                            :class="erros.cultura ? 'border-red-500 dark:border-red-500' : ''">
+                        <option value="">Selecione...</option>
+                        <option value="Soja">Soja</option>
+                        <option value="Milho">Milho</option>
+                        <option value="Cana-de-acucar">Cana-de-acucar</option>
+                        <option value="Cafe">Cafe</option>
+                        <option value="Algodao">Algodao</option>
+                        <option value="Trigo">Trigo</option>
+                        <option value="Arroz">Arroz</option>
+                        <option value="Feijao">Feijao</option>
+                        <option value="Hortalicas">Hortalicas</option>
+                        <option value="Frutas">Frutas</option>
+                        <option value="Outra">Outra</option>
+                    </select>
+                    <p x-show="erros.cultura" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.cultura"></p>
+                </div>
+
+                <!-- Tipo de Extrator -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Extrator</label>
+                    <select x-model="form.tipo_extrator"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        <option value="">Selecione...</option>
+                        <option value="Ceramica">Ceramica</option>
+                        <option value="Tensao">Tensao</option>
+                        <option value="Poroso">Poroso</option>
+                        <option value="Vacuo">Vacuo</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <!-- Sistema de Irrigacao -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sistema de Irrigacao</label>
+                    <select x-model="form.sistema_irrigacao"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                        <option value="">Selecione...</option>
+                        <option value="Gotejamento">Gotejamento</option>
+                        <option value="Microaspersao">Microaspersao</option>
+                        <option value="Aspersao">Aspersao</option>
+                        <option value="Pivo Central">Pivo Central</option>
+                        <option value="Hidroponia NFT">Hidroponia NFT</option>
+                        <option value="Hidroponia DWC">Hidroponia DWC</option>
+                        <option value="Hidroponia Vertical">Hidroponia Vertical</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Observacoes -->
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Observacoes</label>
+                <textarea x-model="form.observacoes" rows="3" placeholder="Informacoes adicionais sobre o ponto..."
+                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPE FIXO -->
+    <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+        <div class="flex justify-end gap-3">
+            <a href="/extrator"
+               class="px-6 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition">
+                Cancelar
+            </a>
+            <button @click="salvar()" :disabled="salvando"
+                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg text-sm font-medium transition">
+                <span x-show="!salvando">Salvar Ponto</span>
+                <span x-show="salvando">Salvando...</span>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        function novoPontoApp() {
+            return {
+                form: {
+                    codigo: '',
+                    nome: '',
+                    latitude: null,
+                    longitude: null,
+                    profundidade: 20,
+                    cultura: '',
+                    tipo_extrator: '',
+                    sistema_irrigacao: '',
+                    observacoes: ''
+                },
+                erros: {},
+                erro: null,
+                sucesso: null,
+                salvando: false,
+
+                validar() {
+                    this.erros = {};
+                    if (!this.form.codigo.trim()) this.erros.codigo = 'Codigo e obrigatorio.';
+                    if (!this.form.nome.trim()) this.erros.nome = 'Nome e obrigatorio.';
+                    if (!this.form.cultura) this.erros.cultura = 'Cultura e obrigatoria.';
+                    return Object.keys(this.erros).length === 0;
+                },
+
+                async salvar() {
+                    this.erro = null;
+                    this.sucesso = null;
+
+                    if (!this.validar()) return;
+
+                    this.salvando = true;
+
+                    const payload = {
+                        codigo: this.form.codigo.trim(),
+                        nome: this.form.nome.trim(),
+                        latitude: this.form.latitude,
+                        longitude: this.form.longitude,
+                        profundidade: this.form.profundidade,
+                        cultura: this.form.cultura,
+                        tipo_extrator: this.form.tipo_extrator || null,
+                        sistema_irrigacao: this.form.sistema_irrigacao || null,
+                        observacoes: this.form.observacoes.trim() || null
+                    };
+
+                    try {
+                        const response = await fetch('/api/v1/extrator/pontos', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            this.erro = data.detail || 'Erro ao salvar ponto.';
+                            return;
+                        }
+
+                        this.sucesso = 'Ponto cadastrado com sucesso! Redirecionando...';
+                        setTimeout(() => {
+                            window.location.href = '/extrator';
+                        }, 1500);
+
+                    } catch (err) {
+                        this.erro = 'Erro de comunicacao com o servidor: ' + err.message;
+                    } finally {
+                        this.salvando = false;
+                    }
+                }
+            }
+        }
+    </script>
+</div>
+{% endblock %}

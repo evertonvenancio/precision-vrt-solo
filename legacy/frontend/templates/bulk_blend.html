@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-8" x-data="bulkBlendApp()">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Bulk Blend e Misturas</h1>
+    <p class="text-gray-500 dark:text-gray-300 mb-6">Otimizacao de mistura de fertilizantes com menor custo.</p>
+
+    <!-- BLOCO 1: Demanda Nutricional -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Demanda Nutricional</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nitrogenio (N) kg/ha</label>
+                <input type="number" x-model.number="demanda.n_kg_ha" step="0.1" min="0"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fosforo (P2O5) kg/ha</label>
+                <input type="number" x-model.number="demanda.p2o5_kg_ha" step="0.1" min="0"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Potassio (K2O) kg/ha</label>
+                <input type="number" x-model.number="demanda.k2o_kg_ha" step="0.1" min="0"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Area (ha)</label>
+                <input type="number" x-model.number="demanda.area_ha" step="0.1" min="0.1"
+                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCO 2: Fertilizantes Disponiveis -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Fertilizantes Disponiveis</h2>
+            <button @click="adicionarFertilizante()"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition">
+                + Adicionar Fertilizante
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+                <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">Nome</th>
+                        <th class="px-4 py-3">Custo (R$/kg)</th>
+                        <th class="px-4 py-3">N (%)</th>
+                        <th class="px-4 py-3">P2O5 (%)</th>
+                        <th class="px-4 py-3">K2O (%)</th>
+                        <th class="px-4 py-3">SGN (mm)</th>
+                        <th class="px-4 py-3">Densidade (kg/L)</th>
+                        <th class="px-4 py-3">Max (%)</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Acoes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="(f, index) in fertilizantes" :key="index">
+                        <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <td class="px-4 py-3">
+                                <input type="text" x-model="f.nome" placeholder="Ex: UREIA"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.custo_kg" step="0.01" min="0"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.composicao.N" step="0.1" min="0" max="100"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.composicao.P2O5" step="0.1" min="0" max="100"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.composicao.K2O" step="0.1" min="0" max="100"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.sgn" step="0.1" min="0"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.densidade" step="0.01" min="0"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <input type="number" x-model.number="f.inclusao_max_pct" step="1" min="0" max="100"
+                                       class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                            </td>
+                            <td class="px-4 py-3">
+                                <button @click="removerFertilizante(index)"
+                                        class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition">
+                                    Remover
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4 flex items-center gap-4">
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <input type="checkbox" x-model="usar_pulp"
+                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                Usar otimizacao via PuLP (Programacao Linear)
+            </label>
+            <div class="flex items-center gap-2">
+                <label class="text-sm text-gray-700 dark:text-gray-300">Capacidade do lote (kg):</label>
+                <input type="number" x-model.number="capacidade_lote_kg" step="100" min="100"
+                       class="w-24 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCO 3: Acao e Resultado -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Resultado da Otimizacao</h2>
+            <button @click="calcularMistura()" :disabled="carregando"
+                    class="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg text-sm font-medium transition">
+                <span x-show="!carregando">Calcular Mistura Otimizada</span>
+                <span x-show="carregando">Calculando...</span>
+            </button>
+        </div>
+
+        <!-- Alertas -->
+        <template x-if="alertas.length > 0">
+            <div class="mb-4 space-y-2">
+                <template x-for="(alerta, idx) in alertas" :key="idx">
+                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg text-sm text-yellow-800 dark:text-yellow-200"
+                         x-text="alerta"></div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Erro -->
+        <template x-if="erro">
+            <div class="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-800 dark:text-red-200"
+                 x-text="erro"></div>
+        </template>
+
+        <!-- Resultado -->
+        <template x-if="resultado && resultado.status !== 'Falha'">
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                        <p class="text-xs text-blue-600 dark:text-blue-400 uppercase font-semibold">Custo Total</p>
+                        <p class="text-2xl font-bold text-blue-800 dark:text-blue-200"
+                           x-text="'R$ ' + resultado.custo_total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})"></p>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                        <p class="text-xs text-green-600 dark:text-green-400 uppercase font-semibold">Metodo</p>
+                        <p class="text-2xl font-bold text-green-800 dark:text-green-200" x-text="resultado.metodo"></p>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                        <p class="text-xs text-purple-600 dark:text-purple-400 uppercase font-semibold">Compatibilidade</p>
+                        <p class="text-2xl font-bold text-purple-800 dark:text-purple-200"
+                           x-text="resultado.compatibilidade + '%'"></p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Composicao da Mistura</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+                            <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <tr>
+                                    <th class="px-4 py-3 rounded-tl-lg">Fertilizante</th>
+                                    <th class="px-4 py-3">Quantidade (kg)</th>
+                                    <th class="px-4 py-3">Percentual (%)</th>
+                                    <th class="px-4 py-3 rounded-tr-lg">Custo (R$)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(qtd, nome) in resultado.composicao" :key="nome">
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <td class="px-4 py-3 font-medium" x-text="nome"></td>
+                                        <td class="px-4 py-3" x-text="qtd.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})"></td>
+                                        <td class="px-4 py-3" x-text="(resultado.pct_inclusao[nome] || 0) + '%'"></td>
+                                        <td class="px-4 py-3"
+                                            x-text="'R$ ' + (qtd * getCustoKg(nome)).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nutrientes Totais Fornecidos</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Nitrogenio (N)</p>
+                            <p class="text-lg font-bold text-gray-800 dark:text-gray-200"
+                               x-text="(resultado.nutrientes_totais.N || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kg'"></p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Fosforo (P2O5)</p>
+                            <p class="text-lg font-bold text-gray-800 dark:text-gray-200"
+                               x-text="(resultado.nutrientes_totais.P2O5 || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kg'"></p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-center">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Potassio (K2O)</p>
+                            <p class="text-lg font-bold text-gray-800 dark:text-gray-200"
+                               x-text="(resultado.nutrientes_totais.K2O || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kg'"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <template x-if="resultado.lotes && resultado.lotes.length > 0">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Lotes de Aplicacao</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+                                <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <tr>
+                                        <th class="px-4 py-3 rounded-tl-lg">Lote</th>
+                                        <th class="px-4 py-3">Total (kg)</th>
+                                        <th class="px-4 py-3 rounded-tr-lg">Composicao</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="lote in resultado.lotes" :key="lote.lote">
+                                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                                            <td class="px-4 py-3 font-medium" x-text="'#' + lote.lote"></td>
+                                            <td class="px-4 py-3" x-text="lote.total_kg.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})"></td>
+                                            <td class="px-4 py-3">
+                                                <template x-for="(qtd, nome) in lote.composicao" :key="nome">
+                                                    <span class="inline-block mr-3 text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded"
+                                                          x-text="nome + ': ' + qtd.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kg'"></span>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function bulkBlendApp() {
+            return {
+                demanda: {
+                    n_kg_ha: 0,
+                    p2o5_kg_ha: 0,
+                    k2o_kg_ha: 0,
+                    area_ha: 0
+                },
+                fertilizantes: [
+                    {
+                        nome: "UREIA",
+                        custo_kg: 3.50,
+                        composicao: { N: 45.0, P2O5: 0.0, K2O: 0.0 },
+                        sgn: 2.5,
+                        densidade: 0.74,
+                        inclusao_min_pct: 0,
+                        inclusao_max_pct: 100
+                    },
+                    {
+                        nome: "MAP",
+                        custo_kg: 5.20,
+                        composicao: { N: 11.0, P2O5: 52.0, K2O: 0.0 },
+                        sgn: 3.0,
+                        densidade: 0.95,
+                        inclusao_min_pct: 0,
+                        inclusao_max_pct: 100
+                    },
+                    {
+                        nome: "MOP",
+                        custo_kg: 4.80,
+                        composicao: { N: 0.0, P2O5: 0.0, K2O: 60.0 },
+                        sgn: 2.8,
+                        densidade: 1.05,
+                        inclusao_min_pct: 0,
+                        inclusao_max_pct: 100
+                    }
+                ],
+                usar_pulp: true,
+                capacidade_lote_kg: 5000,
+                carregando: false,
+                resultado: null,
+                alertas: [],
+                erro: null,
+
+                adicionarFertilizante() {
+                    this.fertilizantes.push({
+                        nome: "",
+                        custo_kg: 0,
+                        composicao: { N: 0, P2O5: 0, K2O: 0 },
+                        sgn: 2.5,
+                        densidade: 0.8,
+                        inclusao_min_pct: 0,
+                        inclusao_max_pct: 100
+                    });
+                },
+
+                removerFertilizante(index) {
+                    this.fertilizantes.splice(index, 1);
+                },
+
+                getCustoKg(nome) {
+                    const f = this.fertilizantes.find(f => f.nome === nome);
+                    return f ? f.custo_kg : 0;
+                },
+
+                async calcularMistura() {
+                    this.carregando = true;
+                    this.resultado = null;
+                    this.alertas = [];
+                    this.erro = null;
+
+                    const payload = {
+                        recomendacao: {
+                            n_kg_ha: this.demanda.n_kg_ha,
+                            p2o5_kg_ha: this.demanda.p2o5_kg_ha,
+                            k2o_kg_ha: this.demanda.k2o_kg_ha,
+                            area_ha: this.demanda.area_ha
+                        },
+                        fertilizantes: this.fertilizantes.map(f => ({
+                            nome: f.nome,
+                            custo_kg: f.custo_kg,
+                            composicao: f.composicao,
+                            sgn: f.sgn,
+                            densidade: f.densidade,
+                            inclusao_min_pct: f.inclusao_min_pct,
+                            inclusao_max_pct: f.inclusao_max_pct
+                        })),
+                        usar_pulp: this.usar_pulp,
+                        capacidade_lote_kg: this.capacidade_lote_kg
+                    };
+
+                    try {
+                        const response = await fetch("/api/v1/bulk_blend/calcular", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            this.erro = data.detail || "Erro ao calcular mistura.";
+                            return;
+                        }
+
+                        this.resultado = data;
+
+                        if (data.status === "Heuristico") {
+                            this.alertas.push("A otimizacao foi realizada via metodo heuristico (PuLP nao disponivel ou falhou).");
+                        }
+                        if (data.compatibilidade < 70) {
+                            this.alertas.push("A compatibilidade fisica da mistura esta abaixo do ideal (< 70%). Considere ajustar os fertilizantes.");
+                        }
+                    } catch (err) {
+                        this.erro = "Erro de comunicacao com o servidor: " + err.message;
+                    } finally {
+                        this.carregando = false;
+                    }
+                }
+            }
+        }
+    </script>
+</div>
+{% endblock %}

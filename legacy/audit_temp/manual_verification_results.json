@@ -1,0 +1,170 @@
+[
+  {
+    "file": "ativos.html",
+    "categoria": "A",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "bulk_blend.html",
+    "categoria": "C",
+    "problema_real": "Estrutura t\u00e9cnica pr\u00f3pria",
+    "evidencia": "Interface t\u00e9cnica complexa de blendagem agr\u00edcola",
+    "tipo_corrigido": "EXCE\u00c7\u00c3O LEG\u00cdTIMA"
+  },
+  {
+    "file": "caixa.html",
+    "categoria": "B",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "clientes.html",
+    "categoria": "A",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "clima.html",
+    "categoria": "C",
+    "problema_real": "Estrutura incompleta",
+    "evidencia": "Template sem elementos essenciais",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "compactacao.html",
+    "categoria": "C",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "compactacao_nova.html",
+    "categoria": "D",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "conhecimento.html",
+    "categoria": "E",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "cruzamento.html",
+    "categoria": "C",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "configuracoes.html",
+    "categoria": "A",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "equipe.html",
+    "categoria": "A",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "financeiro.html",
+    "categoria": "B",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "nematoides.html",
+    "categoria": "C",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "novo_artigo.html",
+    "categoria": "E",
+    "problema_real": "Estrutura espec\u00edfica de formul\u00e1rio",
+    "evidencia": "Formul\u00e1rio de cadastro com estrutura espec\u00edfica",
+    "tipo_corrigido": "EXCE\u00c7\u00c3O LEG\u00cdTIMA"
+  },
+  {
+    "file": "novo_ativo.html",
+    "categoria": "D",
+    "problema_real": "Estrutura espec\u00edfica de formul\u00e1rio",
+    "evidencia": "Formul\u00e1rio de cadastro com estrutura espec\u00edfica",
+    "tipo_corrigido": "EXCE\u00c7\u00c3O LEG\u00cdTIMA"
+  },
+  {
+    "file": "novo_funcionario.html",
+    "categoria": "A",
+    "problema_real": "Estrutura incompleta",
+    "evidencia": "Template sem elementos essenciais",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "permissoes.html",
+    "categoria": "A",
+    "problema_real": "Estrutura padr\u00e3o incompleta",
+    "evidencia": "Template funcional mas sem elementos estruturais completos",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "prescricao.html",
+    "categoria": "C",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "prescricao_nova.html",
+    "categoria": "C",
+    "problema_real": "Estrutura padr\u00e3o incompleta",
+    "evidencia": "N\u00e3o segue completamente o padr\u00e3o esperado",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "prescricao_resultado.html",
+    "categoria": "C",
+    "problema_real": "Interface t\u00e9cnica especializada",
+    "evidencia": "Visualiza\u00e7\u00e3o complexa de resultados anal\u00edticos com gr\u00e1ficos",
+    "tipo_corrigido": "EXCE\u00c7\u00c3O LEG\u00cdTIMA"
+  },
+  {
+    "file": "tabela_precos.html",
+    "categoria": "B",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "upload.html",
+    "categoria": "D",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "upload_resultado.html",
+    "categoria": "D",
+    "problema_real": "Elemento estrutural ausente",
+    "evidencia": "Template funcional mas sem extends base.html",
+    "tipo_corrigido": "ERRO REAL"
+  },
+  {
+    "file": "base_tecnica.html",
+    "categoria": "C",
+    "problema_real": "Template base t\u00e9cnico",
+    "evidencia": "Arquivo de template base para p\u00e1ginas t\u00e9cnicas especializadas",
+    "tipo_corrigido": "EXCE\u00c7\u00c3O LEG\u00cdTIMA"
+  }
+]

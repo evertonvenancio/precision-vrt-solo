@@ -1,0 +1,287 @@
+<!-- Sistema de Personalização do Dashboard -->
+<script src="/components/http-error-handler.html"></script>
+<script>
+function dashboardPersonalization() {
+    return {
+        // Modal state
+        showPersonalizationModal: false,
+        
+        // Available widgets
+        availableWidgets: [
+            {
+                id: 'clientes',
+                title: 'Clientes',
+                description: 'Visualizar clientes relacionados ao trabalho',
+                icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                color: '3b82f6',
+                permission: 'clientes:read',
+                category: 'indicadores'
+            },
+            {
+                id: 'fazendas',
+                title: 'Fazendas',
+                description: 'Áreas e fazendas do usuário',
+                icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+                color: '10b981',
+                permission: 'fazendas:read',
+                category: 'indicadores'
+            },
+            {
+                id: 'processamentos',
+                title: 'Processamentos',
+                description: 'Processamentos em andamento',
+                icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+                color: 'f59e0b',
+                permission: 'processamentos:read',
+                category: 'operacional'
+            },
+            {
+                id: 'prescricoes',
+                title: 'Prescrições',
+                description: 'Prescrições realizadas',
+                icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                color: '8b5cf6',
+                permission: 'prescricoes:read',
+                category: 'operacional'
+            },
+            {
+                id: 'recebimentos',
+                title: 'Recebimentos',
+                description: 'Recebimentos recentes',
+                icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+                color: '10b981',
+                permission: 'financeiro:read',
+                category: 'financeiro'
+            },
+            {
+                id: 'pagamentos',
+                title: 'Pagamentos',
+                description: 'Pagamentos pendentes',
+                icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+                color: 'ef4444',
+                permission: 'financeiro:read',
+                category: 'financeiro'
+            },
+            {
+                id: 'atividades',
+                title: 'Atividades Recent',
+                description: 'Atividades recentes do sistema',
+                icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+                color: '6366f1',
+                permission: 'atividades:read',
+                category: 'gestao'
+            },
+            {
+                id: 'agenda',
+                title: 'Agenda',
+                description: 'Compromissos e agenda',
+                icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+                color: 'f97316',
+                permission: 'agenda:read',
+                category: 'operacional'
+            },
+            {
+                id: 'usuarios',
+                title: 'Usuários',
+                description: 'Usuários do sistema',
+                icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+                color: '8b5cf6',
+                permission: 'usuarios:read',
+                category: 'gestao'
+            },
+            {
+                id: 'alertas',
+                title: 'Alertas',
+                description: 'Alertas e notificações',
+                icon: 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z',
+                color: 'ef4444',
+                permission: 'alertas:read',
+                category: 'gestao'
+            }
+        ],
+        
+        // Selected widgets
+        selectedWidgets: [],
+        
+        // Filter state
+        selectedCategory: 'all',
+        
+        // Modal methods
+        openPersonalization() {
+            this.showPersonalizationModal = true;
+            this.loadAvailableWidgets();
+        },
+        
+        closePersonalization() {
+            this.showPersonalizationModal = false;
+        },
+        
+        // Widget management
+        async loadAvailableWidgets() {
+            // Load user permissions and filter available widgets
+            try {
+                // Usar o sistema de identidade centralizado
+                const response = await fetch('/api/v1/auth/user-permissions', {
+                    headers: {
+                        'Authorization': 'Bearer ' + window.identitySystem.token
+                    }
+                });
+                
+                if (response.ok) {
+                    const permissions = await response.json();
+                    this.selectedWidgets = this.availableWidgets.filter(widget => 
+                        permissions.includes(widget.permission)
+                    );
+                }
+            } catch (error) {
+                console.error('Error loading permissions:', error);
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+                // Fallback to default widgets
+                this.selectedWidgets = this.availableWidgets.slice(0, 5);
+            }
+        },
+        
+        addWidget(widgetId) {
+            const widget = this.availableWidgets.find(w => w.id === widgetId);
+            if (widget && !this.selectedWidgets.find(w => w.id === widgetId)) {
+                this.selectedWidgets.push(widget);
+                this.saveConfiguration();
+            }
+        },
+        
+        removeWidget(widgetId) {
+            this.selectedWidgets = this.selectedWidgets.filter(w => w.id !== widgetId);
+            this.saveConfiguration();
+        },
+        
+        // Configuration management
+        async saveConfiguration() {
+            const config = {
+                widgets: this.selectedWidgets.map(w => ({
+                    id: w.id,
+                    title: w.title,
+                    icon: w.icon,
+                    color: w.color,
+                    permission: w.permission,
+                    category: w.category
+                })),
+                layout: this.getCurrentLayout(),
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // Save to localStorage
+                localStorage.setItem('dashboard-config', JSON.stringify(config));
+                
+                // Save to backend
+                const response = await fetch('/api/v1/dashboard/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + window.identitySystem.token
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                if (!response.ok) {
+                    const httpError = getHttpErrorMessage(response);
+                    window.messageSystem.error(httpError.title, httpError.message);
+                    console.error('Failed to save configuration to backend');
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+                    console.error('Failed to save configuration to backend');
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving configuration:', error);
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+            }
+        },
+        
+        getCurrentLayout() {
+            // Get current widget layout
+            const widgets = document.querySelectorAll('.widget');
+            const layout = {};
+            
+            widgets.forEach(widget => {
+                const id = widget.id;
+                if (id) {
+                    layout[id] = {
+                        position: widget.style.position,
+                        left: widget.style.left,
+                        top: widget.style.top,
+                        gridArea: widget.style.gridArea
+                    };
+                }
+            });
+            
+            return layout;
+        },
+        
+        // Category filter
+        setCategory(category) {
+            this.selectedCategory = category;
+        },
+        
+        getFilteredWidgets() {
+            if (this.selectedCategory === 'all') {
+                return this.availableWidgets;
+            }
+            return this.availableWidgets.filter(w => w.category === this.selectedCategory);
+        },
+        
+        // Reset to default
+        resetToDefault() {
+            // Reset to default configuration based on user role
+            this.$nextTick(() => {
+                this.selectedWidgets = this.getDefaultWidgets();
+                this.saveConfiguration();
+                this.closePersonalization();
+            });
+        },
+        
+        getDefaultWidgets() {
+            // Get default widgets based on user permissions
+            const defaultConfigs = {
+                'consultor': ['clientes', 'fazendas', 'processamentos', 'prescricoes', 'atividades'],
+                'financeiro': ['recebimentos', 'pagamentos', 'financeiro', 'contas', 'fluxo'],
+                'administrador': ['usuarios', 'alertas', 'financeiro', 'processamentos', 'prescricoes'],
+                'tecnico': ['processamentos', 'prescricoes', 'alertas', 'analises', 'operacoes']
+            };
+            
+            // Determine user role from permissions
+            const userRole = this.determineUserRole();
+            const defaultWidgetIds = defaultConfigs[userRole] || ['clientes', 'fazendas', 'atividades'];
+            
+            return this.availableWidgets.filter(w => defaultWidgetIds.includes(w.id));
+        },
+        
+        determineUserRole() {
+            // Determine user role from permissions
+            const permissions = this.selectedWidgets.map(w => w.permission);
+            
+            if (permissions.some(p => p.startsWith('financeiro'))) {
+                return 'financeiro';
+            }
+            if (permissions.some(p => p.startsWith('usuarios'))) {
+                return 'administrador';
+            }
+            if (permissions.some(p => p.startsWith('processamentos'))) {
+                return 'tecnico';
+            }
+            return 'consultor';
+        }
+    }
+}
+</script>

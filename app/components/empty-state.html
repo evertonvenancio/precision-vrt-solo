@@ -1,0 +1,98 @@
+<!-- Empty State Component - Estado vazio genérico -->
+<div class="empty-state" x-data="emptyState()">
+    
+    <!-- Loading State já gerenciado pelo card pai -->
+    
+    <!-- Empty Content -->
+    <div x-show="!loading && !dataAvailable" class="text-center py-8">
+        <div class="mb-4">
+            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+            </div>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2" x-text="title || 'Nenhum dado disponível'"></h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6" x-text="description || 'Não há informações para exibir no momento.'"></p>
+        
+        <!-- Botão de ação quando disponível -->
+        <template x-if="actionText && actionUrl">
+            <div>
+                <a :href="actionUrl" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <span x-text="actionText"></span>
+                    <svg class="ml-2 -mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </template>
+        
+        <!-- Mensagem informativa quando não há ação -->
+        <template x-if="!actionText || !actionUrl">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                <span x-text="message || 'Atualize a página para tentar novamente.'"></span>
+            </p>
+        </template>
+    </div>
+    
+    <!-- No Permission State -->
+    <div x-show="noPermission" class="text-center py-8">
+        <div class="mb-4">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto">
+                <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Acesso Restrito</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">Você não possui permissão para visualizar estas informações.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Entre em contato com o administrador do sistema.</p>
+    </div>
+    
+</div>
+
+<script>
+function emptyState() {
+    return {
+        title: 'Nenhum dado disponível',
+        description: 'Não há informações para exibir no momento.',
+        actionText: null,
+        actionUrl: null,
+        message: null,
+        loading: false,
+        dataAvailable: false,
+        noPermission: false,
+        
+        init() {
+            // Pode ser configurado externamente
+            this.loadState();
+        },
+        
+        loadState() {
+            // Pode ser atualizado dinamicamente
+            // this.title = 'Custom title';
+            // this.description = 'Custom description';
+        },
+        
+        setLoading(loading) {
+            this.loading = loading;
+        },
+        
+        setDataAvailable(available) {
+            this.dataAvailable = available;
+        },
+        
+        setNoPermission(permission) {
+            this.noPermission = permission;
+        },
+        
+        setConfig(config) {
+            if (config.title) this.title = config.title;
+            if (config.description) this.description = config.description;
+            if (config.actionText) this.actionText = config.actionText;
+            if (config.actionUrl) this.actionUrl = config.actionUrl;
+            if (config.message) this.message = config.message;
+        }
+    }
+}
+</script>

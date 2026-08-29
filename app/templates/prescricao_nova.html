@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Prescrição de Solo (VRT) - Precision VRT Solo{% endblock %}
+{% block page_title %}Nova Prescrição{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-full" x-data="prescricaoWizard()">
+
+    <!-- CABEÇALHO -->
+    <header class="flex-shrink-0 bg-white dark:bg-gray-800 shadow-sm p-4">
+        <div class="flex items-center gap-3">
+            <a href="/prescricao" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Nova Prescrição de Solo (VRT)</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Wizard de 3 etapas — Configure, envie e processe</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- CENTRO SCROLLÁVEL -->
+    <div class="flex-1 overflow-y-auto p-6">
+        <div class="max-w-5xl mx-auto">
+
+            <!-- BARRA DE PROGRESSO -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Etapa <span x-text="step"></span> de 3</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400" x-text="stepTitulo"></span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div class="bg-vrt-green h-2.5 rounded-full transition-all duration-300" :style="'width: ' + (step / 3 * 100) + '%'"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span :class="step >= 1 ? 'text-vrt-green dark:text-green-400 font-medium' : ''">1. Configuração</span>
+                    <span :class="step >= 2 ? 'text-vrt-green dark:text-green-400 font-medium' : ''">2. Upload</span>
+                    <span :class="step >= 3 ? 'text-vrt-green dark:text-green-400 font-medium' : ''">3. Processamento</span>
+                </div>
+            </div>
+
+            <!-- ETAPA 1: CONFIGURAÇÃO -->
+            <div x-show="step === 1" x-transition x-cloak class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-5 flex items-center">
+                        <span class="w-8 h-8 bg-vrt-green text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
+                        Configuração da Prescrição
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Cliente -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cliente <span class="text-red-500">*</span></label>
+                            <select x-model="dados.cliente_id"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors"
+                                    :class="erros.cliente_id ? 'border-red-500 dark:border-red-500' : ''">
+                                <option value="">Selecione um cliente...</option>
+                                {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <p x-show="erros.cliente_id" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.cliente_id"></p>
+                        </div>
+
+                        <!-- Nome do Talhão -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Talhão <span class="text-red-500">*</span></label>
+                            <input type="text" x-model="dados.talhao_nome" placeholder="Ex: Talhão 01 - Norte"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors"
+                                   :class="erros.talhao_nome ? 'border-red-500 dark:border-red-500' : ''">
+                            <p x-show="erros.talhao_nome" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.talhao_nome"></p>
+                        </div>
+
+                        <!-- Cultura -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cultura <span class="text-red-500">*</span></label>
+                            <select x-model="dados.cultura"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors"
+                                    :class="erros.cultura ? 'border-red-500 dark:border-red-500' : ''">
+                                <option value="">Selecione uma cultura...</option>
+                                {% for key, nome in culturas %}
+                                <option value="{{ key }}">{{ nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <p x-show="erros.cultura" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.cultura"></p>
+                        </div>
+
+                        <!-- Produtividade Alvo -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Produtividade Alvo <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="number" x-model.number="dados.produtividade" step="0.1" min="0" placeholder="80.0"
+                                       class="w-full px-3 py-2 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors"
+                                       :class="erros.produtividade ? 'border-red-500 dark:border-red-500' : ''">
+                                <span class="absolute right-3 top-2 text-sm text-gray-500 dark:text-gray-400">sc/ha</span>
+                            </div>
+                            <p x-show="erros.produtividade" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.produtividade"></p>
+                        </div>
+
+                        <!-- Metodologia -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Metodologia <span class="text-red-500">*</span></label>
+                            <select x-model="dados.metodologia"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors"
+                                    :class="erros.metodologia ? 'border-red-500 dark:border-red-500' : ''">
+                                <option value="">Selecione uma metodologia...</option>
+                                {% for key, nome in formulas %}
+                                <option value="{{ key }}">{{ nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <p x-show="erros.metodologia" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.metodologia"></p>
+                        </div>
+
+                        <!-- Número de Zonas -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de Zonas</label>
+                            <input type="number" x-model.number="dados.n_zonas" min="2" max="10"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-vrt-green focus:border-vrt-green outline-none transition-colors">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ETAPA 2: UPLOAD -->
+            <div x-show="step === 2" x-transition x-cloak class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-5 flex items-center">
+                        <span class="w-8 h-8 bg-vrt-green text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
+                        Upload de Arquivos
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Limite do Talhão -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Limite do Talhão <span class="text-red-500">*</span></label>
+                            <div
+                                @drop.prevent="handleDrop($event, 'limite')"
+                                @dragover.prevent="dragAtivo = 'limite'"
+                                @dragleave.prevent="dragAtivo = null"
+                                :class="dragAtivo === 'limite' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50'"
+                                class="border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer hover:border-blue-400 dark:hover:border-blue-500"
+                                @click="$refs.inputLimite.click()"
+                            >
+                                <input type="file" x-ref="inputLimite" @change="handleFileSelect($event, 'limite')" accept=".zip,.geojson,.json,.shp" class="hidden">
+                                <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.553-.894L15 7m0 13V7"/>
+                                </svg>
+                                <p class="text-sm text-gray-600 dark:text-gray-300" x-show="!arquivos.limite.nome">Arraste o arquivo aqui ou clique para selecionar</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400" x-show="!arquivos.limite.nome">(.zip com SHP, .geojson, .json)</p>
+                                <div x-show="arquivos.limite.nome" class="mt-2">
+                                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300" x-text="arquivos.limite.nome"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" x-text="formatarTamanho(arquivos.limite.tamanho)"></p>
+                                    <button @click.stop="removerArquivo('limite')" class="mt-1 text-xs text-red-600 dark:text-red-400 hover:underline">Remover</button>
+                                </div>
+                            </div>
+                            <p x-show="erros.limite" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.limite"></p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Deve conter polígono do talhão + pontos com propriedade <strong>id</strong>.</p>
+                        </div>
+
+                        <!-- Amostras de Solo -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amostras de Solo <span class="text-red-500">*</span></label>
+                            <div
+                                @drop.prevent="handleDrop($event, 'amostras')"
+                                @dragover.prevent="dragAtivo = 'amostras'"
+                                @dragleave.prevent="dragAtivo = null"
+                                :class="dragAtivo === 'amostras' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50'"
+                                class="border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer hover:border-green-400 dark:hover:border-green-500"
+                                @click="$refs.inputAmostras.click()"
+                            >
+                                <input type="file" x-ref="inputAmostras" @change="handleFileSelect($event, 'amostras')" accept=".csv,.xlsx,.zip,.geojson,.json" class="hidden">
+                                <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <p class="text-sm text-gray-600 dark:text-gray-300" x-show="!arquivos.amostras.nome">Arraste o arquivo aqui ou clique para selecionar</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400" x-show="!arquivos.amostras.nome">CSV/XLSX: coluna obrigatória <strong>ponto_id</strong>. Sem coordenadas (usa GeoJSON).</p>
+                                <div x-show="arquivos.amostras.nome" class="mt-2">
+                                    <p class="text-sm font-medium text-green-700 dark:text-green-300" x-text="arquivos.amostras.nome"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" x-text="formatarTamanho(arquivos.amostras.tamanho)"></p>
+                                    <button @click.stop="removerArquivo('amostras')" class="mt-1 text-xs text-red-600 dark:text-red-400 hover:underline">Remover</button>
+                                </div>
+                            </div>
+                            <p x-show="erros.amostras" class="mt-1 text-xs text-red-600 dark:text-red-400" x-text="erros.amostras"></p>
+                        </div>
+                    </div>
+
+                    <!-- Resumo da Configuração -->
+                    <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Resumo da Configuração</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                            <div><span class="text-gray-500 dark:text-gray-400">Cliente:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="nomeClienteSelecionado"></span></div>
+                            <div><span class="text-gray-500 dark:text-gray-400">Talhão:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="dados.talhao_nome || '-' "></span></div>
+                            <div><span class="text-gray-500 dark:text-gray-400">Cultura:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="dados.cultura || '-' "></span></div>
+                            <div><span class="text-gray-500 dark:text-gray-400">Produtividade:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="dados.produtividade ? dados.produtividade + ' sc/ha' : '-' "></span></div>
+                            <div><span class="text-gray-500 dark:text-gray-400">Metodologia:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="dados.metodologia || '-' "></span></div>
+                            <div><span class="text-gray-500 dark:text-gray-400">Zonas:</span> <span class="font-medium text-gray-900 dark:text-gray-100" x-text="dados.n_zonas"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ETAPA 3: PROCESSAMENTO -->
+            <div x-show="step === 3" x-transition x-cloak class="space-y-6">
+                <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-12 text-center">
+                    <div class="flex justify-center mb-6">
+                        <svg class="animate-spin h-16 w-16 text-vrt-green" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Processando Dados...</h2>
+                    <p class="text-gray-500 dark:text-gray-400 mb-4">Isso pode levar alguns instantes. Aguarde enquanto interpolamos os dados e geramos as zonas de manejo.</p>
+                    <div class="max-w-md mx-auto">
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="bg-vrt-green h-2 rounded-full animate-pulse" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <p x-show="erro" class="mt-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg text-sm text-red-800 dark:text-red-200" x-text="erro"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RODAPÉ FIXO -->
+    <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <!-- Botão Voltar -->
+            <button
+                @click="voltar()"
+                x-show="step > 1"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-bold rounded-lg shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+            >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Voltar
+            </button>
+            <div x-show="step === 1" class="flex-1"></div>
+
+            <!-- Botão Próximo (Etapa 1) -->
+            <button
+                @click="avancar()"
+                x-show="step === 1"
+                class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-sm text-white bg-vrt-green hover:bg-green-800 transition-colors"
+            >
+                Próximo
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+
+            <!-- Botão Processar (Etapa 2) -->
+            <button
+                @click="processar()"
+                x-show="step === 2"
+                :disabled="!podeProcessar"
+                :class="podeProcessar ? 'bg-vrt-green hover:bg-green-800 text-white' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'"
+                class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-bold rounded-lg shadow-sm transition-colors"
+            >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Processar Dados
+            </button>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+function prescricaoWizard() {
+    return {
+        step: 1,
+        dragAtivo: null,
+        processando: false,
+        erro: null,
+
+        dados: {
+            cliente_id: '',
+            talhao_nome: '',
+            cultura: '',
+            produtividade: '',
+            metodologia: '',
+            n_zonas: 3
+        },
+
+        arquivos: {
+            limite: { nome: '', arquivo: null, tamanho: 0 },
+            amostras: { nome: '', arquivo: null, tamanho: 0 }
+        },
+
+        erros: {},
+
+        get stepTitulo() {
+            const titulos = { 1: 'Configuração', 2: 'Upload de Arquivos', 3: 'Processamento' };
+            return titulos[this.step] || '';
+        },
+
+        get podeProcessar() {
+            return this.arquivos.limite.arquivo && this.arquivos.amostras.arquivo;
+        },
+
+        get nomeClienteSelecionado() {
+            const select = document.querySelector('select[x-model="dados.cliente_id"]');
+            if (select) {
+                const option = select.querySelector('option[value="' + this.dados.cliente_id + '"]');
+                return option ? option.textContent : '-';
+            }
+            return '-';
+        },
+
+        avancar() {
+            this.erros = {};
+            let valido = true;
+
+            if (!this.dados.cliente_id) { this.erros.cliente_id = 'Selecione um cliente.'; valido = false; }
+            if (!this.dados.talhao_nome.trim()) { this.erros.talhao_nome = 'Informe o nome do talhão.'; valido = false; }
+            if (!this.dados.cultura) { this.erros.cultura = 'Selecione uma cultura.'; valido = false; }
+            if (!this.dados.produtividade || this.dados.produtividade <= 0) { this.erros.produtividade = 'Informe uma produtividade válida.'; valido = false; }
+            if (!this.dados.metodologia) { this.erros.metodologia = 'Selecione uma metodologia.'; valido = false; }
+
+            if (valido) this.step = 2;
+        },
+
+        voltar() {
+            if (this.step > 1) this.step--;
+            this.erro = null;
+        },
+
+        handleDrop(event, tipo) {
+            this.dragAtivo = null;
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                this.definirArquivo(tipo, files[0]);
+            }
+        },
+
+        handleFileSelect(event, tipo) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                this.definirArquivo(tipo, files[0]);
+            }
+        },
+
+        definirArquivo(tipo, file) {
+            this.arquivos[tipo] = {
+                nome: file.name,
+                arquivo: file,
+                tamanho: file.size
+            };
+            this.erros[tipo] = null;
+        },
+
+        removerArquivo(tipo) {
+            this.arquivos[tipo] = { nome: '', arquivo: null, tamanho: 0 };
+            this.erros[tipo] = null;
+        },
+
+        formatarTamanho(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
+
+        async processar() {
+            this.erros = {};
+            if (!this.arquivos.limite.arquivo) { this.erros.limite = 'Selecione o arquivo de limite do talhão.'; }
+            if (!this.arquivos.amostras.arquivo) { this.erros.amostras = 'Selecione o arquivo de amostras de solo.'; }
+            if (!this.podeProcessar) return;
+
+            this.step = 3;
+            this.erro = null;
+
+            const formData = new FormData();
+            formData.append('cliente_id', this.dados.cliente_id);
+            formData.append('talhao_nome', this.dados.talhao_nome);
+            formData.append('cultura', this.dados.cultura);
+            formData.append('produtividade', this.dados.produtividade);
+            formData.append('metodologia', this.dados.metodologia);
+            formData.append('n_zonas', this.dados.n_zonas);
+            formData.append('limite_talhao', this.arquivos.limite.arquivo);
+            formData.append('amostras_solo', this.arquivos.amostras.arquivo);
+
+            try {
+                const response = await fetch('/prescricao/processar', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    window.location.href = data.redirect || '/prescricao/resultado';
+                } else {
+                    this.step = 2;
+                    this.erro = data.detail || 'Erro ao processar prescrição.';
+                }
+            } catch (err) {
+                this.step = 2;
+                this.erro = 'Erro de comunicação com o servidor: ' + err.message;
+            }
+        }
+    };
+}
+</script>
+{% endblock %}

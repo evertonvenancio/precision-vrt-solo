@@ -1,0 +1,234 @@
+<!-- Sistema de Drag & Drop para Dashboard -->
+<script src="/components/http-error-handler.html"></script>
+<script>
+// Simple drag and drop system without external libraries
+function dragDropSystem() {
+    return {
+        draggedElement: null,
+        dragOffset: { x: 0, y: 0 },
+        
+        init() {
+            this.setupDragAndDrop();
+            this.loadDashboardConfig();
+        },
+        
+        setupDragAndDrop() {
+            // Add event listeners to all widgets
+            this.$nextTick(() => {
+                const widgets = document.querySelectorAll('.widget');
+                widgets.forEach(widget => {
+                    widget.addEventListener('mousedown', this.handleMouseDown.bind(this));
+                    widget.draggable = true;
+                    widget.addEventListener('dragstart', this.handleDragStart.bind(this));
+                    widget.addEventListener('dragover', this.handleDragOver.bind(this));
+                    widget.addEventListener('drop', this.handleDrop.bind(this));
+                    widget.addEventListener('dragend', this.handleDragEnd.bind(this));
+                });
+            });
+        },
+        
+        handleMouseDown(e) {
+            // Handle mouse drag for better UX
+            const widget = e.currentTarget;
+            const rect = widget.getBoundingClientRect();
+            
+            this.draggedElement = widget;
+            this.dragOffset.x = e.clientX - rect.left;
+            this.dragOffset.y = e.clientY - rect.top;
+            
+            widget.style.position = 'fixed';
+            widget.style.zIndex = '1000';
+            widget.style.pointerEvents = 'none';
+            widget.style.opacity = '0.8';
+            
+            // Create ghost element
+            const ghost = widget.cloneNode(true);
+            ghost.style.position = 'absolute';
+            ghost.style.pointerEvents = 'none';
+            ghost.style.opacity = '0.5';
+            ghost.style.zIndex = '999';
+            ghost.id = 'drag-ghost';
+            document.body.appendChild(ghost);
+            
+            // Track mouse movement
+            const handleMouseMove = (e) => {
+                ghost.style.left = (e.clientX - this.dragOffset.x) + 'px';
+                ghost.style.top = (e.clientY - this.dragOffset.y) + 'px';
+            };
+            
+            const handleMouseUp = () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+                
+                // Remove ghost element
+                const ghost = document.getElementById('drag-ghost');
+                if (ghost) ghost.remove();
+                
+                // Reset widget
+                widget.style.position = '';
+                widget.style.zIndex = '';
+                widget.style.pointerEvents = '';
+                widget.style.opacity = '';
+                
+                this.draggedElement = null;
+            };
+            
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        },
+        
+        handleDragStart(e) {
+            const widget = e.currentTarget;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', widget.innerHTML);
+            
+            widget.style.opacity = '0.5';
+        },
+        
+        handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        },
+        
+        handleDrop(e) {
+            e.preventDefault();
+            
+            const targetWidget = e.currentTarget;
+            const draggedWidgetId = this.draggedElement?.id || this.getWidgetId(e.dataTransfer.getData('text/html'));
+            const targetWidgetId = targetWidget.id;
+            
+            if (draggedWidgetId && targetWidgetId && draggedWidgetId !== targetWidgetId) {
+                this.swapWidgets(draggedWidgetId, targetWidgetId);
+            }
+        },
+        
+        handleDragEnd(e) {
+            // Reset all widgets opacity
+            const widgets = document.querySelectorAll('.widget');
+            widgets.forEach(widget => {
+                widget.style.opacity = '';
+            });
+        },
+        
+        getWidgetId(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const widget = doc.querySelector('.widget');
+            return widget?.id || '';
+        },
+        
+        swapWidgets(widgetId1, widgetId2) {
+            const widget1 = document.getElementById(widgetId1);
+            const widget2 = document.getElementById(widgetId2);
+            
+            if (widget1 && widget2) {
+                // Get positions
+                const pos1 = this.getWidgetPosition(widget1);
+                const pos2 = this.getWidgetPosition(widget2);
+                
+                // Swap positions
+                widget1.style.position = pos2.position;
+                widget1.style.left = pos2.left;
+                widget1.style.top = pos2.top;
+                widget1.style.gridArea = pos2.gridArea;
+                
+                widget2.style.position = pos1.position;
+                widget2.style.left = pos1.left;
+                widget2.style.top = pos1.top;
+                widget2.style.gridArea = pos1.gridArea;
+                
+                // Update configuration
+                this.saveDashboardConfig();
+            }
+        },
+        
+        getWidgetPosition(widget) {
+            return {
+                position: widget.style.position,
+                left: widget.style.left,
+                top: widget.style.top,
+                gridArea: widget.style.gridArea
+            };
+        },
+        
+        loadDashboardConfig() {
+            // Load saved dashboard configuration
+            const config = localStorage.getItem('dashboard-config');
+            if (config) {
+                const parsedConfig = JSON.parse(config);
+                this.applyLayout(parsedConfig);
+            }
+        },
+        
+        saveDashboardConfig() {
+            // Save current dashboard configuration
+            const config = this.getCurrentLayout();
+            localStorage.setItem('dashboard-config', JSON.stringify(config));
+            
+            // Notify backend of changes
+            this.notifyBackend(config);
+        },
+        
+        getCurrentLayout() {
+            const widgets = document.querySelectorAll('.widget');
+            const layout = {};
+            
+            widgets.forEach(widget => {
+                const id = widget.id;
+                if (id) {
+                    layout[id] = {
+                        position: widget.style.position,
+                        left: widget.style.left,
+                        top: widget.style.top,
+                        gridArea: widget.style.gridArea,
+                        minimized: widget.getAttribute('data-minimized') === 'true'
+                    };
+                }
+            });
+            
+            return layout;
+        },
+        
+        applyLayout(layout) {
+            Object.entries(layout).forEach(([widgetId, position]) => {
+                const widget = document.getElementById(widgetId);
+                if (widget) {
+                    widget.style.position = position.position || '';
+                    widget.style.left = position.left || '';
+                    widget.style.top = position.top || '';
+                    widget.style.gridArea = position.gridArea || '';
+                    widget.setAttribute('data-minimized', position.minimized || false);
+                }
+            });
+        },
+        
+        async notifyBackend(config) {
+            // Notify backend about configuration changes
+            try {
+                const response = await fetch('/api/v1/dashboard/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + window.identitySystem.token
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                if (!response.ok) {
+                    const httpError = getHttpErrorMessage(response); window.messageSystem.error(httpError.title, httpError.message); console.error('Failed to save dashboard configuration to backend');
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error notifying backend:', error);
+                    // Adicionar mensagem para usuário
+                    if (window.messageSystem) {
+                        window.messageSystem.error('Erro', 'Operação falhou. Tente novamente.');
+                    }
+            }
+        }
+    }
+}
+</script>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, tabela_inicio, tabela_fim, empty_state %}
+
+{% block title %}Análise de Compactação do Solo{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    {{ header_pagina(
+        'Análise de Compactação do Solo',
+        'Avalie a resistência mecânica do solo por talhão.',
+        '/compactacao/nova',
+        'Nova Análise',
+        'plus'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="card">
+            {% if analises %}
+            {{ tabela_inicio([
+                ('Talhão', 'left'),
+                ('Data da Coleta', 'left'),
+                ('Classificação Geral', 'left'),
+                ('Necessita Escarificação?', 'left'),
+                ('Ações', 'right')
+            ]) }}
+            {% for item in analises %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-medium">{{ item.talhao }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ item.data_coleta }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ item.classificacao }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ item.escarificacao }}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="/compactacao/{{ item.id }}" class="action-link">Detalhes</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {{ tabela_fim() }}
+            {% else %}
+            {{ empty_state('Nenhuma análise de compactação cadastrada.', 'Cadastrar a primeira análise →', '/compactacao/nova') }}
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

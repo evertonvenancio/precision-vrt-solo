@@ -1,0 +1,1114 @@
+{# extends "base.html" #}
+
+<!-- Incluir componentes globais -->
+{% include "components/card.html" %}
+{% include "components/button.html" %}
+{% include "components/table.html" %}
+{% include "components/loading.html" %}
+{% include "components/message.html" %}
+{% include "components/modal.html" %}
+{% include "components/empty-state.html" %}
+{% include "components/breadcrumb.html" %}
+{% include "components/widget-clientes.html" %}
+{% include "components/widget-fazendas.html" %}
+{% include "components/widget-recebimentos.html" %}
+{% include "components/widget-generic.html" %}
+
+<!-- Dashboard Modular - Utilizando Componentes Globais -->
+<div id="dashboard-root" x-data="dashboardSystem()">
+    
+    <!-- Sistema de Mensagens Global -->
+    <div x-data="messageSystem()" 
+         x-init="$watch('messages', () => { if (messages.length > 0) showCurrentMessage() })"
+         x-show="messages.length > 0"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform translate-y-2"
+         class="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
+        
+        <!-- Mensagens Individuais -->
+        <template x-for="(message, index) in messages" :key="index">
+            <div :class="{
+                'bg-green-50 border-green-200 text-green-700': message.type === 'success',
+                'bg-blue-50 border-blue-200 text-blue-700': message.type === 'info',
+                'bg-yellow-50 border-yellow-200 text-yellow-700': message.type === 'warning',
+                'bg-red-50 border-red-200 text-red-700': message.type === 'error'
+            }" 
+                 class="border-l-4 p-4 rounded-lg shadow-lg"
+                 x-show="message.show"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform translate-y-2">
+                
+                <div class="flex items-center">
+                    <!-- Ícone -->
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0" :fill="message.type === 'success' ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="message.type === 'success'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path x-show="message.type === 'error'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path x-show="message.type === 'info'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1m-1-2h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path x-show="message.type === 'warning'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    
+                    <!-- Conteúdo -->
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm" x-text="message.title"></h4>
+                        <p class="text-sm mt-1" x-text="message.text"></p>
+                    </div>
+                    
+                    <!-- Botão de fechar -->
+                    <button @click="closeMessage(index)" class="ml-4 flex-shrink-0 text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <!-- SIDEBAR e TOPBAR serão incluídos pelo base.html -->
+    <main class="flex-1 ml-64 mt-16">
+        <div class="p-6">
+            
+            <!-- Header do Dashboard -->
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1">Seu painel personalizado</p>
+                </div>
+                
+                <!-- Controles do Dashboard -->
+                <div class="flex items-center space-x-3">
+                    <!-- Botão de Personalização -->
+                    <button @click="personalizationSystem.openPersonalization()" 
+                            class="btn-primary px-4 py-2 rounded-lg font-medium transition-colors hover:bg-opacity-90">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Personalizar
+                    </button>
+                    
+                    <!-- Opções de Layout -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                            </svg>
+                            Layout
+                        </button>
+                        
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                            <button @click="setGridSize('1x1'); open = false" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Pequeno</button>
+                            <button @click="setGridSize('2x2'); open = false" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Médio</button>
+                            <button @click="setGridSize('3x3'); open = false" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Grande</button>
+                            <button @click="setGridSize('full'); open = false" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Largura completa</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de Atualização -->
+                    <button @click="refreshAllWidgets()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Grid do Dashboard Modular -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                 :class="gridSizeClass">
+                
+                <!-- Widgets Dinâmicos -->
+                <template x-for="widget in widgets" :key="widget.id">
+                    
+                    <!-- Card Widget com Componente Global -->
+                    <div id="widget-{{ widget.id }}" 
+                         class="widget"
+                         :class="[
+                             'bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-4 transition-all duration-300 ease-in-out transform hover:scale-[1.02] opacity-50: !widget.hasPermission',
+                             'cursor-not-allowed': !widget.hasPermission
+                         ]"
+                         :style="getWidgetStyle(widget)"
+                         x-data="widgetData(widget)">
+                        
+                        <!-- Header do Widget -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center" 
+                                     :style="'background: linear-gradient(135deg, #' + widget.color + ' 0%, #' + getDarkColor(widget.color) + ' 100%)'">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path :x-text="widget.icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="widget.title"></h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" x-text="widget.description"></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Ações do Widget -->
+                            <div class="flex items-center space-x-2">
+                                <!-- Minimizar/Maximizar -->
+                                <button @click="toggleMinimize()" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path x-show="!widget.minimized" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        <path x-show="widget.minimized" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Atualizar Widget -->
+                                <button @click="refreshWidget()" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Remover Widget -->
+                                <button @click="removeWidget()" class="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Conteúdo do Widget -->
+                        <div x-show="!widget.minimized" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+                            
+                            <!-- Loading State -->
+                            <div x-show="widget.state === 'loading'" class="py-8 text-center">
+                                <div class="inline-flex items-center">
+                                    <svg class="animate-spin h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="ml-3 text-secondary">Carregando...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Empty State -->
+                            <div x-show="widget.state === 'empty'" class="py-8 text-center">
+                                <div class="text-gray-400 mb-4">
+                                    <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2" x-text="widget.emptyTitle"></h4>
+                                <p class="text-gray-500 dark:text-gray-400" x-text="widget.emptyDescription"></p>
+                            </div>
+                            
+                            <!-- Error State -->
+                            <div x-show="widget.state === 'error'" class="py-8 text-center">
+                                <div class="text-red-400 mb-4">
+                                    <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-medium text-red-900 dark:text-red-100 mb-2">Erro ao carregar</h4>
+                                <p class="text-red-600 dark:text-red-400" x-text="widget.errorMessage"></p>
+                            </div>
+                            
+                            <!-- No Permission State -->
+                            <div x-show="widget.state === 'no-permission'" class="py-8 text-center">
+                                <div class="text-yellow-400 mb-4">
+                                    <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1m-1-2h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-medium text-yellow-900 dark:text-yellow-100 mb-2">Sem permissão</h4>
+                                <p class="text-yellow-600 dark:text-yellow-400" x-text="widget.noPermissionMessage"></p>
+                            </div>
+                            
+                            <!-- Loaded Content - Componentes Específicos -->
+                            <div x-show="widget.state === 'loaded'">
+                                <!-- Widget Content via Slot e Componentes Específicos -->
+                                <slot name="widget-content">
+                                    
+                                    <!-- Componentes Específicos por Tipo de Widget -->
+                                    <template x-if="widget.id === 'clientes'">
+                                        <div x-data="clientesWidget()" @load="loadClientesData()">
+                                            <!-- Conteúdo específico do widget clientes -->
+                                            <div class="widget-content">
+                                                
+                                                <!-- Loading State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Empty State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Error State já gerenciado pelo card pai -->
+                                                
+                                                <!-- No Permission State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Loaded Content -->
+                                                <div x-show="widget.state === 'loaded'">
+                                                    
+                                                    <!-- Estatísticas Gerais com Cards -->
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                                        
+                                                        <!-- Card Total Clientes -->
+                                                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-blue-100 text-sm">Total de Clientes</p>
+                                                                    <p class="text-2xl font-bold" x-text="widgetData.total || 0"></p>
+                                                                    <p class="text-blue-100 text-xs mt-1">
+                                                                        <span x-text="widgetData.trend === 'up' ? '↗️' : widgetData.trend === 'down' ? '↘️' : '→'"></span>
+                                                                        <span x-text="widgetData.recent ? `+${widgetData.recent}` : 'Estável'"></span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Clientes Recent -->
+                                                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-green-100 text-sm">Novos Este Mês</p>
+                                                                    <p class="text-2xl font-bold" x-text="widgetData.recent || 0"></p>
+                                                                    <p class="text-green-100 text-xs mt-1">Novos clientes</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                    <!-- Lista de Clientes -->
+                                                    <div class="space-y-3">
+                                                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Clientes Recentes</h4>
+                                                        
+                                                        <!-- Item de Cliente -->
+                                                        <template x-for="cliente in widgetData.data" :key="cliente.name">
+                                                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                                                <div class="flex items-center space-x-3">
+                                                                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                                                        <span class="text-blue-600 dark:text-blue-300 font-semibold text-sm" x-text="cliente.name.charAt(0)"></span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="font-medium text-gray-900 dark:text-white" x-text="cliente.name"></p>
+                                                                        <p class="text-xs text-gray-500 dark:text-gray-400">R$ <span x-text="cliente.value.toLocaleString()"></span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex items-center space-x-2">
+                                                                    <span :class="{
+                                                                        'bg-green-100 text-green-800': cliente.change > 0,
+                                                                        'bg-red-100 text-red-800': cliente.change < 0,
+                                                                        'bg-gray-100 text-gray-800': cliente.change === 0
+                                                                    }" class="px-2 py-1 rounded-full text-xs font-medium">
+                                                                        <span x-text="cliente.change > 0 ? '+' : ''"></span><span x-text="cliente.change"></span>%
+                                                                    </span>
+                                                                    <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">
+                                                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                        
+                                                        <!-- Sem dados -->
+                                                        <div x-show="!widgetData.data || widgetData.data.length === 0" class="text-center py-6">
+                                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhum cliente encontrado</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Botão para ver todos -->
+                                                    <div class="mt-4 text-center">
+                                                        <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                                                            Ver todos os clientes →
+                                                        </button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <!-- Componente Fazendas -->
+                                    <template x-if="widget.id === 'fazendas'">
+                                        <div x-data="fazendasWidget()" @load="loadFazendasData()">
+                                            <!-- Conteúdo específico do widget fazendas -->
+                                            <div class="widget-content">
+                                                
+                                                <!-- Loading State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Empty State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Error State já gerenciado pelo card pai -->
+                                                
+                                                <!-- No Permission State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Loaded Content -->
+                                                <div x-show="widget.state === 'loaded'">
+                                                    
+                                                    <!-- Estatísticas Gerais -->
+                                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                                                        
+                                                        <!-- Card Total Fazendas -->
+                                                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-green-100 text-sm">Total de Fazendas</p>
+                                                                    <p class="text-2xl font-bold" x-text="widgetData.total || 0"></p>
+                                                                    <p class="text-green-100 text-xs mt-1">Propriedades</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Área Total -->
+                                                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-blue-100 text-sm">Área Total</p>
+                                                                    <p class="text-xl font-bold" x-text="widgetData.area_total || '0'"></p>
+                                                                    <p class="text-blue-100 text-xs mt-1">Hectares</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7m0 0L9 7"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Processadas -->
+                                                        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-orange-100 text-sm">Processadas</p>
+                                                                    <p class="text-2xl font-bold" x-text="widgetData.processadas || 0"></p>
+                                                                    <p class="text-orange-100 text-xs mt-1">Esta semana</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                    <!-- Lista de Fazendas -->
+                                                    <div class="space-y-3">
+                                                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Fazendas em Processamento</h4>
+                                                        
+                                                        <template x-for="fazenda in widgetData.data" :key="fazenda.name">
+                                                            <div class="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                                                                <div class="flex items-center justify-between mb-2">
+                                                                    <h5 class="font-medium text-gray-900 dark:text-white" x-text="fazenda.name"></h5>
+                                                                    <span :class="{
+                                                                        'bg-green-100 text-green-800': fazenda.status === 'concluído',
+                                                                        'bg-yellow-100 text-yellow-800': fazenda.status === 'processando',
+                                                                        'bg-blue-100 text-blue-800': fazenda.status === 'agendado'
+                                                                    }" class="px-2 py-1 rounded-full text-xs font-medium">
+                                                                        <span x-text="fazenda.status"></span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="flex items-center justify-between text-sm">
+                                                                    <span class="text-gray-500 dark:text-gray-400">
+                                                                        <span x-text="fazenda.area"></span> ha
+                                                                    </span>
+                                                                    <div class="flex items-center space-x-2">
+                                                                        <div class="w-20 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                                                            <div :class="{
+                                                                                'bg-green-500': fazenda.status === 'concluído',
+                                                                                'bg-yellow-500': fazenda.status === 'processando',
+                                                                                'bg-blue-500': fazenda.status === 'agendado'
+                                                                            }" class="h-2 rounded-full" :style="`width: ${fazenda.status === 'concluído' ? '100%' : fazenda.status === 'processando' ? '75%' : '0%'}`"></div>
+                                                                        </div>
+                                                                        <span class="text-gray-500 dark:text-gray-400 text-xs" x-text="fazenda.status === 'concluído' ? '100%' : fazenda.status === 'processando' ? '75%' : '0%'"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                        
+                                                        <!-- Sem dados -->
+                                                        <div x-show="!widgetData.data || widgetData.data.length === 0" class="text-center py-6">
+                                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhuma fazenda em processamento</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Botão para ver detalhes -->
+                                                    <div class="mt-4 text-center">
+                                                        <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                                                            Gerenciar fazendas →
+                                                        </button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <!-- Componente Recebimentos -->
+                                    <template x-if="widget.id === 'recebimentos'">
+                                        <div x-data="recebimentosWidget()" @load="loadRecebimentosData()">
+                                            <!-- Conteúdo específico do widget recebimentos -->
+                                            <div class="widget-content">
+                                                
+                                                <!-- Loading State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Empty State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Error State já gerenciado pelo card pai -->
+                                                
+                                                <!-- No Permission State já gerenciado pelo card pai -->
+                                                
+                                                <!-- Loaded Content -->
+                                                <div x-show="widget.state === 'loaded'">
+                                                    
+                                                    <!-- Estatísticas Financeiras -->
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                                        
+                                                        <!-- Card Total Recebimentos -->
+                                                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-green-100 text-sm">Total Recebido</p>
+                                                                    <p class="text-2xl font-bold" x-text="'R$ ' + (widgetData.total || 0).toLocaleString('pt-BR'))"></p>
+                                                                    <p class="text-green-100 text-xs mt-1">Acumulado</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Mês Atual -->
+                                                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
+                                                            <div class="flex items-center justify-between">
+                                                                <div>
+                                                                    <p class="text-blue-100 text-sm">Mês Atual</p>
+                                                                    <p class="text-xl font-bold" x-text="'R$ ' + (widgetData.mes_atual || 0).toLocaleString('pt-BR'))"></p>
+                                                                    <p class="text-blue-100 text-xs mt-1">Recebido</p>
+                                                                </div>
+                                                                <div class="bg-white/20 rounded-lg p-2">
+                                                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    
+                                                    <!-- Trend -->
+                                                    <div class="flex items-center justify-center mb-4">
+                                                        <span :class="{
+                                                            'text-green-600 dark:text-green-400': widgetData.trend === 'up',
+                                                            'text-red-600 dark:text-red-400': widgetData.trend === 'down',
+                                                            'text-gray-600 dark:text-gray-400': widgetData.trend === 'stable'
+                                                        }" class="flex items-center space-x-1 text-sm font-medium">
+                                                            <span x-text="widgetData.trend === 'up' ? '↗️' : widgetData.trend === 'down' ? '↘️' : '→'"></span>
+                                                            <span x-text="widgetData.trend === 'up' ? 'Recebimentos em alta' : widgetData.trend === 'down' ? 'Recebimentos em queda' : 'Estável'"></span>
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <!-- Lista de Recebimentos -->
+                                                    <div class="space-y-3">
+                                                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Recebimentos Recentes</h4>
+                                                        
+                                                        <template x-for="recebimento in widgetData.data" :key="recebimento.id">
+                                                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                                                <div class="flex items-center space-x-3">
+                                                                    <div :class="{
+                                                                        'bg-green-100 dark:bg-green-900': recebimento.status === 'pago',
+                                                                        'bg-yellow-100 dark:bg-yellow-900': recebimento.status === 'pendente'
+                                                                    }" class="w-10 h-10 rounded-full flex items-center justify-center">
+                                                                        <svg class="w-5 h-5" :class="{
+                                                                            'text-green-600 dark:text-green-400': recebimento.status === 'pago',
+                                                                            'text-yellow-600 dark:text-yellow-400': recebimento.status === 'pendente'
+                                                                        }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                                        </svg>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="font-medium text-gray-900 dark:text-white" x-text="recebimento.name"></p>
+                                                                        <p class="text-xs text-gray-500 dark:text-gray-400" x-text="recebimento.date"></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex items-center space-x-2">
+                                                                    <span class="font-semibold text-gray-900 dark:text-white" x-text="'R$ ' + recebimento.value.toLocaleString('pt-BR')"></span>
+                                                                    <span :class="{
+                                                                        'bg-green-100 text-green-800': recebimento.status === 'pago',
+                                                                        'bg-yellow-100 text-yellow-800': recebimento.status === 'pendente'
+                                                                    }" class="px-2 py-1 rounded-full text-xs font-medium">
+                                                                        <span x-text="recebimento.status === 'pago' ? 'Pago' : 'Pendente'"></span>
+                                                                    </span>
+                                                                    <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">
+                                                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                        
+                                                        <!-- Sem dados -->
+                                                        <div x-show="!widgetData.data || widgetData.data.length === 0" class="text-center py-6">
+                                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhum recebimento encontrado</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Botão para ver todos -->
+                                                    <div class="mt-4 text-center">
+                                                        <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                                                            Ver todos os recebimentos →
+                                                        </button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <!-- Componente Genérico para outros widgets -->
+                                    <template x-if="['processamentos', 'prescricoes', 'pagamentos', 'atividades', 'agenda', 'usuarios', 'alertas'].includes(widget.id)">
+                                        <div x-data="genericWidget()">
+                                            <!-- Conteúdo genérico para outros widgets -->
+                                            <div class="text-center py-8">
+                                                <div class="mb-4">
+                                                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto">
+                                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path :x-text="widget.icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <h5 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Widget <span x-text="widget.title"></span></h5>
+                                                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                                                    Este widget será implementado com dados reais em breve.
+                                                </p>
+                                                
+                                                <!-- Placeholder para dados futuros -->
+                                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-left">
+                                                    <h6 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Informações disponíveis:</h6>
+                                                    <ul class="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                                                        <li>• Total: <span x-text="widget.id === 'atividades' ? '28' : widget.id === 'agenda' ? '6' : '0'"></span></li>
+                                                        <li>• Ativos: <span x-text="widget.id === 'atividades' ? '4' : widget.id === 'agenda' ? '2' : '0'"></span></li>
+                                                        <li>• Status: <span x-text="widget.trend === 'up' ? 'Crescente' : widget.trend === 'down' ? 'Decrescente' : 'Estável'"></span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Botão de ação -->
+                                            <div class="mt-4 flex justify-center">
+                                                <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                                                    Configurar widget →
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                </slot>
+                            </div>
+                        </div>
+                        
+                        <!-- State Minimized -->
+                        <div x-show="widget.minimized" class="text-center py-2">
+                            <p class="text-sm text-gray-500 dark:text-gray-400" x-text="widget.title"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Empty State (no widgets) -->
+            <div x-show="widgets.length === 0" class="text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <svg class="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-2">Nenhum widget adicionado</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Personalize seu dashboard adicionando widgets relevantes</p>
+                <button @click="personalizationSystem.openPersonalization()" class="btn-primary px-6 py-3 rounded-lg font-medium">
+                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Adicionar primeiro widget
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal de Personalização -->
+    <div x-show="personalizationSystem.showPersonalizationModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Personalizar Dashboard</h2>
+                <button @click="personalizationSystem.closePersonalization()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Content -->
+            <div class="p-6 overflow-y-auto max-h-[60vh]">
+                <!-- Category Filter -->
+                <div class="flex space-x-2 mb-6">
+                    <button @click="personalizationSystem.setCategory('all')" 
+                            :class="personalizationSystem.selectedCategory === 'all' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium">
+                        Todos
+                    </button>
+                    <button @click="personalizationSystem.setCategory('indicadores')" 
+                            :class="personalizationSystem.selectedCategory === 'indicadores' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium">
+                        Indicadores
+                    </button>
+                    <button @click="personalizationSystem.setCategory('operacional')" 
+                            :class="personalizationSystem.selectedCategory === 'operacional' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium">
+                        Operacional
+                    </button>
+                    <button @click="personalizationSystem.setCategory('financeiro')" 
+                            :class="personalizationSystem.selectedCategory === 'financeiro' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium">
+                        Financeiro
+                    </button>
+                    <button @click="personalizationSystem.setCategory('gestao')" 
+                            :class="personalizationSystem.selectedCategory === 'gestao' ? 'bg-primary text-white' : 'bg-gray-200 dark:bg-gray-700'"
+                            class="px-4 py-2 rounded-lg text-sm font-medium">
+                        Gestão
+                    </button>
+                </div>
+                
+                <!-- Available Widgets -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Widgets Disponíveis</h3>
+                    
+                    <template x-for="widget in personalizationSystem.getFilteredWidgets()" :key="widget.id">
+                        <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center" 
+                                     :style="'background: linear-gradient(135deg, #' + widget.color + ' 0%, #' + getDarkColor(widget.color) + ' 100%)'">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path :x-text="widget.icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900 dark:text-white" x-text="widget.title"></h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" x-text="widget.description"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <span :class="{
+                                    'bg-green-100 text-green-800': personalizationSystem.selectedWidgets.find(w => w.id === widget.id),
+                                    'bg-gray-100 text-gray-800': !personalizationSystem.selectedWidgets.find(w => w.id === widget.id)
+                                }" class="px-3 py-1 rounded-full text-xs font-medium">
+                                    <span x-text="personalizationSystem.selectedWidgets.find(w => w.id === widget.id) ? 'Adicionado' : 'Adicionar'"></span>
+                                </span>
+                                
+                                <button @click="personalizationSystem.selectedWidgets.find(w => w.id === widget.id) ? 
+                                               personalizationSystem.removeWidget(widget.id) : 
+                                               personalizationSystem.addWidget(widget.id)"
+                                        :class="personalizationSystem.selectedWidgets.find(w => w.id === widget.id) ? 
+                                               'bg-red-500 hover:bg-red-600' : 
+                                               'bg-primary hover:bg-blue-600'"
+                                        class="px-3 py-1 rounded-lg text-white text-sm font-medium">
+                                    <span x-text="personalizationSystem.selectedWidgets.find(w => w.id === widget.id) ? 'Remover' : 'Adicionar'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700">
+                <button @click="personalizationSystem.resetToDefault()" 
+                        class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+                    Restaurar padrão
+                </button>
+                
+                <div class="flex space-x-3">
+                    <button @click="personalizationSystem.closePersonalization()" 
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button @click="savePersonalization()" 
+                            class="btn-primary px-4 py-2 rounded-lg font-medium">
+                        Salvar alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Components Globais -->
+<script src="/app/components/drag-drop.js"></script>
+<script src="/app/components/dashboard-personalization.js"></script>
+
+<!-- Sistema de Dashboard Modular -->
+<script>
+function dashboardSystem() {
+    return {
+        // Dashboard State
+        widgets: [],
+        gridSize: 'lg',
+        gridSizeClass: 'lg:grid-cols-3',
+        
+        // Initialize
+        init() {
+            this.loadDashboardConfig();
+            this.initDragAndDrop();
+            this.initPersonalization();
+            
+            // Load user role and permissions
+            this.loadUserRole();
+        },
+        
+        // Load dashboard configuration from real backend
+        async loadDashboardConfig() {
+            try {
+                // Try to load from localStorage first
+                const localConfig = localStorage.getItem('dashboard-config');
+                if (localConfig) {
+                    const config = JSON.parse(localConfig);
+                    this.widgets = config.widgets || this.getDefaultWidgets();
+                    this.applyLayout(config.layout);
+                    return;
+                }
+                
+                // Load from real backend API
+                const response = await fetch('/api/v1/dashboard/config', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                if (response.ok) {
+                    const config = await response.json();
+                    this.widgets = config.widgets || this.getDefaultWidgets();
+                    this.applyLayout(config.layout);
+                } else {
+                    // Load default configuration
+                    this.widgets = this.getDefaultWidgets();
+                    this.saveDashboardConfig();
+                }
+            } catch (error) {
+                console.error('Error loading dashboard config:', error);
+                this.widgets = this.getDefaultWidgets();
+            }
+        },
+        
+        // Get default widgets based on user role
+        getDefaultWidgets() {
+            return [
+                {
+                    id: 'clientes',
+                    title: 'Clientes',
+                    description: 'Visualizar clientes relacionados ao trabalho',
+                    icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                    color: '3b82f6',
+                    permission: 'clientes:read',
+                    category: 'indicadores',
+                    state: 'loading',
+                    hasPermission: true,
+                    minimized: false,
+                    emptyTitle: 'Sem clientes',
+                    emptyDescription: 'Não há clientes disponíveis no momento.',
+                    errorMessage: 'Não foi possível carregar os clientes.',
+                    noPermissionMessage: 'Você não possui permissão para visualizar clientes.'
+                },
+                {
+                    id: 'fazendas',
+                    title: 'Fazendas',
+                    description: 'Áreas e fazendas do usuário',
+                    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+                    color: '10b981',
+                    permission: 'fazendas:read',
+                    category: 'indicadores',
+                    state: 'loading',
+                    hasPermission: true,
+                    minimized: false,
+                    emptyTitle: 'Sem fazendas',
+                    emptyDescription: 'Não há fazendas disponíveis no momento.',
+                    errorMessage: 'Não foi possível carregar as fazendas.',
+                    noPermissionMessage: 'Você não possui permissão para visualizar fazendas.'
+                }
+            ];
+        },
+        
+        // Load user role from real backend
+        async loadUserRole() {
+            try {
+                const response = await fetch('/api/v1/auth/user-role', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                if (response.ok) {
+                    const role = await response.json();
+                    this.userRole = role;
+                    // Check permissions for each widget
+                    this.widgets.forEach(widget => {
+                        widget.hasPermission = this.checkPermission(widget.permission);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading user role:', error);
+            }
+        },
+        
+        // Check permission
+        checkPermission(permission) {
+            // This should be implemented based on actual user permissions
+            // For now, default to true
+            return true;
+        },
+        
+        // Initialize drag and drop with component integration
+        initDragAndDrop() {
+            // Drag drop functionality will be handled by the drag-drop component
+            window.dragDropSystem = window.dragDropSystem || {
+                init: () => {}
+            };
+            dragDropSystem.init();
+        },
+        
+        // Initialize personalization with component integration
+        initPersonalization() {
+            // Personalization functionality will be handled by the dashboard-personalization component
+            this.personalizationSystem = this.personalizationSystem || {
+                openPersonalization: () => {},
+                closePersonalization: () => {},
+                setCategory: () => {},
+                getFilteredWidgets: () => [],
+                addWidget: () => {},
+                removeWidget: () => {},
+                resetToDefault: () => {}
+            };
+        },
+        
+        // Apply layout
+        applyLayout(layout) {
+            if (!layout) return;
+            
+            Object.entries(layout).forEach(([widgetId, position]) => {
+                const widget = document.getElementById(`widget-${widgetId}`);
+                if (widget) {
+                    widget.style.position = position.position || '';
+                    widget.style.left = position.left || '';
+                    widget.style.top = position.top || '';
+                    widget.style.gridArea = position.gridArea || '';
+                    widget.setAttribute('data-minimized', position.minimized || false);
+                }
+            });
+        },
+        
+        // Grid size management
+        setGridSize(size) {
+            this.gridSize = size;
+            
+            const gridClasses = {
+                '1x1': 'grid-cols-1',
+                '2x2': 'md:grid-cols-2 lg:grid-cols-2',
+                '3x3': 'md:grid-cols-2 lg:grid-cols-3',
+                'full': 'grid-cols-1'
+            };
+            
+            this.gridSizeClass = gridClasses[size] || 'lg:grid-cols-3';
+        },
+        
+        // Widget management
+        async refreshAllWidgets() {
+            try {
+                // Show loading state for all widgets
+                this.widgets.forEach(widget => {
+                    widget.state = 'loading';
+                });
+                
+                // Load real data for each widget
+                for (const widget of this.widgets) {
+                    await this.refreshWidget(widget.id);
+                }
+            } catch (error) {
+                console.error('Error refreshing widgets:', error);
+                window.messageSystem?.error('Erro', 'Falha ao atualizar widgets.');
+            }
+        },
+        
+        async refreshWidget(widgetId) {
+            const widget = this.widgets.find(w => w.id === widgetId);
+            if (!widget) return;
+            
+            try {
+                // Load real data from backend
+                const response = await fetch(`/api/v1/dashboard/widgets/${widgetId}`, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    widget.state = 'loaded';
+                    // Real data will be displayed via widget-specific components
+                } else {
+                    widget.state = 'error';
+                    widget.errorMessage = 'Erro ao carregar dados do widget';
+                }
+            } catch (error) {
+                widget.state = 'error';
+                widget.errorMessage = 'Erro ao conectar com o servidor';
+                console.error(`Error loading widget ${widgetId}:`, error);
+            }
+        },
+        
+        // Layout management
+        getWidgetStyle(widget) {
+            return {
+                'min-height': widget.minimized ? '60px' : '200px'
+            };
+        },
+        
+        getDarkColor(hexColor) {
+            // Convert hex to darker version for dark mode
+            const r = parseInt(hexColor.substr(0, 2), 16);
+            const g = parseInt(hexColor.substr(2, 2), 16);
+            const b = parseInt(hexColor.substr(4, 2), 16);
+            
+            const darkerR = Math.max(0, r - 30);
+            const darkerG = Math.max(0, g - 30);
+            const darkerB = Math.max(0, b - 30);
+            
+            return `${darkerR.toString(16).padStart(2, '0')}${darkerG.toString(16).padStart(2, '0')}${darkerB.toString(16).padStart(2, '0')}`;
+        },
+        
+        // Personalization
+        async savePersonalization() {
+            try {
+                const config = {
+                    widgets: this.widgets.map(w => ({
+                        id: w.id,
+                        title: w.title,
+                        icon: w.icon,
+                        color: w.color,
+                        permission: w.permission,
+                        category: w.category
+                    })),
+                    layout: this.getCurrentLayout(),
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Save to real backend
+                const response = await fetch('/api/v1/dashboard/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                if (response.ok) {
+                    window.messageSystem?.success('Sucesso', 'Configuração salva com sucesso');
+                    this.personalizationSystem.closePersonalization();
+                } else {
+                    throw new Error('Falha ao salvar configuração');
+                }
+            } catch (error) {
+                console.error('Error saving personalization:', error);
+                window.messageSystem?.error('Erro', 'Falha ao salvar configuração');
+            }
+        },
+        
+        getCurrentLayout() {
+            const widgets = document.querySelectorAll('.widget');
+            const layout = {};
+            
+            widgets.forEach(widget => {
+                const id = widget.id;
+                if (id) {
+                    layout[id] = {
+                        position: widget.style.position,
+                        left: widget.style.left,
+                        top: widget.style.top,
+                        gridArea: widget.style.gridArea,
+                        minimized: widget.getAttribute('data-minimized') === 'true'
+                    };
+                }
+            });
+            
+            return layout;
+        }
+    }
+}
+
+// Widget-specific data
+function widgetData(widget) {
+    return {
+        widget,
+        
+        toggleMinimize() {
+            widget.minimized = !widget.minimized;
+            dashboardSystem().saveDashboardConfig();
+        },
+        
+        refreshWidget() {
+            dashboardSystem().refreshWidget(widget.id);
+        },
+        
+        removeWidget() {
+            const dashboard = dashboardSystem();
+            dashboard.widgets = dashboard.widgets.filter(w => w.id !== widget.id);
+            dashboard.saveDashboardConfig();
+        }
+    }
+}
+
+// Global Alpine app data
+function appData() {
+    return {
+        pageTitle: 'Dashboard',
+        pageDescription: 'Seu painel de controle personalizado',
+        
+        init() {
+            // Initialize app components
+            console.log('Dashboard modular initialized');
+        }
+    }
+}
+
+// Breadcrumb system
+function breadcrumbSystem() {
+    return {
+        breadcrumbs: [
+            { name: 'Dashboard', url: '/dashboard' }
+        ]
+    }
+}
+</script>

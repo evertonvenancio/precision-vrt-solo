@@ -1,0 +1,160 @@
+<!-- Componente Widget Recebimentos - Utiliza Card.html e Table.html -->
+<div class="widget-content" x-data="recebimentosWidget()">
+    
+    <!-- Loading State já gerenciado pelo card pai -->
+    
+    <!-- Empty State já gerenciado pelo card pai -->
+    
+    <!-- Error State já gerenciado pelo card pai -->
+    
+    <!-- No Permission State já gerenciado pelo card pai -->
+    
+    <!-- Loaded Content -->
+    <div x-show="widget.state === 'loaded'">
+        
+        <!-- Estatísticas Financeiras -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            
+            <!-- Card Total Recebimentos -->
+            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm">Total Recebido</p>
+                        <p class="text-2xl font-bold" x-text="'R$ ' + (widgetData.total || 0).toLocaleString('pt-BR'))"></p>
+                        <p class="text-green-100 text-xs mt-1">Acumulado</p>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mês Atual -->
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Mês Atual</p>
+                        <p class="text-xl font-bold" x-text="'R$ ' + (widgetData.mes_atual || 0).toLocaleString('pt-BR'))"></p>
+                        <p class="text-blue-100 text-xs mt-1">Recebido</p>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Trend -->
+        <div class="flex items-center justify-center mb-4">
+            <span :class="{
+                'text-green-600 dark:text-green-400': widgetData.trend === 'up',
+                'text-red-600 dark:text-red-400': widgetData.trend === 'down',
+                'text-gray-600 dark:text-gray-400': widgetData.trend === 'stable'
+            }" class="flex items-center space-x-1 text-sm font-medium">
+                <span x-text="widgetData.trend === 'up' ? '↗️' : widgetData.trend === 'down' ? '↘️' : '→'"></span>
+                <span x-text="widgetData.trend === 'up' ? 'Recebimentos em alta' : widgetData.trend === 'down' ? 'Recebimentos em queda' : 'Estável'"></span>
+            </span>
+        </div>
+        
+        <!-- Lista de Recebimentos -->
+        <div class="space-y-3">
+            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Recebimentos Recentes</h4>
+            
+            <template x-for="recebimento in widgetData.data" :key="recebimento.id">
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div :class="{
+                            'bg-green-100 dark:bg-green-900': recebimento.status === 'pago',
+                            'bg-yellow-100 dark:bg-yellow-900': recebimento.status === 'pendente'
+                        }" class="w-10 h-10 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" :class="{
+                                'text-green-600 dark:text-green-400': recebimento.status === 'pago',
+                                'text-yellow-600 dark:text-yellow-400': recebimento.status === 'pendente'
+                            }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white" x-text="recebimento.name"></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400" x-text="recebimento.date"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-semibold text-gray-900 dark:text-white" x-text="'R$ ' + recebimento.value.toLocaleString('pt-BR')"></span>
+                        <span :class="{
+                            'bg-green-100 text-green-800': recebimento.status === 'pago',
+                            'bg-yellow-100 text-yellow-800': recebimento.status === 'pendente'
+                        }" class="px-2 py-1 rounded-full text-xs font-medium">
+                            <span x-text="recebimento.status === 'pago' ? 'Pago' : 'Pendente'"></span>
+                        </span>
+                        <button class="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </template>
+            
+            <!-- Sem dados -->
+            <div x-show="!widgetData.data || widgetData.data.length === 0" class="text-center py-6">
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhum recebimento encontrado</p>
+            </div>
+        </div>
+        
+        <!-- Botão para ver todos -->
+        <div class="mt-4 text-center">
+            <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                Ver todos os recebimentos →
+            </button>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+function recebimentosWidget() {
+    return {
+        widget,
+        widgetData: {
+            total: 0,
+            mes_atual: 0,
+            trend: 'stable',
+            data: []
+        },
+        
+        init() {
+            // Carregar dados reais do backend
+            this.loadRecebimentosData();
+        },
+        
+        async loadRecebimentosData() {
+            try {
+                const response = await fetch('/api/v1/dashboard/widgets/recebimentos', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.widgetData = data.data;
+                    widget.state = 'loaded';
+                } else {
+                    widget.state = 'error';
+                    widget.errorMessage = 'Não foi possível carregar os dados dos recebimentos';
+                }
+            } catch (error) {
+                widget.state = 'error';
+                widget.errorMessage = 'Erro ao conectar com o servidor';
+                console.error('Error loading recebimentos data:', error);
+            }
+        }
+    }
+}
+</script>

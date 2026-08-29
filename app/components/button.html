@@ -1,0 +1,65 @@
+<!-- Botão genérico reutilizável com API clara -->
+<button 
+    class="button-component {{ button_classes || 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2' }}"
+    :disabled="disabled || loading"
+    data-event="{{ onClickEvent || '' }}"
+    type="{{ buttonType || 'button' }}"
+    x-data="buttonData({{ button_props | tojson | default('{}') }})">
+
+    <!-- Conteúdo principal (ícone + texto) -->
+    <div class="flex items-center justify-center">
+        <!-- Ícone (opcional) -->
+        <span x-show="hasIcon" class="w-5 h-5">
+            <slot name="icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </slot>
+        </span>
+        
+        <!-- Texto principal -->
+        <span x-show="!loading" x-text="buttonText || 'Ação'" class="whitespace-nowrap"></span>
+        
+        <!-- Ícone de loading -->
+        <span x-show="loading" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Carregando...</span>
+        </span>
+    </div>
+    
+    <!-- Conteúdo adicional (opcional) -->
+    <slot></slot>
+</button>
+
+<script>
+function buttonData(props = {}) {
+    return {
+        // Propriedades do botão (via props ou defaults)
+        buttonText: props.buttonText || '',
+        buttonType: props.buttonType || 'button',
+        disabled: props.disabled || false,
+        loading: props.loading || false,
+        hasIcon: props.hasIcon || false,
+        onClickEvent: props.onClickEvent || '',
+        
+        // Métodos
+        handleClick() {
+            const event = this.onClickEvent;
+            if (!this.disabled && !this.loading && event && window[event]) {
+                window[event]();
+            }
+        },
+        
+        startLoading() {
+            this.loading = true;
+        },
+        
+        stopLoading() {
+            this.loading = false;
+        }
+    };
+}
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision VRT Solo - Login</title>
+
+    <script src="/static/js/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --login-bg: #f9fafb;
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
+            --title-color: #111827;
+            --subtitle-color: #6b7280;
+            --label-color: #374151;
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+            --input-text: #111827;
+            --input-placeholder: #9ca3af;
+        }
+
+        html.dark {
+            --login-bg: #111827;
+            --card-bg: #1f2937;
+            --card-border: #374151;
+            --title-color: #ffffff;
+            --subtitle-color: #9ca3af;
+            --label-color: #d1d5db;
+            --input-bg: #374151;
+            --input-border: #4b5563;
+            --input-text: #ffffff;
+            --input-placeholder: #9ca3af;
+        }
+
+        .login-body {
+            background-color: var(--login-bg);
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+        }
+
+        .login-title {
+            color: var(--title-color);
+        }
+
+        .login-subtitle {
+            color: var(--subtitle-color);
+        }
+
+        .login-label {
+            color: var(--label-color);
+        }
+
+        .login-input {
+            background-color: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--input-text);
+        }
+
+        .login-input::placeholder {
+            color: var(--input-placeholder);
+        }
+    </style>
+</head>
+
+<body class="login-body h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-md px-4">
+        <div class="login-card shadow-lg rounded-xl p-8">
+
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-xl mx-auto flex items-center justify-center text-white text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7m0 0L9 7"/>
+                    </svg>
+                </div>
+                <h1 class="login-title text-2xl font-bold">Precision VRT Solo</h1>
+                <p class="login-subtitle text-sm mt-1">Acesse sua conta</p>
+            </div>
+
+            <form method="post" action="/auth/login">
+                <div class="mb-4">
+                    <label class="login-label block text-sm font-medium mb-2" for="usuario">Usuário</label>
+                    <input class="login-input w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                           id="usuario" name="usuario" type="text" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="mb-6">
+                    <label class="login-label block text-sm font-medium mb-2" for="senha">Senha</label>
+                    <input class="login-input w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                           id="senha" name="senha" type="password" placeholder="Digite sua senha" required>
+                </div>
+                <button class="w-full py-2.5 px-4 rounded-lg text-white font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                        style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);"
+                        type="submit">
+                    Acessar Sistema
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

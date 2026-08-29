@@ -1,0 +1,15 @@
+VERIFICAÇÃO AD-HOC - FASE 12 - ETAPA 1
+Data: 07/08/2026
+Total de issues: 11
+================================================================================
+❌ button.html: classes responsivas ausentes
+❌ input.html: classes responsivas ausentes
+❌ card.html: classes responsivas ausentes
+❌ table.html: classes responsivas ausentes
+❌ modal.html: classes responsivas ausentes
+❌ loading.html: classes responsivas ausentes
+❌ empty-state.html: classes responsivas ausentes
+❌ breadcrumb.html: classes responsivas ausentes
+❌ main_content: não encontrado
+❌ sistema de loading: não encontrado
+❌ sistema de breadcrumbs: não encontrado

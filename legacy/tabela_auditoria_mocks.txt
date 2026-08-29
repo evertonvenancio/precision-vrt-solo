@@ -1,0 +1,31 @@
+## TABELA DE CLASSIFICAÇÃO DE MOCKS - FASE 13 ETAPA 6
+
+| Local | Tipo | Caminho de produção? | Necessário? | Decisão |
+| ----- | ---- | -------------------- | ----------- | ------- |
+| **Clientes Service** | | | | |
+| `app/services/clientes_service.py` | return [] | ✅ Sim | ❌ Não | 🟡 Trocar por lógica real |
+| `app/services/clientes_service_real.py` | return [] | ✅ Sim | ❌ Não | 🟡 Fundir com real |
+| **Financeiro Service** | | | | |
+| `app/services/financeiro_service.py` | return [] x2 | ✅ Sim | ❌ Não | 🔴 Corrigir lógica real |
+| `app/services/financeiro_service_real.py` | return [] x2 | ✅ Sim | ❌ Não | 🔴 Fundir com real |
+| **Financeiro** | | | | |
+| `core/compactacao/compactacao/motor.py` | return {} | ✅ Sim | ❌ Não | 🔴 Implementar lógica real |
+| `core/fertirrigacao/fertirrigacao/contratos.py` | return {} | ✅ Sim | ❌ Não | 🔴 Implementar lógica real |
+| **Governaça** | | | | |
+| `core/governanca/clientes_responsabilidade.py` | return [] | ✅ Sim | ❌ Não | 🔡 Implementar lógica real |
+| **Configuração** | | | | |
+| `config/sais_solucao.py` | return [] | ✅ Sim | ❌ Não | 🔡 Implementar lógica real |
+
+### 🟡 Mocks Temporários (Aceitáveis)
+- Services de desenvolvimento podem ter returns vazios em métodos não implementados
+- Contanto que não estejam no caminho de produção crítico
+
+### 🔴 Mocks Críticos (Urgentes)
+- Financeiro Service - está no caminho de produção
+- Compactação Motor - está no caminho de produção
+- Fertirrigação Contratos - está no caminho de produção
+
+### 🟡 Mocks a Corrigir (Alto Prioridade)
+- Clientes Service - trocar por lógica real
+- Governança - implementar lógica real
+- Configuração - implementar lógica real

@@ -1,0 +1,33 @@
+<!-- Inputs padronizados -->
+<div class="space-y-4">
+    <!-- Input básico -->
+    <div>
+        <label class="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3" x-text="label">Label</label>
+        <input type="text" 
+               class="input-field px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+               :placeholder="placeholder"
+               x-model="value">
+        <p class="mt-1 text-sm sm:text-base text-gray-500 dark:text-gray-400" x-show="helpText" x-text="helpText">Texto de ajuda</p>
+    </div>
+    
+    <!-- Input com erro -->
+    <div>
+        <label class="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3" x-text="label">Label</label>
+        <input type="text" 
+               class="input-field px-3 sm:px-4 py-2 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent" 
+               :placeholder="placeholder"
+               x-model="value"
+               :class="{'border-red-300': error}">
+        <p class="mt-1 text-sm sm:text-base text-red-600" x-show="error" x-text="error">Mensagem de erro</p>
+    </div>
+    
+    <!-- Input desabilitado -->
+    <div>
+        <label class="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">Label</label>
+        <input type="text" 
+               disabled
+               class="input-field px-3 sm:px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed" 
+               :placeholder="placeholder"
+               x-model="value">
+    </div>
+</div>

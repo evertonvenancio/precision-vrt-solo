@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Precision VRT Solo{% endblock %}</title>
+
+    <!-- 1. Theme.js — executa ANTES de qualquer renderização -->
+    <script src="/static/js/theme.js"></script>
+
+    <!-- 2. Configuração do Tailwind DEVE vir antes do CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        vrt: {
+                            green: '#2B6B3F',
+                            orange: '#E8A838'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 3. Alpine.js Collapse Plugin (deve vir antes do Alpine principal) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+        .sidebar-transition { transition: width 0.3s ease; }
+        .sidebar-collapsed { width: 64px; }
+        .sidebar-expanded { width: 260px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+
+<!-- 4. x-data no BODY (não no <html>) — Alpine funciona melhor aqui -->
+<body x-data="appData()"
+      x-init="initApp()"
+      class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 h-screen overflow-hidden flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar-transition flex-shrink-0 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full"
+           :class="sidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'">
+
+        <!-- LOGO -->
+        <div class="h-16 flex items-center px-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+            <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+                <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7m0 0L9 7"/>
+                    </svg>
+                </div>
+                <div x-show="sidebarOpen" x-collapse x-cloak class="overflow-hidden">
+                    <h1 class="text-sm font-bold text-gray-900 dark:text-white tracking-wide">PRECISION VRT</h1>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest">Solo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU -->
+        <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+
+            <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+               :class="$el.getAttribute('href') === window.location.pathname ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/50' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white'">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                </svg>
+                <span x-show="sidebarOpen" x-collapse x-cloak class="whitespace-nowrap">Dashboard</span>
+            </a>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">CRM & Comercial</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/financeiro" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Orçamentos & Vendas</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        CRM & Comercial
+                    </div>
+
+                    <a href="/financeiro" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Orçamentos & Vendas</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Manejo & Prescrição</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/prescricao" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Prescrição de Solo VRT</a>
+                    <a href="/compactacao" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Compactação do Solo</a>
+                    <a href="/extrator" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Fertirrigação & Hidroponia</a>
+                    <a href="/bulk_blend" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Bulk Blend & Misturas</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Manejo & Prescrição
+                    </div>
+
+                    <a href="/prescricao" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Prescrição de Solo VRT</a>
+                    <a href="/compactacao" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Compactação do Solo</a>
+                    <a href="/extrator" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Fertirrigação & Hidroponia</a>
+                    <a href="/bulk_blend" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Bulk Blend & Misturas</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Inteligência Agronômica</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/clima" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Clima & Aplicação</a>
+                    <a href="/cruzamento" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Cruzamento Solo x Planta</a>
+                    <a href="/nematoides" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Nematoides</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Inteligência Agronômica
+                    </div>
+
+                    <a href="/clima" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Clima & Aplicação</a>
+                    <a href="/cruzamento" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Cruzamento Solo x Planta</a>
+                    <a href="/nematoides" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Nematoides</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Base Técnica</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/base-tecnica/culturas" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Culturas</a>
+                    <a href="/base-tecnica/metodologias" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Metodologias & Fórmulas</a>
+                    <a href="/base-tecnica/bibliografia" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Bibliografia & Legislação</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Base Técnica
+                    </div>
+
+                    <a href="/base-tecnica/culturas" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Culturas</a>
+                    <a href="/base-tecnica/metodologias" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Metodologias & Fórmulas</a>
+                    <a href="/base-tecnica/bibliografia" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Bibliografia & Legislação</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Gestão Financeira</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/financeiro/caixa" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Contas a Pagar/Receber</a>
+                    <a href="/ativos" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Patrimônio & Ativos</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Gestão Financeira
+                    </div>
+
+                    <a href="/financeiro/caixa" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Contas a Pagar/Receber</a>
+                    <a href="/ativos" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Patrimônio & Ativos</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Gente & Gestão</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/equipe" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Funcionários</a>
+                    <a href="/equipe/permissoes" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Permissões de Acesso</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Gente & Gestão
+                    </div>
+
+                    <a href="/equipe" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Funcionários</a>
+                    <a href="/equipe/permissoes" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Permissões de Acesso</a>
+                
+                </div>
+            </div>
+
+            <div x-data="{ open: false, popoverOpen: false, popoverTop: '0px' }" class="space-y-0.5 relative">
+                <button @click="sidebarOpen ? open = !open : (popoverOpen = !popoverOpen, popoverTop = $el.getBoundingClientRect().top + 'px')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                    </svg>
+                    <span x-show="sidebarOpen" x-collapse x-cloak class="flex-1 text-left whitespace-nowrap">Cadastros Gerais</span>
+                    <svg x-show="sidebarOpen" x-cloak class="w-4 h-4 flex-shrink-0 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <div x-show="open && sidebarOpen" x-collapse x-cloak class="pl-10 space-y-0.5">
+                    <a href="/clientes" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Clientes & Fazendas</a>
+                    <a href="/cadastros/precos" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors">Tabela de Preços e Serviços</a>
+                </div>
+            
+                <div x-show="popoverOpen" x-cloak @click.away="popoverOpen = false" class="fixed z-50 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2"
+                     style="left: 64px;" x-bind:style="popoverOpen ? 'top:' + popoverTop : ''">
+                    <div class="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700 mb-1">
+                        Cadastros Gerais
+                    </div>
+
+                    <a href="/clientes" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Clientes & Fazendas</a>
+                    <a href="/cadastros/precos" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/40 rounded-md transition-colors" @click="popoverOpen = false">Tabela de Preços e Serviços</a>
+                
+                </div>
+            </div>
+
+            <a href="/configuracoes" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+               :class="$el.getAttribute('href') === window.location.pathname ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700/50' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white'">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span x-show="sidebarOpen" x-collapse x-cloak class="whitespace-nowrap">Configurações</span>
+            </a>
+        </nav>
+
+        <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+            <button @click="sidebarOpen = !sidebarOpen"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors"
+                    :title="sidebarOpen ? 'Recolher menu' : 'Expandir menu'">
+                <svg class="w-4 h-4 transition-transform" :class="sidebarOpen ? '' : 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+                </svg>
+                <span x-show="sidebarOpen" x-collapse x-cloak class="whitespace-nowrap">Recolher</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+        <!-- TOPBAR -->
+        <header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{% block page_title %}{% endblock %}</h2>
+            </div>
+
+            <div class="flex items-center gap-4">
+                
+                <!-- Toggle Tema -->
+                <button @click="toggleTheme()"
+                        class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        :title="isDark ? 'Modo claro' : 'Modo escuro'">
+                    <svg x-show="isDark" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg x-show="!isDark" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+
+                <!-- Informações de Clima (integrado) -->
+                <div x-data="{ clima: null, carregando: true }" 
+                     x-init="carregarClima()" 
+                     class="flex items-center gap-2 text-sm">
+                    <div x-show="carregando" class="w-6 h-6 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                    <div x-show="!carregando && clima" class="flex items-center gap-2">
+                        <svg x-show="clima?.condicao === 'sol'" class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v6m0 6v6m-11-7h6m6 0h6"/>
+                        </svg>
+                        <svg x-show="clima?.condicao === 'nuvem'" class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                        </svg>
+                        <span x-show="clima?.temperatura" class="text-gray-600 dark:text-gray-400" x-text="clima.temperatura + '°C'"></span>
+                        <span x-show="clima?.cidade" class="text-gray-600 dark:text-gray-400" x-text="climacidade"></span>
+                        <span x-show="!clima && !carregando" class="text-gray-400 text-sm">Clima indisponível</span>
+                    </div>
+                </div>
+
+                <!-- Menu do Usuário -->
+                <div class="relative" x-data="{ open: false, usuario: null, carregando: true }" 
+                     x-init="carregarUsuario()">
+                    <button @click="open = !open" class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-lg px-2 py-1.5 transition-colors">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" 
+                             :style="'background: linear-gradient(135deg, #2B6B3F, #1a4a2a);'"
+                             x-show="!carregando && usuario">
+                            <span x-text="usuario?.nome ? usuario.nome.substring(0, 2).toUpperCase() : '--'"></span>
+                        </div>
+                        <div class="hidden md:block text-left">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white" 
+                               x-show="!carregando && usuario" 
+                               x-text="usuario?.nome || 'Usuário'"></p>
+                            <p x-show="carregando" class="text-sm text-gray-400">Carregando...</p>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" x-cloak
+                         class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden">
+                        <a href="#" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            Perfil
+                        </a>
+                        <a href="/configuracoes" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Configurações
+                        </a>
+                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
+                        <a href="/login" class="flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </header>
+
+        <!-- ÁREA DE CONTEÚDO -->
+        <main class="flex-1 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        function appData() {
+            return {
+                isDark: false,
+                sidebarOpen: true,
+                usuario: null,
+                clima: null,
+                
+                initApp() {
+                    this.isDark = window.vrtTheme.isDark;
+                    this.sidebarOpen = localStorage.getItem('sidebarOpen') !== 'false';
+                    this.carregarUsuario();
+                    this.carregarClima();
+                    this.$watch('sidebarOpen', value => localStorage.setItem('sidebarOpen', value));
+                },
+                
+                carregarUsuario() {
+                    fetch('/api/me')
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Usuário não autenticado');
+                        })
+                        .then(data => {
+                            this.usuario = data;
+                        })
+                        .catch(error => {
+                            console.log('Erro ao carregar usuário:', error);
+                            this.usuario = null;
+                        });
+                },
+                
+                carregarClima() {
+                    // Clima será implementado posteriormente com fonte real
+                    // Por enquanto, estado inicial: carregando
+                    setTimeout(() => {
+                        this.clima = { temperatura: null, cidade: null, condicao: null };
+                    }, 1000);
+                },
+                
+                toggleTheme() {
+                    window.vrtTheme.toggle();
+                    this.isDark = window.vrtTheme.isDark;
+                },
+                
+                logout() {
+                    fetch('/auth/logout', { method: 'POST' })
+                        .then(() => {
+                            window.location.href = '/login';
+                        })
+                        .catch(error => {
+                            console.error('Erro no logout:', error);
+                            window.location.href = '/login';
+                        });
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

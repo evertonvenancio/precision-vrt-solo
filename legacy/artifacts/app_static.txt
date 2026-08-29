@@ -1,0 +1,4 @@
+app/static/css/components.css
+app/static/css/style.css
+app/static/js/app.js
+app/static/js/theme.js

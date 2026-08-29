@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, card_inicio, card_fim, badge_status, botao %}
+
+{% block title %}Venda #{{ venda.id }}{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    {{ header_pagina(
+        'Venda #' ~ (venda.id|string|truncate(8, True, '')),
+        'Detalhes da venda registrada.',
+        '',
+        '',
+        ''
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="space-y-6">
+
+            <!-- Cabecalho com Acoes -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <a href="/web/vendas"
+                       class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        Voltar
+                    </a>
+                    {{ badge_status(venda.status|title,
+                        'verde' if venda.status in ['pago','concluida'] else
+                        'amarelo' if venda.status == 'aguardando_pagamento' else
+                        'azul' if venda.status == 'aberta' else
+                        'vermelho' if venda.status == 'cancelado' else 'cinza') }}
+                    <span class="text-xs text-gray-400 uppercase font-semibold">{{ venda.tipo_venda }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    {% if 'vendas:faturar' in permissoes or 'admin' in permissoes %}
+                    <a href="/web/vendas/{{ venda.id }}/nf"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+                       style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Gerar NF
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Card: Dados Gerais -->
+            {{ card_inicio('Dados da Venda') }}
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ID</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ venda.id }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cliente</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ venda.cliente_id or 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Data da Venda</p>
+                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ venda.data_venda.strftime('%d/%m/%Y') if venda.data_venda else 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Orcamento Vinculado</p>
+                    <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                        {% if venda.orcamento_id %}
+                        <a href="/web/orcamentos/{{ venda.orcamento_id }}" class="text-green-600 dark:text-green-400 hover:underline">#{{ venda.orcamento_id }}</a>
+                        {% else %}
+                        Venda direta
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Card: Valores -->
+            {{ card_inicio('Valores') }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Valor Total</p>
+                    <p class="mt-1 text-xl font-bold text-gray-900 dark:text-white">R$ {{ '{:,.2f}'.format(venda.valor_total|float) }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Valor Pago</p>
+                    <p class="mt-1 text-xl font-bold text-gray-900 dark:text-white">R$ {{ '{:,.2f}'.format(venda.valor_pago|float) }}</p>
+                </div>
+                <div class="p-4 rounded-lg"
+                     {% if venda.status in ['pago','concluida'] %}
+                     style="background: rgba(43,107,63,0.08);"
+                     {% elif venda.status == 'cancelado' %}
+                     style="background: rgba(239,68,68,0.08);"
+                     {% else %}
+                     style="background: rgba(234,179,8,0.08);"
+                     {% endif %}>
+                    <p class="text-xs font-medium uppercase"
+                       {% if venda.status in ['pago','concluida'] %}style="color: #2B6B3F;"
+                       {% elif venda.status == 'cancelado' %}style="color: #ef4444;"
+                       {% else %}style="color: #d97706;"{% endif %}>Status</p>
+                    <p class="mt-1 text-lg font-bold uppercase"
+                       {% if venda.status in ['pago','concluida'] %}style="color: #2B6B3F;"
+                       {% elif venda.status == 'cancelado' %}style="color: #ef4444;"
+                       {% else %}style="color: #d97706;"{% endif %}>{{ venda.status }}</p>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Card: Titulos Financeiros -->
+            {% if venda.titulos is defined and venda.titulos %}
+            {{ card_inicio('Titulos Financeiros') }}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-3">#</th>
+                            <th class="px-6 py-3">Valor</th>
+                            <th class="px-6 py-3">Vencimento</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3 text-right">Acoes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+                        {% for titulo in venda.titulos %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">#{{ titulo.id }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">R$ {{ titulo.valor }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ titulo.data_vencimento.strftime('%d/%m/%Y') if titulo.data_vencimento else 'N/A' }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                {{ badge_status(titulo.status|title,
+                                    'verde' if titulo.status == 'pago' else
+                                    'vermelho' if titulo.status == 'atrasado' else 'amarelo') }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                {% if titulo.status == 'pendente' %}
+                                <form method="POST" action="/web/vendas/{{ venda.id }}/baixar-titulo?titulo_id={{ titulo.id }}" class="inline">
+                                    <input type="hidden" name="data_pagamento" value="{{ today }}">
+                                    <input type="hidden" name="valor_pago" value="{{ titulo.valor }}">
+                                    <input type="hidden" name="metodo_pagamento" value="dinheiro">
+                                    <button type="submit" class="text-xs font-medium px-2 py-1 rounded text-green-600 hover:text-green-800 hover:bg-green-50">Baixar</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{ card_fim() }}
+            {% endif %}
+
+            <!-- Card: Historico -->
+            {{ card_inicio('Historico') }}
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                    <span class="font-mono text-xs text-gray-400">{{ venda.criado_em.strftime('%d/%m/%Y %H:%M') if venda.criado_em else '' }}</span>
+                    <span>Venda registrada</span>
+                </div>
+                {% if venda.atualizado_em %}
+                <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                    <span class="font-mono text-xs text-gray-400">{{ venda.atualizado_em.strftime('%d/%m/%Y %H:%M') }}</span>
+                    <span>Ultima atualizacao</span>
+                </div>
+                {% endif %}
+            </div>
+            {{ card_fim() }}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

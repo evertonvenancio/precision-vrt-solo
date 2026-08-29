@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block page_title %}Auditoria do Sistema{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Auditoria do Sistema</h1>
+
+        <!-- Estatísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Total de Eventos</h3>
+                <p class="text-2xl font-bold text-blue-900 dark:text-blue-100" id="total-eventos">--</p>
+            </div>
+
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-green-800 dark:text-green-300 mb-1">Operações Bem-sucedidas</h3>
+                <p class="text-2xl font-bold text-green-900 dark:text-green-100" id="operacoes-sucesso">--</p>
+            </div>
+
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-red-800 dark:text-red-300 mb-1">Operações Falhas</h3>
+                <p class="text-2xl font-bold text-red-900 dark:text-red-100" id="operacoes-falha">--</p>
+            </div>
+
+            <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-purple-800 dark:text-purple-300 mb-1">Usuários Ativos</h3>
+                <p class="text-2xl font-bold text-purple-900 dark:text-purple-100" id="usuarios-ativos">--</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Filtros de Pesquisa</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Módulo</label>
+                    <select id="filtro-modulo" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="usuarios">Usuários</option>
+                        <option value="clientes">Clientes</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="prescricao_vrt">Prescrição VRT</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Ação</label>
+                    <select id="filtro-tipo" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="criar">Criar</option>
+                        <option value="alterar">Alterar</option>
+                        <option value="excluir">Excluir</option>
+                        <option value="login">Login</option>
+                        <option value="logout">Logout</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuário</label>
+                    <input type="text" id="filtro-usuario" placeholder="Nome do usuário" class="form-input">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data Início</label>
+                    <input type="date" id="data-inicio" class="form-input">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data Fim</label>
+                    <input type="date" id="data-fim" class="form-input">
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mt-4">
+                <button onclick="filtrarEventos()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    Pesquisar
+                </button>
+                <button onclick="limparFiltros()" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    Limpar
+                </button>
+                <button onclick="exportarAuditoria('csv')" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors" style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Exportar CSV
+                </button>
+                <button onclick="exportarAuditoria('excel')" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Exportar Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabela de Eventos -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Timestamp</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Usuário</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Módulo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ação</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Resultado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">IP</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-eventos" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <!-- Eventos serão carregados dinamicamente -->
+                </tbody>
+            </table>
+
+            <!-- Estado vazio -->
+            <div id="estado-vazio" class="hidden text-center py-8">
+                <svg class="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <p class="text-gray-500 dark:text-gray-400">Nenhum evento encontrado para os filtros selecionados.</p>
+            </div>
+
+            <!-- Estado carregando -->
+            <div id="estado-carregando" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-500 dark:text-gray-400">Carregando eventos...</p>
+            </div>
+        </div>
+
+        <!-- Paginação -->
+        <div class="flex justify-between items-center mt-6">
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+                Mostrando <span id="registros-inicio">0</span> a <span id="registros-fim">0</span> de <span id="total-registros">0</span> registros
+            </div>
+            <div class="flex gap-2">
+                <button onclick="paginarAnterior()" id="btn-anterior" class="px-3 py-1 bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors disabled:opacity-50">
+                    Anterior
+                </button>
+                <button onclick="paginarProximo()" id="btn-proximo" class="px-3 py-1 bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors disabled:opacity-50">
+                    Próximo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Variáveis globais
+let paginaAtual = 1;
+let registrosPorPagina = 20;
+let filtrosAtuais = {};
+let totalRegistros = 0;
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    carregarEstatisticas();
+    carregarEventos();
+});
+
+function carregarEstatisticas() {
+    fetch('/audit/estatisticas')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const stats = data.data;
+                document.getElementById('total-eventos').textContent = stats.total_registros || 0;
+
+                const sucesso = stats.por_tipo_acao?.criar + stats.por_tipo_acao?.alterar + 0 || 0;
+                const falha = stats.por_tipo_acao?.login_falho || 0;
+
+                document.getElementById('operacoes-sucesso').textContent = sucesso;
+                document.getElementById('operacoes-falha').textContent = falha;
+                document.getElementById('usuarios-ativos').textContent = Object.keys(stats.por_usuario || {}).length;
+            }
+        })
+        .catch(error => console.error('Erro ao carregar estatísticas:', error));
+}
+
+function carregarEventos() {
+    const params = new URLSearchParams({
+        page: paginaAtual,
+        limit: registrosPorPagina,
+        ...filtrosAtuais
+    });
+
+    // Mostrar estado carregando
+    document.getElementById('estado-carregando').classList.remove('hidden');
+    document.getElementById('tabela-eventos').innerHTML = '';
+    document.getElementById('estado-vazio').classList.add('hidden');
+
+    fetch(`/audit/api?${params}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('estado-carregando').classList.add('hidden');
+
+            if (data.success) {
+                const eventos = data.data;
+                totalRegistros = data.total;
+
+                if (eventos.length === 0) {
+                    document.getElementById('estado-vazio').classList.remove('hidden');
+                    document.getElementById('tabela-eventos').innerHTML = '';
+                } else {
+                    popularTabela(eventos);
+                    atualizarInformacoesPaginacao();
+                }
+            } else {
+                document.getElementById('estado-vazio').classList.remove('hidden');
+                document.getElementById('tabela-eventos').innerHTML = '<tr><td colspan="7" class="text-center text-red-600">Erro ao carregar eventos</td></tr>';
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao carregar eventos:', error);
+            document.getElementById('estado-carregando').classList.add('hidden');
+            document.getElementById('estado-vazio').classList.remove('hidden');
+        });
+}
+
+function popularTabela(eventos) {
+    const tbody = document.getElementById('tabela-eventos');
+    tbody.innerHTML = '';
+
+    eventos.forEach(evento => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-700';
+
+        const timestamp = new Date(evento.timestamp).toLocaleString('pt-BR');
+        const resultadoClass = evento.sucesso ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+        const resultadoText = evento.sucesso ? 'Sucesso' : 'Falha';
+
+        tr.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${timestamp}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${evento.usuario_nome}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${evento.modulo}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${evento.acao}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm ${resultadoClass}">${resultadoText}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${evento.ip_origem || '-'}</td>
+            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">${evento.mensagem || '-'}</td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+function filtrarEventos() {
+    // Coletar filtros
+    filtrosAtuais = {};
+
+    const modulo = document.getElementById('filtro-modulo').value;
+    if (modulo) filtrosAtuais.modulo = modulo;
+
+    const tipo = document.getElementById('filtro-tipo').value;
+    if (tipo) filtrosAtuais.tipo_acao = tipo;
+
+    const usuario = document.getElementById('filtro-usuario').value;
+    if (usuario) filtrosAtuais.usuario = usuario;
+
+    const dataInicio = document.getElementById('data-inicio').value;
+    if (dataInicio) filtrosAtuais.data_inicio = dataInicio;
+
+    const dataFim = document.getElementById('data-fim').value;
+    if (dataFim) filtrosAtuais.data_fim = dataFim;
+
+    // Resetar paginação
+    paginaAtual = 1;
+
+    // Recarregar eventos
+    carregarEventos();
+}
+
+function limparFiltros() {
+    // Limpar formulários
+    document.getElementById('filtro-modulo').value = '';
+    document.getElementById('filtro-tipo').value = '';
+    document.getElementById('filtro-usuario').value = '';
+    document.getElementById('data-inicio').value = '';
+    document.getElementById('data-fim').value = '';
+
+    // Resetar filtros
+    filtrosAtuais = {};
+    paginaAtual = 1;
+
+    // Recarregar eventos
+    carregarEventos();
+}
+
+function exportarAuditoria(formato) {
+    const params = new URLSearchParams(filtrosAtuais);
+    params.append('formato', formato);
+
+    window.open(`/audit/exportar?${params}`, '_blank');
+}
+
+function paginarAnterior() {
+    if (paginaAtual > 1) {
+        paginaAtual--;
+        carregarEventos();
+    }
+}
+
+function paginarProximo() {
+    paginaAtual++;
+    carregarEventos();
+}
+
+function atualizarInformacoesPaginacao() {
+    const inicio = (paginaAtual - 1) * registrosPorPagina + 1;
+    const fim = Math.min(paginaAtual * registrosPorPagina, totalRegistros);
+
+    document.getElementById('registros-inicio').textContent = inicio;
+    document.getElementById('registros-fim').textContent = fim;
+    document.getElementById('total-registros').textContent = totalRegistros;
+
+    // Atualizar botões de paginação
+    document.getElementById('btn-anterior').disabled = paginaAtual === 1;
+    document.getElementById('btn-proximo').disabled = fim >= totalRegistros;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, card_inicio, card_fim, badge_status, botao %}
+
+{% block title %}Orcamento #{{ orcamento.id }}{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    {{ header_pagina(
+        'Orcamento #' ~ (orcamento.id|string|truncate(8, True, '')),
+        'Detalhes do orcamento comercial.',
+        '',
+        '',
+        ''
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="space-y-6">
+
+            <!-- Cabecalho com Acoes -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <a href="/web/orcamentos"
+                       class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        Voltar
+                    </a>
+                    {{ badge_status(orcamento.status|upper,
+                        'verde' if orcamento.status == 'aprovado' else
+                        'amarelo' if orcamento.status == 'enviado' else
+                        'azul' if orcamento.status == 'rascunho' else
+                        'vermelho' if orcamento.status in ['recusado','cancelado'] else 'cinza') }}
+                </div>
+                <div class="flex items-center gap-2">
+                    {% if orcamento.status == 'rascunho' or orcamento.status == 'enviado' %}
+                    {% if 'orcamentos:aprovar' in permissoes or 'admin' in permissoes %}
+                    <form method="POST" action="/web/orcamentos/{{ orcamento.id }}/aprovar" class="inline">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+                                style="background: linear-gradient(135deg, #2B6B3F 0%, #1a4a2a 100%);">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Aprovar
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                    {% if 'orcamentos:export' in permissoes or 'admin' in permissoes %}
+                    <a href="/web/orcamentos/{{ orcamento.id }}/pdf"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors"
+                       style="background: linear-gradient(135deg, #E8A838 0%, #d4952e 100%);">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Baixar PDF
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Card: Dados Gerais -->
+            {{ card_inicio('Dados Gerais') }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ID</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ orcamento.id }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cliente</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ orcamento.cliente_id or 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Responsavel</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ orcamento.usuario_id or 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Data Emissao</p>
+                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ orcamento.data_emissao.strftime('%d/%m/%Y') if orcamento.data_emissao else 'N/A' }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</p>
+                    <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white uppercase">{{ orcamento.status }}</p>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Card: Valores -->
+            {{ card_inicio('Valores') }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Valor Bruto</p>
+                    <p class="mt-1 text-lg font-bold text-gray-900 dark:text-white">R$ {{ '{:,.2f}'.format(orcamento.valor_total_bruto|float) }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Desconto</p>
+                    <p class="mt-1 text-lg font-bold text-gray-900 dark:text-white">{{ '{:.2f}'.format(orcamento.desconto_percentual|float) }}%</p>
+                </div>
+                <div class="p-4 rounded-lg" style="background: rgba(43,107,63,0.08);">
+                    <p class="text-xs font-medium" style="color: #2B6B3F;">Valor Liquido</p>
+                    <p class="mt-1 text-xl font-bold" style="color: #2B6B3F;">R$ {{ '{:,.2f}'.format(orcamento.valor_total_liquido|float) }}</p>
+                </div>
+            </div>
+            {{ card_fim() }}
+
+            <!-- Card: Historico -->
+            {{ card_inicio('Historico') }}
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                    <span class="font-mono text-xs text-gray-400">{{ orcamento.criado_em.strftime('%d/%m/%Y %H:%M') if orcamento.criado_em else '' }}</span>
+                    <span>Orcamento criado</span>
+                </div>
+                {% if orcamento.atualizado_em %}
+                <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                    <span class="font-mono text-xs text-gray-400">{{ orcamento.atualizado_em.strftime('%d/%m/%Y %H:%M') }}</span>
+                    <span>Ultima atualizacao</span>
+                </div>
+                {% endif %}
+            </div>
+            {{ card_fim() }}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

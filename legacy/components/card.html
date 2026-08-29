@@ -1,0 +1,43 @@
+<!-- Cards padronizados -->
+<div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="card p-4 sm:p-6 rounded-lg">
+    <!-- Card com título e conteúdo -->
+    <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }">
+        <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="flex items-center justify-between mb-4">
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white" x-text="title">Título do Card</h3>
+            <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Conteúdo do card -->
+        <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="mb-4">
+            <slot></slot>
+        </div>
+        
+        <!-- Rodapé do card -->
+        <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="flex justify-end space-x-3">
+            <button @click="$emit('cancel')" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" x-text="cancelText || 'Cancelar'">Cancelar</button>
+            <button @click="$emit('confirm')" class="btn-primary px-4 py-2 rounded-lg font-medium transition-colors hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" x-text="confirmText || 'Confirmar'">Confirmar</button>
+        </div>
+    </div>
+    
+    <!-- Card simples -->
+    <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="p-4 sm:p-6 rounded-lg">
+        <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="flex items-center justify-between mb-4">
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white" x-text="title">Título</h3>
+            <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full" x-text="status">Ativo</span>
+        </div>
+        
+        <p class="text-gray-600 dark:text-gray-400 mb-4" x-text="description">Descrição do card</p>
+        
+        <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }" class="flex items-center space-x-4">
+            <img class="w-10 h-10 rounded-full" :src="avatar" alt="Avatar">
+            <div x-data="{ cardData: { title: 'Título', description: 'Descrição' } }">
+                <p class="text-sm sm:text-base font-medium text-gray-900 dark:text-white" x-text="userName">Nome do usuário</p>
+                <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400" x-text="userEmail">email@usuario.com</p>
+            </div>
+        </div>
+    </div>
+</div>

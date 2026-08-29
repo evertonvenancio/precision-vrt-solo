@@ -1,0 +1,196 @@
+{# extends "base.html" #}
+
+{% extends 'base.html' %}
+
+
+        <!-- Componentes Globais -->
+        {% include "components/card.html" %}
+        {% include "components/button.html" %}
+        {% include "components/table.html" %}
+        {% include "components/loading.html" %}
+        {% include "components/message.html" %}
+        {% include "components/empty-state.html" %}
+        
+<script>
+function pageData() {
+    return {
+        pageTitle: 'Extrator',
+        pageDescription: 'Fertirrigação e Hidroponia - Extrator de Solução - Pontos de Monitoramento',
+        breadcrumbs: [
+            { name: 'Dashboard', url: '/dashboard' },
+            { name: 'Extrator', url: '#' }
+        ],
+        pageContent: `
+<div class="flex flex-col h-full" x-data="extratorApp()">
+    <!-- CABECALHO FIXO -->
+    <header class="flex-shrink-0 bg-white dark:bg-gray-800 shadow-sm p-4">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Fertirrigação e Hidroponia</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Extração e processamento de dados agrícolas de múltiplas fontes.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Extração e processamento de dados agrícolas de múltiplas fontes.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Extrator de Solução - Pontos de Monitoramento</p>
+            </div>
+            <div class="flex gap-3">
+                <button @click="abrirUpload()"
+                        class="px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition">
+                    Upload de Leituras (CSV)
+                </button>
+                <a href="/extrator/novo-ponto"
+                   class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition">
+                    + Novo Ponto
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CENTRO SCROLLAVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Pontos de Monitoramento</h2>
+                <div class="flex gap-2">
+                    <input type="text" x-model="filtro" placeholder="Buscar ponto..."
+                           class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+            </div>
+
+            <div x-show="pontosFiltrados.length === 0" class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.553-.894L15 7m0 13V7"/>
+                </svg>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhum ponto cadastrado.</p>
+                <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">Clique em "Novo Ponto" para começar.</p>
+            </div>
+
+            <div x-show="pontosFiltrados.length > 0" class="overflow-x-auto">
+                <div class="overflow-x-auto">
+            \1
+                    <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <tr>
+                            <th class="px-4 py-3 rounded-tl-lg">Código</th>
+                            <th class="px-4 py-3">Cultura</th>
+                            <th class="px-4 py-3">Localização</th>
+                            <th class="px-4 py-3">Última Leitura</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3 rounded-tr-lg text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="ponto in pontosFiltrados" :key="ponto.id">
+                            <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100" x-text="ponto.codigo"></td>
+                                <td class="px-4 py-3" x-text="ponto.cultura"></td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs text-gray-500 dark:text-gray-400" x-text="formatarCoordenadas(ponto.latitude, ponto.longitude)"></span>
+                                    <span class="block text-xs text-gray-400 dark:text-gray-500" x-text="ponto.profundidade + ' cm'"></span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span x-text="ponto.ultima_leitura ? formatarData(ponto.ultima_leitura) : 'Nunca'"
+                                          :class="ponto.ultima_leitura ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'"></span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                          :class="statusClass(ponto.status)"
+                                          x-text="ponto.status || 'Pendente'"></span>
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <button @click="verDetalhes(ponto.id)" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm mr-3 transition">Detalhes</button>
+                                    <button @click="novaLeitura(ponto.id)" class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 text-sm transition">Nova Leitura</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPE FIXO -->
+    <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+        <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+            <span x-text="pontos.length + ' ponto(s) cadastrado(s)'"></span>
+            <span>Precision VRT Solo - Módulo Fertirrigação</span>
+        </div>
+    </footer>
+</div>
+
+
+        <!-- Componentes Globais -->
+        {% include "components/card.html" %}
+        {% include "components/button.html" %}
+        {% include "components/table.html" %}
+        {% include "components/loading.html" %}
+        {% include "components/message.html" %}
+        {% include "components/empty-state.html" %}
+        
+<script>
+function extratorApp() {
+    return {
+        pontos: [],
+        filtro: '',
+
+        get pontosFiltrados() {
+            if (!this.filtro) return this.pontos;
+            const termo = this.filtro.toLowerCase();
+            return this.pontos.filter(p =>
+                p.codigo.toLowerCase().includes(termo) ||
+                p.cultura.toLowerCase().includes(termo) ||
+                p.nome.toLowerCase().includes(termo)
+            );
+        },
+
+        async init() {
+            await this.carregarPontos();
+        },
+
+        async carregarPontos() {
+            try {
+                const response = await fetch('/api/v1/extrator/pontos');
+                if (response.ok) {
+                    this.pontos = await response.json();
+                }
+            } catch (err) {
+                console.error('Erro ao carregar pontos:', err);
+            }
+        },
+
+        formatarCoordenadas(lat, lng) {
+            if (!lat || !lng) return 'N/A';
+            return lat.toFixed(6) + ', ' + lng.toFixed(6);
+        },
+
+        formatarData(dataStr) {
+            const data = new Date(dataStr);
+            return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        },
+
+        statusClass(status) {
+            const map = {
+                'Normal': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200',
+                'Alerta': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200',
+                'Critico': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200',
+                'Pendente': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+            };
+            return map[status] || map['Pendente'];
+        },
+
+        verDetalhes(id) {
+            window.location.href = '/extrator/ponto/' + id;
+        },
+
+        novaLeitura(id) {
+            window.location.href = '/extrator/ponto/' + id + '/nova-leitura';
+        },
+
+        abrirUpload() {
+            alert('Funcionalidade de upload CSV em desenvolvimento.');
+        }
+    }
+}
+</script>
+        `
+    }
+}
+</script>

@@ -1,0 +1,163 @@
+<!-- Componente Widget Processamentos - Utiliza Card.html -->
+<div class="widget-content" x-data="processamentosWidget()">
+    
+    <!-- Loading State já gerenciado pelo card pai -->
+    
+    <!-- Empty State já gerenciado pelo card pai -->
+    
+    <!-- Error State já gerenciado pelo card pai -->
+    
+    <!-- No Permission State já gerenciado pelo card pai -->
+    
+    <!-- Loaded Content -->
+    <div x-show="widget.state === 'loaded'">
+        
+        <!-- Estatísticas Gerais -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            
+            <!-- Card Total Processamentos -->
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm">Total Processamentos</p>
+                        <p class="text-2xl font-bold" x-text="widgetData.total || 0"></p>
+                        <p class="text-purple-100 text-xs mt-1">Em andamento</p>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Em Andamento -->
+            <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100 text-sm">Em Andamento</p>
+                        <p class="text-2xl font-bold" x-text="widgetData.andamento || 0"></p>
+                        <p class="text-yellow-100 text-xs mt-1">Ativos</p>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Concluídos -->
+            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm">Concluídos</p>
+                        <p class="text-2xl font-bold" x-text="widgetData.concluido || 0"></p>
+                        <p class="text-green-100 text-xs mt-1">Esta semana</p>
+                    </div>
+                    <div class="bg-white/20 rounded-lg p-2">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Lista de Processamentos -->
+        <div class="space-y-3">
+            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Processamentos Recentes</h4>
+            
+            <template x-for="processamento in widgetData.data" :key="processamento.id">
+                <div class="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <h5 class="font-medium text-gray-900 dark:text-white" x-text="processamento.name"></h5>
+                        <span :class="{
+                            'bg-green-100 text-green-800': processamento.status === 'concluido',
+                            'bg-yellow-100 text-yellow-800': processamento.status === 'andamento',
+                            'bg-blue-100 text-blue-800': processamento.status === 'agendado'
+                        }" class="px-2 py-1 rounded-full text-xs font-medium">
+                            <span x-text="processamento.status === 'concluido' ? 'Concluído' : processamento.status === 'andamento' ? 'Andamento' : 'Agendado'"></span>
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-gray-500 dark:text-gray-400">Progresso</span>
+                            <span class="text-gray-500 dark:text-gray-400" x-text="processamento.progress + '%'"></span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div :class="{
+                                'bg-green-500': processamento.status === 'concluido',
+                                'bg-yellow-500': processamento.status === 'andamento',
+                                'bg-blue-500': processamento.status === 'agendado'
+                            }" class="h-2 rounded-full transition-all duration-300" :style="`width: ${processamento.progress}%`"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-500 dark:text-gray-400">ID: <span x-text="processamento.id"></span></span>
+                        <button class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+                            Ver detalhes
+                        </button>
+                    </div>
+                </div>
+            </template>
+            
+            <!-- Sem dados -->
+            <div x-show="!widgetData.data || widgetData.data.length === 0" class="text-center py-6">
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Nenhum processamento encontrado</p>
+            </div>
+        </div>
+        
+        <!-- Botão para ver todos -->
+        <div class="mt-4 text-center">
+            <button class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                Gerenciar processamentos →
+            </button>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+function processamentosWidget() {
+    return {
+        widget,
+        widgetData: {
+            total: 0,
+            andamento: 0,
+            concluido: 0,
+            trend: 'stable',
+            data: []
+        },
+        
+        init() {
+            // Carregar dados reais do backend
+            this.loadProcessamentosData();
+        },
+        
+        async loadProcessamentosData() {
+            try {
+                const response = await fetch('/api/v1/dashboard/widgets/processamentos', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.widgetData = data.data;
+                    widget.state = 'loaded';
+                } else {
+                    widget.state = 'error';
+                    widget.errorMessage = 'Não foi possível carregar os dados dos processamentos';
+                }
+            } catch (error) {
+                widget.state = 'error';
+                widget.errorMessage = 'Erro ao conectar com o servidor';
+                console.error('Error loading processamentos data:', error);
+            }
+        }
+    }
+}
+</script>

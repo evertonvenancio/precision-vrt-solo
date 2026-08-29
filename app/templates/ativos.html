@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, tabela_inicio, tabela_fim, empty_state %}
+
+{% block title %}Gestão de Ativos e Patrimônio{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    {{ header_pagina(
+        'Gestão de Ativos e Patrimônio',
+        'Controle de bens, depreciação e vida útil.',
+        '/ativos/novo',
+        'Novo Ativo',
+        'plus'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="card">
+            {% if ativos %}
+            {{ tabela_inicio([
+                ('Nome do Bem', 'left'),
+                ('Categoria', 'left'),
+                ('Valor Aquisição', 'left'),
+                ('Vida Útil (anos)', 'left'),
+                ('Depreciação Mensal (R$)', 'left')
+            ]) }}
+            {% for ativo in ativos %}
+            <tr class="hover:bg-green-50 dark:hover:bg-gray-700/30 transition-colors">
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-medium">{{ ativo.nome_bem }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ ativo.categoria }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono">R$ {{ "%.2f"|format(ativo.valor_aquisicao) }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ ativo.vida_util_anos }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono">R$ {{ "%.2f"|format(ativo.depreciacao_mensal) }}</td>
+            </tr>
+            {% endfor %}
+            {{ tabela_fim() }}
+            {% else %}
+            {{ empty_state('Nenhum ativo cadastrado.', 'Cadastrar o primeiro ativo →', '/ativos/novo') }}
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

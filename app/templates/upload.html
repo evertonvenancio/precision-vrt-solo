@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_formulario, card_inicio, card_fim, botao %}
+
+{% block title %}Upload de Arquivos{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    {{ header_formulario(
+        'Upload de Arquivos',
+        '/web/dashboard',
+        'Enviar Arquivo',
+        'form-upload'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-2xl mx-auto">
+
+            {{ card_inicio('Selecionar Arquivo') }}
+                {% if error %}
+                <div class="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-4 rounded-lg mb-6 border border-red-200 dark:border-red-700">
+                    <p class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        {{ error }}
+                    </p>
+                </div>
+                {% endif %}
+
+                <form id="form-upload" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <div>
+                        <label for="file" class="form-label">Arquivo de Dados</label>
+                        <input type="file" id="file" name="file" required
+                               accept=".csv,.xlsx,.xls,.shp,.json,.geojson,.tif,.tiff,.zip,.isoxml"
+                               class="form-input block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            Formatos suportados: CSV, XLSX, SHP, GeoJSON, TIFF, ZIP, ISOXML
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="descricao" class="form-label">Descrição (opcional)</label>
+                        <textarea id="descricao" name="descricao" rows="3" class="form-input block w-full"></textarea>
+                    </div>
+                </form>
+            {{ card_fim() }}
+
+            {{ card_inicio('Tipos de Arquivos Suportados') }}
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Dados de Análise
+                        </h4>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
+                            <li>CSV: Laboratório</li>
+                            <li>XLSX: Planilhas</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 7m0 13V7m0 0L9 7"/></svg>
+                            Geoespaciais
+                        </h4>
+                        <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
+                            <li>SHP: Shapefile</li>
+                            <li>GeoJSON: Padrão</li>
+                        </ul>
+                    </div>
+                </div>
+            {{ card_fim() }}
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('file').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const fileName = file.name.toLowerCase();
+            const validExtensions = ['.csv', '.xlsx', '.xls', '.shp', '.json', '.geojson', '.tif', '.tiff', '.zip', '.isoxml'];
+            const hasValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+
+            if (!hasValidExtension) {
+                alert('Por favor, selecione um arquivo válido: CSV, XLSX, SHP, GeoJSON, TIFF, ZIP ou ISOXML');
+                e.target.value = '';
+            }
+        }
+    });
+</script>
+{% endblock %}

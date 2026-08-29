@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Biblioteca Técnica{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+
+    <!-- CABEÇALHO FIXO -->
+    <div class="flex-shrink-0 px-8 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Biblioteca Técnica</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Artigos, metodologias e referências técnicas.</p>
+            </div>
+            <a href="/conhecimento/novo-artigo"
+               class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Novo Artigo
+            </a>
+        </div>
+    </div>
+
+    <!-- CENTRO SCROLLÁVEL -->
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+            {% if artigos %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs font-medium uppercase tracking-wider">
+                            <th class="px-6 py-3">Título</th>
+                            <th class="px-6 py-3">Categoria</th>
+                            <th class="px-6 py-3">Referências</th>
+                            <th class="px-6 py-3">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for artigo in artigos %}
+                        <tr class="hover:bg-green-50 dark:hover:bg-gray-700/30 transition">
+                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-medium">{{ artigo.titulo }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium
+                                    {% if artigo.categoria == 'Metodologia' %}bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300
+                                    {% elif artigo.categoria == 'Cultura' %}bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300
+                                    {% else %}bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300{% endif %}">
+                                    {{ artigo.categoria }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 max-w-xs truncate">{{ artigo.referencias }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ artigo.data_criacao.strftime("%d/%m/%Y") }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-12 text-center">
+                <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <p class="text-gray-500 text-lg">Nenhum artigo cadastrado.</p>
+                <a href="/conhecimento/novo-artigo" class="inline-block mt-4 text-green-600 hover:text-green-700 font-medium">
+                    Cadastrar o primeiro artigo →
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,462 @@
+{
+  "audit_results": [
+    {
+      "file": "ativos.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "A",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "base.html",
+      "extends_base": false,
+      "has_header": true,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "F",
+      "status": "NEEDS_FIX"
+    },
+    {
+      "file": "base_tecnica.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "bulk_blend.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "C",
+      "status": "OK"
+    },
+    {
+      "file": "caixa.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "B",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "clientes.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "A",
+      "status": "OK"
+    },
+    {
+      "file": "clima.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "C",
+      "status": "OK"
+    },
+    {
+      "file": "compactacao.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "C",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "compactacao_nova.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "D",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "configuracoes.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "A",
+      "status": "OK"
+    },
+    {
+      "file": "conhecimento.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "E",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "cruzamento.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "C",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "dashboard.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "equipe.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "A",
+      "status": "OK"
+    },
+    {
+      "file": "extrator.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "C",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "financeiro.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "B",
+      "status": "OK"
+    },
+    {
+      "file": "login.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "F",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "nematoides.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "C",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "novo_artigo.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "E",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "novo_ativo.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "F",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "novo_cliente.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "novo_funcionario.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "novo_orcamento.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "novo_ponto_extrator.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "permissoes.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "A",
+      "status": "OK"
+    },
+    {
+      "file": "prescricao.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "C",
+      "status": "OK"
+    },
+    {
+      "file": "prescricao_nova.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "D",
+      "status": "OK"
+    },
+    {
+      "file": "prescricao_resultado.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": false,
+      "category": "F",
+      "status": "OK"
+    },
+    {
+      "file": "tabela_precos.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": false,
+      "has_components": false,
+      "category": "B",
+      "status": "NEEDS_RESPONSIVE"
+    },
+    {
+      "file": "upload.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "D",
+      "status": "OK"
+    },
+    {
+      "file": "upload_resultado.html",
+      "extends_base": true,
+      "has_header": false,
+      "has_title": true,
+      "has_subtitle": true,
+      "has_breadcrumb": true,
+      "has_responsive": true,
+      "has_components": true,
+      "category": "D",
+      "status": "OK"
+    }
+  ],
+  "problems": [
+    {
+      "file": "ativos.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "base.html",
+      "issues": [
+        "N\u00e3o estende base.html",
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "caixa.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "compactacao.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "compactacao_nova.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "conhecimento.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "cruzamento.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "extrator.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "login.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "nematoides.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "novo_artigo.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "novo_ativo.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    },
+    {
+      "file": "tabela_precos.html",
+      "issues": [
+        "N\u00e3o responsivo"
+      ]
+    }
+  ],
+  "summary": {
+    "total_templates": 31,
+    "ok_templates": 18,
+    "problem_templates": 13
+  }
+}

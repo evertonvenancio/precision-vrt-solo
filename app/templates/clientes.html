@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina, tabela_inicio, tabela_fim, empty_state %}
+
+{% block title %}Gestão de Clientes{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col" x-data="{ open: false, clienteId: null, clienteNome: '', senha: '', justificativa: '', erro: '', carregando: false, busca: '' }">
+
+    {{ header_pagina(
+        'Gestão de Clientes',
+        'Cadastro e gerenciamento de clientes e fazendas.',
+        '/clientes/novo',
+        'Novo Cliente',
+        'plus'
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+
+        <div class="mb-4">
+            <input type="text" x-model="busca" placeholder="Buscar cliente por nome ou CPF/CNPJ..."
+                   class="form-input" style="max-width: 400px;">
+        </div>
+
+        <div class="card">
+            {{ tabela_inicio([
+                ('Nome', 'left'),
+                ('CPF/CNPJ', 'left'),
+                ('Cidade', 'left'),
+                ('Telefone', 'left'),
+                ('Área (ha)', 'left'),
+                ('Ações', 'right')
+            ]) }}
+
+            {% for cliente in clientes %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                x-show="!busca || '{{ cliente.nome }}'.toLowerCase().includes(busca.toLowerCase()) || '{{ cliente.cpf_cnpj }}'.toLowerCase().includes(busca.toLowerCase())">
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-medium">{{ cliente.nome }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.cpf_cnpj }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.cidade }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.telefone }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.area_total_hectares }}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="/clientes/{{ cliente.id }}/editar" class="action-link mr-4">Editar</a>
+                    <button @click="open = true; clienteId = '{{ cliente.id }}'; clienteNome = '{{ cliente.nome }}'; senha = ''; justificativa = ''; erro = ''"
+                            class="action-danger">Excluir</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    {{ empty_state('Nenhum cliente cadastrado.', 'Cadastrar o primeiro cliente →', '/clientes/novo') }}
+                </td>
+            </tr>
+            {% endfor %}
+            {{ tabela_fim() }}
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center" style="display: none;">
+        <div class="absolute inset-0 bg-black bg-opacity-50" @click="open = false"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Confirmar Exclusão</h3>
+                <button @click="open = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Você está prestes a excluir o cliente <strong x-text="clienteNome" class="text-gray-900 dark:text-gray-100"></strong>. Esta ação requer confirmação por senha e justificativa.
+            </p>
+            <div class="space-y-4">
+                <div>
+                    <label class="form-label">Senha do Administrador</label>
+                    <input type="password" x-model="senha" class="form-input" placeholder="Digite sua senha">
+                </div>
+                <div>
+                    <label class="form-label">Justificativa</label>
+                    <textarea x-model="justificativa" rows="3" class="form-input" placeholder="Informe o motivo da exclusão"></textarea>
+                </div>
+                <div x-show="erro" class="form-error bg-red-50 dark:bg-red-900/20 p-2 rounded" x-text="erro"></div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button @click="open = false" class="btn btn-secondary">Cancelar</button>
+                <button @click="carregando = true; erro = ''; fetch('/clientes/' + clienteId + '/excluir', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ senha: senha, justificativa: justificativa }) }).then(r => r.json().then(data => ({ status: r.status, body: data }))).then(result => { carregando = false; if (result.status === 403) { erro = result.body.detail; } else if (result.body.success) { window.location.href = result.body.redirect; } else { erro = result.body.detail || 'Erro desconhecido.'; } }).catch(e => { carregando = false; erro = 'Erro de comunicação com o servidor.'; })"
+                        :disabled="carregando || !senha || !justificativa"
+                        :class="{ 'opacity-50 cursor-not-allowed': carregando || !senha || !justificativa }"
+                        class="btn btn-danger">
+                    <svg x-show="carregando" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span x-text="carregando ? 'Processando...' : 'Confirmar Exclusão'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
