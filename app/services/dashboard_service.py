@@ -109,14 +109,19 @@ class DashboardService:
 
     def _get_clima(self) -> dict | None:
         try:
-            from models.config import ConfigSistema
-            config = self.db.query(ConfigSistema).filter(
-                ConfigSistema.chave == "cidade_padrao"
-            ).first()
-            cidade = config.valor if config and config.valor else None
-            if not cidade:
-                return None
-            return self._consultar_clima(cidade)
+            from db.database import SessionLocal
+            db_local = SessionLocal()
+            try:
+                result = db_local.execute(
+                    text("SELECT valor FROM configuracoes WHERE chave = 'cidade_padrao' LIMIT 1")
+                )
+                row = result.fetchone()
+                cidade = row[0] if row and row[0] else None
+                if not cidade:
+                    return None
+                return self._consultar_clima(cidade)
+            finally:
+                db_local.close()
         except Exception:
             return None
 

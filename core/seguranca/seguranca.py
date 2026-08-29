@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # Configuracao do banco de dados
 # ---------------------------------------------------------------------------
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "precision_vrt.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "precision_vrt.db")
 
 
 def _get_connection() -> sqlite3.Connection:

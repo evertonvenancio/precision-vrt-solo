@@ -13,8 +13,9 @@ class Orcamento(Base):
     Modelo de dados do Orçamento usando SQLAlchemy.
     Mapeia a tabela 'orcamentos' existente do banco de dados.
     """
-    
+
     __tablename__ = "orcamentos"
+    __table_args__ = {"extend_existing": True}
     
     id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     tenant_id = Column(String(36), index=True, default='default')

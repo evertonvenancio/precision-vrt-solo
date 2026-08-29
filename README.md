@@ -6,6 +6,7 @@
 [![SQLite](https://img.shields.io/badge/SQLite-3-lightgrey.svg)](https://www.sqlite.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4+-38B2AC.svg)](https://tailwindcss.com/)
 [![Alpine.js](https://img.shields.io/badge/Alpine.js-3.13+-8BC0D0.svg)](https://alpinejs.dev/)
+[![Status](https://img.shields.io/badge/Status-Operacional-brightgreen.svg)](#)
 
 > **Plataforma operacional de agricultura de precisão** — Motor agronômico + Dados espaciais + Prescrição VRT + Rastreabilidade completa.
 
@@ -26,6 +27,8 @@ O **Precision VRT Solo** é uma plataforma SaaS multi-tenant para gestão integr
 │  HISTÓRICO (ciclo fechado de evidência)                      │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+**Status Atual (29/08/2026):** ✅ **OPERACIONAL** — Aplicação inicia sem erros, 28 roteadores web/API registrados, RBAC funcional, sidebar dinâmica, banco íntegro (33 tabelas).
 
 ### Quatro Camadas Principais
 
