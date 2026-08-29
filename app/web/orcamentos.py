@@ -4,7 +4,6 @@ Integração completa com RBAC e serviços reais.
 """
 
 from fastapi import APIRouter, Request, Depends, HTTPException
-from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Optional
 
@@ -13,7 +12,7 @@ from app.services.orcamentos_service import OrcamentosService
 from db.database import SessionLocal
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/", response_class=HTMLResponse)

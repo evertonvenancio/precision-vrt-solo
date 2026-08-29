@@ -9,14 +9,13 @@ import uuid
 from pathlib import Path
 from fastapi import APIRouter, Request, UploadFile, File, Depends, Form, HTTPException
 from fastapi.responses import JSONResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from db.database import get_db
 from app.services.nematoides_service import NematoidesService
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 # Diretórios
 BASE_DIR = Path(__file__).resolve().parent.parent

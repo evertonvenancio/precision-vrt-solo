@@ -4,14 +4,13 @@ Responsabilidade exclusiva: receber requisição → chamar service → retornar
 Zero consulta ao banco. Zero regra de negócio.
 """
 from fastapi import APIRouter, Request, Form, Depends, UploadFile, File
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from db.database import get_db
 from app.services.upload_service import UploadService
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/upload")

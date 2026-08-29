@@ -8,7 +8,6 @@ Zero consulta ao banco. Zero regra de negócio.
 from fastapi import APIRouter, Request, Form, HTTPException, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.templating import Jinja2Templates
 from datetime import datetime
 import os
 
@@ -29,7 +28,7 @@ except Exception as e:
     AUTH_SERVICE_AVAILABLE = False
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 # Sistema de autenticação
 security = HTTPBearer()

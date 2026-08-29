@@ -9,7 +9,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Query, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
 from db.database import get_db
 from app.services.auditoria_service import AuditoriaPersistenteService
@@ -17,7 +16,7 @@ from core.seguranca.auth import get_current_user_id, get_current_user_nome, requ
 from core.seguranca.auditoria import TipoAcao, ModuloSistema
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/audit")

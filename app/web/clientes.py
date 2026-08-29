@@ -5,7 +5,6 @@ Responsabilidade exclusiva: receber requisição → chamar service → retornar
 Zero consulta ao banco. Zero regra de negócio.
 """
 from fastapi import APIRouter, Request, Form, Depends, HTTPException
-from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
@@ -15,8 +14,8 @@ from core.authorization.dependencies import require_permission
 
 security = HTTPBearer()
 router = APIRouter()
+from app.template_config import templates  # compartilhado - globals de RBAC
 
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/")

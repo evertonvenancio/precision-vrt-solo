@@ -2,15 +2,14 @@
 Precision VRT Solo - Rotas do Módulo Comunicação
 """
 from fastapi import APIRouter, Request, Depends
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from db.database import get_db
 from core.seguranca.permissions import get_permissoes
 
 router = APIRouter()
+from app.template_config import templates  # compartilhado - globals de RBAC
 
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/comunicacao")

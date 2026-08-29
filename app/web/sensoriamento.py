@@ -2,13 +2,12 @@
 Precision VRT Solo - Rotas do Módulo Sensoriamento
 """
 from fastapi import APIRouter, Request, Depends, HTTPException
-from fastapi.templating import Jinja2Templates
 
 from core.authorization.dependencies import require_permission
 from app.services.sensoriamento_service import SensoriamentoService
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/sensoriamento")

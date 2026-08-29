@@ -3,20 +3,8 @@ Precision VRT Solo - Serviço do Módulo Equipe
 Toda consulta ao banco e regra de negócio centralizada aqui.
 """
 from sqlalchemy.orm import Session
-
+from sqlalchemy import text
 from core.seguranca.permissions import get_permissoes
-
-# Importar funções originais do service existente
-try:
-    from app.services.equipe_service_original import (
-        listar_funcionarios as _listar_funcionarios_orig,
-        get_contexto_novo_funcionario as _get_contexto_novo_funcionario_orig,
-        get_pagina_permissoes as _get_pagina_permissoes_orig,
-    )
-except ImportError:
-    def _listar_funcionarios_orig(db): return []
-    def _get_contexto_novo_funcionario_orig(): return {}
-    def _get_pagina_permissoes_orig(): return {}
 
 
 class EquipeService:
@@ -33,10 +21,28 @@ class EquipeService:
         return get_permissoes(self.db)
 
     def listar_funcionarios(self):
-        return _listar_funcionarios_orig(self.db)
+        """Lista funcionários da tabela funcionarios."""
+        try:
+            result = self.db.execute(text("SELECT id, nome_completo, cpf, cargo, salario_base, comissao_percentual, ativo FROM funcionarios WHERE ativo = 1 ORDER BY nome_completo ASC"))
+            funcionarios = []
+            for row in result.fetchall():
+                funcionarios.append({
+                    "id": row[0],
+                    "nome_completo": row[1],
+                    "cpf": row[2],
+                    "cargo": row[3],
+                    "salario_base": float(row[4]) if row[4] else 0.0,
+                    "comissao_percentual": float(row[5]) if row[5] else 0.0,
+                    "ativo": row[6]
+                })
+            return funcionarios
+        except Exception as e:
+            print(f"Erro ao listar funcionários: {e}")
+            return []
 
     def get_contexto_novo_funcionario(self):
-        return _get_contexto_novo_funcionario_orig()
+        return {"cargos": ["Agrônomo", "Consultor", "Gerente Técnico", "Assistente de Campo", "Financeiro"]}
 
     def get_pagina_permissoes(self):
-        return _get_pagina_permissoes_orig()
+        return {"status": "ok"}
+

@@ -12,10 +12,9 @@ from sqlalchemy.orm import Session
 
 from db.database import get_db
 from app.services.dashboard_service import DashboardService
+from app.template_config import templates
 
 router = APIRouter()
-
-templates = Jinja2Templates(directory="app/templates")
 
 
 def get_token_from_cookie(request: Request) -> str:

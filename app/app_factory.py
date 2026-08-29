@@ -36,12 +36,11 @@ def create_app() -> FastAPI:
     # Middleware Multi-Tenancy
     app.add_middleware(TenantMiddleware)
 
-    # Registrar helpers de template para RBAC
-    from fastapi.templating import Jinja2Templates as _J2
-    _j2 = _J2(directory="app/templates")
-    _j2.env.globals["has_permission"] = template_has_permission
-    _j2.env.globals["filter_menu"] = template_filter_menu
-    _j2.env.globals["SIDEBAR_MENU_STRUCTURE"] = SIDEBAR_MENU_STRUCTURE
+    # Registrar helpers de template para RBAC na instância compartilhada
+    from app.template_config import templates as shared_templates
+    shared_templates.env.globals["has_permission"] = template_has_permission
+    shared_templates.env.globals["filter_menu"] = template_filter_menu
+    shared_templates.env.globals["SIDEBAR_MENU_STRUCTURE"] = SIDEBAR_MENU_STRUCTURE
     
     # Montar arquivos estáticos
     static_dir = Path(__file__).parent / "static"

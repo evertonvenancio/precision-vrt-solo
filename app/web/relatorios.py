@@ -7,7 +7,6 @@ Endpoints HTTP para geração e exportação de relatórios.
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Query, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
-from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import tempfile
 import os
@@ -20,7 +19,7 @@ from core.seguranca.auth import Permission
 from core.seguranca.auditoria import TipoAcao, ModuloSistema
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/relatorios")

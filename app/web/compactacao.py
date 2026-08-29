@@ -8,15 +8,14 @@ import shutil
 import uuid
 from pathlib import Path
 from fastapi import APIRouter, Request, Depends, HTTPException
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from db.database import get_db
 from app.services.compactacao_service import CompactacaoService
 
 router = APIRouter()
+from app.template_config import templates  # compartilhado - globals de RBAC
 
-templates = Jinja2Templates(directory="app/templates")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 UPLOAD_DIR = BASE_DIR / "data" / "uploads"
