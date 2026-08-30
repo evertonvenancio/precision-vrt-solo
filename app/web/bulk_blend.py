@@ -15,7 +15,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 
-@router.get("/bulk-blend")
+@router.get("/")
 async def bulk_blend_page(request: Request, db: Session = Depends(get_db)):
     service = BulkBlendService()
     return templates.TemplateResponse(request=request, name="bulk_blend.html", context={})

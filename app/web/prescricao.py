@@ -13,7 +13,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/prescricao")
+@router.get("/")
 async def prescricao_page(
     request: Request,
     db: Session = Depends(get_db),
@@ -28,14 +28,14 @@ async def prescricao_page(
     )
 
 
-@router.get("/prescricao/nova")
+@router.get("/nova")
 async def prescricao_nova_page(
     request: Request,
     db: Session = Depends(get_db),
 ):
     """Página de nova prescrição."""
     service = PrescricaoService(db)
-    context = service.get_contexto_nova_page()
+    context = service.get_nova_context()
     return templates.TemplateResponse(
         request=request,
         name="prescricao_nova.html",
@@ -43,7 +43,7 @@ async def prescricao_nova_page(
     )
 
 
-@router.post("/prescricao/upload-geo")
+@router.post("/upload-geo")
 async def upload_geo_prescricao(
     limite_talhao: UploadFile = File(...),
     amostras_solo: UploadFile = File(...),
@@ -54,7 +54,7 @@ async def upload_geo_prescricao(
     return service.processar_upload_geo(limite_talhao, amostras_solo)
 
 
-@router.post("/prescricao/processar")
+@router.post("/processar")
 async def prescricao_processar(
     limite_talhao: UploadFile = File(...),
     amostras_solo: UploadFile = File(...),
@@ -80,7 +80,7 @@ async def prescricao_processar(
     )
 
 
-@router.get("/prescricao/resultado")
+@router.get("/resultado")
 async def prescricao_resultado(
     request: Request,
     db: Session = Depends(get_db),

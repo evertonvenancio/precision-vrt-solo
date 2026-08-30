@@ -23,7 +23,7 @@ UPLOAD_DIR = BASE_DIR / "data" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
-@router.get("/nematoides")
+@router.get("/")
 async def nematoides_page(request: Request, db: Session = Depends(get_db)):
     """Página principal do módulo nematoides."""
     service = NematoidesService(db)
@@ -35,7 +35,7 @@ async def nematoides_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/nematoides/nova")
+@router.get("/nova")
 async def nematoides_nova_page(request: Request, db: Session = Depends(get_db)):
     """Página de nova análise de nematoides."""
     service = NematoidesService(db)
@@ -47,7 +47,7 @@ async def nematoides_nova_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/nematoides/upload")
+@router.post("/upload")
 async def nematoides_upload_geo(
     amostras_nematoides: UploadFile = File(...),
     limite_talhao: UploadFile = File(None),
@@ -73,7 +73,7 @@ async def nematoides_upload_geo(
         raise HTTPException(status_code=500, detail=f"Erro no upload: {str(e)}")
 
 
-@router.post("/nematoides/processar")
+@router.post("/processar")
 async def nematoides_processar(
     limite_talhao: UploadFile = File(...),
     amostras_nematoides: UploadFile = File(...),
@@ -112,7 +112,7 @@ async def nematoides_processar(
         raise HTTPException(status_code=500, detail=f"Erro ao processar: {str(e)}")
 
 
-@router.get("/nematoides/resultado")
+@router.get("/resultado")
 async def nematoides_resultado(
     request: Request,
     db: Session = Depends(get_db),

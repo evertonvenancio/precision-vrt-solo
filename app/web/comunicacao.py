@@ -12,6 +12,6 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 
-@router.get("/comunicacao")
+@router.get("/")
 async def comunicacao_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request=request, name="comunicacao.html", context={"permissoes": get_permissoes(db)})

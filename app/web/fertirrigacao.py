@@ -12,7 +12,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/fertirrigacao")
+@router.get("/")
 async def fertirrigacao_page(
     request: Request,
     usuario: dict = Depends(require_permission("fertirrigacao:read"))
@@ -30,7 +30,7 @@ async def fertirrigacao_page(
     )
 
 
-@router.get("/fertirrigacao/nova")
+@router.get("/nova")
 async def fertirrigacao_nova_page(
     request: Request,
     usuario: dict = Depends(require_permission("fertirrigacao:write"))

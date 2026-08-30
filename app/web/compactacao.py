@@ -22,7 +22,7 @@ UPLOAD_DIR = BASE_DIR / "data" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
-@router.get("/compactacao")
+@router.get("/")
 async def compactacao_page(request: Request, db: Session = Depends(get_db)):
     service = CompactacaoService(db)
     permissoes = service.buscar_permissoes()
@@ -33,7 +33,7 @@ async def compactacao_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/compactacao/nova")
+@router.get("/nova")
 async def compactacao_nova_page(request: Request, db: Session = Depends(get_db)):
     service = CompactacaoService(db)
     permissoes = service.buscar_permissoes()
@@ -44,7 +44,7 @@ async def compactacao_nova_page(request: Request, db: Session = Depends(get_db))
     )
 
 
-@router.post("/compactacao/upload")
+@router.post("/upload")
 async def compactacao_upload(
     request: Request,
     db: Session = Depends(get_db),

@@ -203,7 +203,7 @@ def _include_web_routers(app: FastAPI) -> None:
 
     # Carregar equipe router
     from app.web.equipe import router as equipe_router
-    app.include_router(equipe_router, prefix="/web/equipe", tags=["web-equipe"])
+    app.include_router(equipe_router, prefix="/web/equipes", tags=["web-equipes"])
     print("[OK] Equipe router included")
 
     # Carregar extrator router

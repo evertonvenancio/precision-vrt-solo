@@ -10,7 +10,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/monitoramento")
+@router.get("/")
 async def monitoramento_page(
     request: Request,
     usuario: dict = Depends(require_permission("monitoramento:read"))
@@ -28,7 +28,7 @@ async def monitoramento_page(
     )
 
 
-@router.get("/monitoramento/novo")
+@router.get("/novo")
 async def monitoramento_novo_page(
     request: Request,
     usuario: dict = Depends(require_permission("monitoramento:write"))

@@ -15,9 +15,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 
-# Rota canônica (/equipe) + alias compatível com sidebar (/equipes)
-
-@router.get("/equipe")
+@router.get("/")
 async def equipe_page(request: Request, db: Session = Depends(get_db)):
     service = EquipeService(db)
     permissoes = service.buscar_permissoes()
@@ -25,13 +23,7 @@ async def equipe_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request=request, name="equipe.html", context={"funcionarios": funcionarios, "permissoes": permissoes})
 
 
-@router.get("/equipes")
-async def equipe_page_alias(request: Request, db: Session = Depends(get_db)):
-    """Alias compatível com sidebar (/equipes)."""
-    return await equipe_page(request, db)
-
-
-@router.get("/equipe/novo-funcionario")
+@router.get("/novo-funcionario")
 async def novo_funcionario_page(request: Request, db: Session = Depends(get_db)):
     service = EquipeService(db)
     permissoes = service.buscar_permissoes()

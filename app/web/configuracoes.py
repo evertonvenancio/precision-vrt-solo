@@ -16,7 +16,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 
-@router.get("/configuracoes")
+@router.get("/")
 async def configuracoes_page(request: Request, db: Session = Depends(get_db)):
     service = ConfiguracoesService(db)
     permissoes = service.buscar_permissoes()
@@ -32,7 +32,7 @@ async def configuracoes_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/configuracoes")
+@router.post("/")
 async def salvar_configuracoes(
     request: Request,
     db: Session = Depends(get_db),
@@ -75,7 +75,7 @@ async def salvar_configuracoes(
 
     service.salvar(configuracoes)
 
-    return RedirectResponse(url="/configuracoes", status_code=303)
+    return RedirectResponse(url="/web/configuracoes", status_code=303)
 
 
 @router.get("/api/configuracoes/clima")

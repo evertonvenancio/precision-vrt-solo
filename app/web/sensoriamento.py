@@ -10,7 +10,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/sensoriamento")
+@router.get("/")
 async def sensoriamento_page(
     request: Request,
     usuario: dict = Depends(require_permission("sensoriamento:read"))
@@ -28,7 +28,7 @@ async def sensoriamento_page(
     )
 
 
-@router.get("/sensoriamento/novo")
+@router.get("/novo")
 async def sensoriamento_novo_page(
     request: Request,
     usuario: dict = Depends(require_permission("sensoriamento:write"))

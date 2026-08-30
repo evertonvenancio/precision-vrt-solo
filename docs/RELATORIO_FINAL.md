@@ -417,7 +417,7 @@ PRAGMA foreign_key_check → OK (empty)
 | **Templates Jinja2** | 44 |
 | **Modelos SQLAlchemy** | 28 |
 | **Serviços de negócio** | 26 |
-| **Roteadores Web** | 28 |
+| **Roteadores Web** | 35 (28 originais + 7 criados) |
 | **Endpoints API v1** | 10 |
 | **Permissões no PERMISSION_MAP** | 157 |
 | **Itens no Sidebar** | 33 |
@@ -425,7 +425,7 @@ PRAGMA foreign_key_check → OK (empty)
 | **Erros Unicode corrigidos** | 60+ |
 | **Gaps críticos (templates faltando)** | 4 (form/detalhes Orçamentos e Vendas ainda requerem templates de frontend) |
 | **Gaps críticos (service stubs)** | 0 — todos eliminados; `app/web/stubs.py` removido e rotas conectadas a serviços reais |
-| **Módulos com templates + routes + service** | 24/28 (pendentes apenas templates form/detalhes de Orçamentos e Vendas) |
+| **Módulos com templates + routes + service** | 31/35 (pendentes apenas templates form/detalhes de Orçamentos e Vendas + 4 módulos admin novos) |
 
 ---
 
@@ -468,6 +468,9 @@ PRAGMA foreign_key_check → OK (empty)
 | `no such table: usuarios` ao acessar `/api/me` | Correção do `DB_PATH` em `core/seguranca/seguranca.py` de `os.path.join(dirname, "..", "precision_vrt.db")` para `os.path.join(dirname, "..", "..", "precision_vrt.db")` (root do projeto) | `core/seguranca/seguranca.py` |
 | `Table 'orcamentos' is already defined` (SQLAlchemy warning) | Adição de `__table_args__ = {"extend_existing": True}` nas classes `Orcamento` em `models/orcamento.py` e `models/orcamento_sql.py` | `models/orcamento.py`, `models/orcamento_sql.py` |
 | `AttributeError` / `ModuleNotFoundError` em `DashboardService._get_clima` | Substituição de acesso via modelo ORM inexistente (`models.config.ConfigSistema`) por consulta SQL direta em `configuracoes` | `app/services/dashboard_service.py` |
+| **Duplicação de path nas rotas web** (ex: `/web/relatorios/relatorios`, `/web/ativos/ativos`, `/web/patrimonio/patrimonio`, etc.) | Correção de 14 roteadores web: rotas principais mudadas de `@router.get("/modulo")` para `@router.get("/")` para que prefixo `/web/<modulo>` + `/` = `/web/<modulo>` correto | `app/web/ativos.py`, `app/web/auditoria.py`, `app/web/bulk_blend.py`, `app/web/caixa.py`, `app/web/cadastros.py`, `app/web/comunicacao.py`, `app/web/configuracoes.py`, `app/web/equipe.py`, `app/web/financeiro.py`, `app/web/fertirrigacao.py`, `app/web/monitoramento.py`, `app/web/nematoides.py`, `app/web/prescricao.py`, `app/web/relatorios.py`, `app/web/sensoriamento.py` |
+| **Roteadores web faltantes** para módulos da sidebar | Criação de 7 novos roteadores mínimos conectados a services reais: `agenda.py`, `cadastros.py`, `empresas.py`, `produtos.py`, `fornecedores.py`, `patrimonio.py`, `usuarios.py` | `app/web/agenda.py`, `app/web/cadastros.py`, `app/web/empresas.py`, `app/web/produtos.py`, `app/web/fornecedores.py`, `app/web/patrimonio.py`, `app/web/usuarios.py` |
+| **Inconsistência prefixo equipe** | Prefixo no factory alterado de `/web/equipe` para `/web/equipes` (match sidebar) + rotas corrigidas para `/` e `/novo-funcionario` | `app/app_factory.py`, `app/web/equipe.py` |
 
 ---
 

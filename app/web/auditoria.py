@@ -19,7 +19,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/audit")
+@router.get("/")
 async def pagina_auditoria(request: Request):
     """
     Página de auditoria - interface visual.

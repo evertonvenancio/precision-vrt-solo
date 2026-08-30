@@ -1,5 +1,5 @@
 """
-Precision VRT Solo - Rotas do Módulo Ativos
+Precision VRT Solo - Rotas do Módulo Patrimônio
 
 Responsabilidade exclusiva: receber requisição → chamar service → retornar response.
 Zero consulta ao banco. Zero regra de negócio.
@@ -14,9 +14,8 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-
-@router.get("/")
-async def ativos_page(request: Request, db: Session = Depends(get_db)):
+@router.get("/patrimonio")
+async def patrimonio_page(request: Request, db: Session = Depends(get_db)):
     service = AtivosService(db)
     permissoes = service.buscar_permissoes()
     return templates.TemplateResponse(
@@ -26,8 +25,8 @@ async def ativos_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/novo")
-async def novo_ativo_page(request: Request, db: Session = Depends(get_db)):
+@router.get("/patrimonio/novo")
+async def novo_patrimonio_page(request: Request, db: Session = Depends(get_db)):
     service = AtivosService(db)
     permissoes = service.buscar_permissoes()
     return templates.TemplateResponse(

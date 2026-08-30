@@ -279,7 +279,13 @@ class DashboardService:
                     "AND data_nascimento IS NOT NULL "
                     "AND strftime('%m-%d', data_nascimento) = ?"
                 ), (f"{dia:02d}-{mes:02d}",))
-                aniversariantes = [{"nome": row[0]} for row in result.fetchall()]
+
+                rows = result.fetchall()
+                # Garantir que retorna lista de dicts
+                aniversariantes = []
+                for row in rows:
+                    if row and row[0]:
+                        aniversariantes.append({"nome": row[0]})
                 return aniversariantes
             finally:
                 db_local.close()

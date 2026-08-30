@@ -15,7 +15,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 
-@router.get("/financeiro")
+@router.get("/")
 async def financeiro_page(request: Request, db: Session = Depends(get_db)):
     service = FinanceiroService(db)
     permissoes = service.buscar_permissoes()
@@ -23,7 +23,7 @@ async def financeiro_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request=request, name="financeiro.html", context={"orcamentos": orcamentos, "permissoes": permissoes})
 
 
-@router.get("/financeiro/novo-orcamento")
+@router.get("/novo-orcamento")
 async def novo_orcamento_page(request: Request, db: Session = Depends(get_db)):
     service = FinanceiroService(db)
     permissoes = service.buscar_permissoes()
@@ -31,7 +31,7 @@ async def novo_orcamento_page(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(request=request, name="novo_orcamento.html", context={"clientes": clientes, "permissoes": permissoes})
 
 
-@router.post("/financeiro/novo-orcamento")
+@router.post("/novo-orcamento")
 async def salvar_orcamento(request: Request, db: Session = Depends(get_db)):
     form_data = await request.form()
     dados = dict(form_data)
