@@ -12,6 +12,7 @@ from db.database import get_db
 from app.services.permissoes_service import PermissoesService
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 
 
 @router.get("/equipe/permissoes")

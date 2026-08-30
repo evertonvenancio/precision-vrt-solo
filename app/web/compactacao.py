@@ -14,6 +14,7 @@ from db.database import get_db
 from app.services.compactacao_service import CompactacaoService
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 

@@ -12,6 +12,7 @@ from app.services.clima_service import ClimaService
 from config.clima_config import clima_config
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 

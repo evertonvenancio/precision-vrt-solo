@@ -5,17 +5,17 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from db.database import get_db
-from core.authorization.dependencies import require_permission
 from app.services.fertirrigacao_service import FertirrigacaoService
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
 @router.get("/")
 async def fertirrigacao_page(
     request: Request,
-    usuario: dict = Depends(require_permission("fertirrigacao:read"))
+    user: dict = Depends(require_permission_web("fertirrigacao:read"))
 ):
     """Página principal de fertirrigação."""
     return templates.TemplateResponse(
@@ -23,9 +23,9 @@ async def fertirrigacao_page(
         name="fertirrigacao.html",
         context={
             "request": request,
-            "usuario": usuario,
+            "usuario": user,
             "titulo": "Fertirrigação",
-            "permissoes": usuario.get("permissions", [])
+            "permissoes": user.get("permissions", [])
         }
     )
 
@@ -33,7 +33,7 @@ async def fertirrigacao_page(
 @router.get("/nova")
 async def fertirrigacao_nova_page(
     request: Request,
-    usuario: dict = Depends(require_permission("fertirrigacao:write"))
+    user: dict = Depends(require_permission_web("fertirrigacao:write"))
 ):
     """Página para novo cálculo de fertirrigação."""
     return templates.TemplateResponse(
@@ -41,8 +41,8 @@ async def fertirrigacao_nova_page(
         name="fertirrigacao_nova.html",
         context={
             "request": request,
-            "usuario": usuario,
+            "usuario": user,
             "titulo": "Nova Fertirrigação",
-            "permissoes": usuario.get("permissions", [])
+            "permissoes": user.get("permissions", [])
         }
     )

@@ -11,6 +11,7 @@ from db.database import get_db
 from app.services.equipe_service import EquipeService
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 

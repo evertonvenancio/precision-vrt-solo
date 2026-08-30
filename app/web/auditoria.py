@@ -16,6 +16,7 @@ from core.seguranca.auth import get_current_user_id, get_current_user_nome, requ
 from core.seguranca.auditoria import TipoAcao, ModuloSistema
 
 router = APIRouter()
+from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
@@ -101,7 +102,7 @@ async def obter_auditoria_api(
             "data": registros,
             "total": len(registros),
             "filtros": {
-                "usuario": usuario,
+                "usuario": user,
                 "modulo": modulo,
                 "tipo_acao": tipo_acao,
                 "data_inicio": data_inicio,

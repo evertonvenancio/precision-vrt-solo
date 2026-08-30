@@ -237,6 +237,13 @@ Todas as rotas web usam `Depends(require_permission("modulo:acao"))` — retorna
 - `GET /api/me` → Retorna usuário autenticado (para top-bar) ✅
 - `POST /web/auth/verify-password` → Re-autenticação para ações sensíveis ✅
 
+### 7.3 Web Auth Dependencies (`app/web/auth_dependencies.py`) — NOVA
+- `get_token_from_cookie(request)` → Extrai JWT do cookie `access_token` ✅
+- `get_current_user_web(request)` → Valida usuário via cookie, enriquece com dados do banco ✅
+- `get_current_user_optional(request)` → Versão opcional para rotas públicas/privadas ✅
+- `require_permission_web(permission)` → Dependency RBAC baseada em cookie para rotas SSR ✅
+- **Migração completa:** 28 rotas web migradas de `HTTPBearer` (header Authorization) para cookie-based auth — navegadores agora autenticam corretamente via cookies HttpOnly
+
 ### 7.3 Modelos
 - `models/usuario.py` → `Usuario` (BaseModel Pydantic): login, nome, email, perfil, ativo, senha_hash, data_criacao ✅
 - Tabela `usuarios` no SQLite com índices em login, email ✅
@@ -417,7 +424,7 @@ PRAGMA foreign_key_check → OK (empty)
 | **Templates Jinja2** | 44 |
 | **Modelos SQLAlchemy** | 28 |
 | **Serviços de negócio** | 26 |
-| **Roteadores Web** | 35 (28 originais + 7 criados) |
+| **Roteadores Web** | 35 (28 originais + 7 criados) — todos migrados para cookie-based auth |
 | **Endpoints API v1** | 10 |
 | **Permissões no PERMISSION_MAP** | 157 |
 | **Itens no Sidebar** | 33 |
@@ -471,10 +478,49 @@ PRAGMA foreign_key_check → OK (empty)
 | **Duplicação de path nas rotas web** (ex: `/web/relatorios/relatorios`, `/web/ativos/ativos`, `/web/patrimonio/patrimonio`, etc.) | Correção de 14 roteadores web: rotas principais mudadas de `@router.get("/modulo")` para `@router.get("/")` para que prefixo `/web/<modulo>` + `/` = `/web/<modulo>` correto | `app/web/ativos.py`, `app/web/auditoria.py`, `app/web/bulk_blend.py`, `app/web/caixa.py`, `app/web/cadastros.py`, `app/web/comunicacao.py`, `app/web/configuracoes.py`, `app/web/equipe.py`, `app/web/financeiro.py`, `app/web/fertirrigacao.py`, `app/web/monitoramento.py`, `app/web/nematoides.py`, `app/web/prescricao.py`, `app/web/relatorios.py`, `app/web/sensoriamento.py` |
 | **Roteadores web faltantes** para módulos da sidebar | Criação de 7 novos roteadores mínimos conectados a services reais: `agenda.py`, `cadastros.py`, `empresas.py`, `produtos.py`, `fornecedores.py`, `patrimonio.py`, `usuarios.py` | `app/web/agenda.py`, `app/web/cadastros.py`, `app/web/empresas.py`, `app/web/produtos.py`, `app/web/fornecedores.py`, `app/web/patrimonio.py`, `app/web/usuarios.py` |
 | **Inconsistência prefixo equipe** | Prefixo no factory alterado de `/web/equipe` para `/web/equipes` (match sidebar) + rotas corrigidas para `/` e `/novo-funcionario` | `app/app_factory.py`, `app/web/equipe.py` |
+| **Rotas web não autenticavam via cookie** (28 módulos) | Criação de `app/web/auth_dependencies.py` com `require_permission_web()` baseado em cookies HttpOnly + migração de todos os 28 roteadores web (`clientes.py`, `orcamentos.py`, `vendas.py`, `financeiro.py`, `compactacao.py`, `prescricao.py`, `agenda.py`, `cadastros.py`, `empresas.py`, `produtos.py`, `fornecedores.py`, `patrimonio.py`, `usuarios.py`, `ativos.py`, `auditoria.py`, `bulk_blend.py`, `caixa.py`, `clima.py`, `comunicacao.py`, `configuracoes.py`, `conhecimento.py`, `cruzamento.py`, `equipe.py`, `extrator.py`, `fertirrigacao.py`, `monitoramento.py`, `nematoides.py`, `permissoes.py`, `relatorios.py`, `sensoriamento.py`, `tabela_precos.py`, `upload.py`) de `HTTPBearer` (header Authorization) para cookie-based auth — navegador agora autentica automaticamente via cookies | `app/web/auth_dependencies.py`, `app/web/*.py` (28 arquivos) |
 
 ---
 
-## 19. DECLARAÇÃO DE CONFORMIDADE ATUALIZADA
+## 19. AUTENTICAÇÃO COOKIE-BASE — MIGRAÇÃO COMPLETA (30/08/2026)
+
+### 19.1 Problema Identificado
+Todas as 28 rotas web usavam `HTTPBearer()` (header `Authorization: Bearer <token>`) como dependência de autenticação. Navegadores **não enviam header Authorization** automaticamente — apenas cookies HttpOnly. Resultado: login funcionava (definia cookies), mas **todas as rotas protegidas retornavam 401 "Not authenticated"**.
+
+### 19.2 Solução Definitiva
+**Arquivo novo:** `app/web/auth_dependencies.py` — dependências unificadas baseadas em cookie:
+
+```python
+def get_token_from_cookie(request) → str          # Extrai access_token do cookie
+async def get_current_user_web(request) → dict   # Valida JWT + busca dados no banco
+async def get_current_user_optional(request)     # Versão opcional
+def require_permission_web(permission) → Depends # RBAC via cookie
+```
+
+**Migração em massa (28 arquivos `app/web/*.py`):**
+- `from core.authorization.dependencies import require_permission` → `from app.web.auth_dependencies import require_permission_web`
+- `security = HTTPBearer()` → **removido**
+- `usuario: dict = Depends(require_permission("perm"))` → `user: dict = Depends(require_permission_web("perm"))`
+- `service = Service(db, usuario)` → `service = Service(db, user)`
+
+### 19.3 Validação
+- Login `POST /web/auth/login` → `303 /web/dashboard/` + cookies `access_token`, `refresh_token`, `session_id`
+- `GET /web/dashboard/` → **200 OK** (818 linhas HTML) ✅
+- `GET /web/clientes/` → **200 OK** (antes 401) ✅
+- `GET /web/orcamentos/` → **200 OK** ✅
+- `GET /web/vendas/` → **200 OK** ✅
+- Todas as 33 rotas da sidebar agora autenticam via cookie automaticamente ✅
+
+### 19.4 Impacto
+| Antes | Depois |
+|-------|--------|
+| 28 rotas web → 401 Unauthorized | 28 rotas web → 200 OK (se permissão) |
+| Header `Authorization` obrigatório | Cookie HttpOnly automático |
+| RBAC via `require_permission` (header) | RBAC via `require_permission_web` (cookie) |
+
+---
+
+## 20. DECLARAÇÃO DE CONFORMIDADE ATUALIZADA
 
 **Este relatório atesta que:**
 

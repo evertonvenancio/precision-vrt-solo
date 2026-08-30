@@ -7,7 +7,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Optional
 
-from core.authorization.dependencies import require_permission, get_user_permissions
+from app.web.auth_dependencies import require_permission_web
 from app.services.vendas_service import VendasService
 from db.database import SessionLocal
 
@@ -18,7 +18,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 @router.get("/", response_class=HTMLResponse)
 async def listar_vendas(
     request: Request,
-    usuario: dict = Depends(require_permission("vendas:read"))
+    user: dict = Depends(require_permission_web("vendas:read"))
 ):
     """
     Lista todas as vendas do tenant atual.
@@ -26,7 +26,7 @@ async def listar_vendas(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         vendas = service.listar_vendas()
 
         return templates.TemplateResponse(
@@ -34,10 +34,10 @@ async def listar_vendas(
             name="vendas/lista.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "vendas": vendas,
                 "titulo": "Vendas",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -47,7 +47,7 @@ async def listar_vendas(
 @router.get("/novo", response_class=HTMLResponse)
 async def nova_venda(
     request: Request,
-    usuario: dict = Depends(require_permission("vendas:write"))
+    user: dict = Depends(require_permission_web("vendas:write"))
 ):
     """
     Formulário para criar nova venda.
@@ -55,7 +55,7 @@ async def nova_venda(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         clientes = service.listar_clientes_ativos()
         orcamentos = service.listar_orcamentos_aprovados()
 
@@ -64,12 +64,12 @@ async def nova_venda(
             name="vendas/formulario.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "clientes": clientes,
                 "orcamentos": orcamentos,
                 "venda": None,
                 "titulo": "Nova Venda",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -80,7 +80,7 @@ async def nova_venda(
 async def detalhar_venda(
     request: Request,
     venda_id: int,
-    usuario: dict = Depends(require_permission("vendas:read"))
+    user: dict = Depends(require_permission_web("vendas:read"))
 ):
     """
     Detalhes de uma venda específica.
@@ -88,7 +88,7 @@ async def detalhar_venda(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         venda = service.buscar_por_id(venda_id)
 
         if not venda:
@@ -99,10 +99,10 @@ async def detalhar_venda(
             name="vendas/detalhes.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "venda": venda,
                 "titulo": f"Venda #{venda_id}",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -112,7 +112,7 @@ async def detalhar_venda(
 @router.post("/registrar-avista")
 async def registrar_venda_avista(
     request: Request,
-    usuario: dict = Depends(require_permission("vendas:write"))
+    user: dict = Depends(require_permission_web("vendas:write"))
 ):
     """
     Registra uma venda à vista.
@@ -123,7 +123,7 @@ async def registrar_venda_avista(
 
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         venda = service.registrar_venda_avista(dados)
         db.commit()
 
@@ -141,7 +141,7 @@ async def registrar_venda_avista(
 @router.post("/registrar-prazo")
 async def registrar_venda_prazo(
     request: Request,
-    usuario: dict = Depends(require_permission("vendas:write"))
+    user: dict = Depends(require_permission_web("vendas:write"))
 ):
     """
     Registra uma venda a prazo.
@@ -152,7 +152,7 @@ async def registrar_venda_prazo(
 
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         venda = service.registrar_venda_prazo(dados)
         db.commit()
 
@@ -172,7 +172,7 @@ async def baixar_titulo(
     request: Request,
     venda_id: int,
     titulo_id: int,
-    usuario: dict = Depends(require_permission("vendas:write"))
+    user: dict = Depends(require_permission_web("vendas:write"))
 ):
     """
     Realiza a baixa de um título financeiro.
@@ -183,7 +183,7 @@ async def baixar_titulo(
 
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         service.baixar_titulo(titulo_id, dados)
         db.commit()
 
@@ -202,7 +202,7 @@ async def baixar_titulo(
 async def gerar_nota_fiscal(
     request: Request,
     venda_id: int,
-    usuario: dict = Depends(require_permission("vendas:faturar"))
+    user: dict = Depends(require_permission_web("vendas:faturar"))
 ):
     """
     Gera nota fiscal da venda.
@@ -210,7 +210,7 @@ async def gerar_nota_fiscal(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db)
+        service = VendasService(db, user)
         nf_bytes = service.gerar_nota_fiscal(venda_id)
 
         from fastapi.responses import StreamingResponse

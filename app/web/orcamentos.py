@@ -7,7 +7,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Optional
 
-from core.authorization.dependencies import require_permission, get_user_permissions
+from app.web.auth_dependencies import require_permission_web
 from app.services.orcamentos_service import OrcamentosService
 from db.database import SessionLocal
 
@@ -18,7 +18,7 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 @router.get("/", response_class=HTMLResponse)
 async def listar_orcamentos(
     request: Request,
-    usuario: dict = Depends(require_permission("orcamentos:read"))
+    user: dict = Depends(require_permission_web("orcamentos:read"))
 ):
     """
     Lista todos os orçamentos do tenant atual.
@@ -26,7 +26,7 @@ async def listar_orcamentos(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
+        service = OrcamentosService(db, user)
         orcamentos = service.listar_orcamentos()
 
         return templates.TemplateResponse(
@@ -34,10 +34,10 @@ async def listar_orcamentos(
             name="orcamentos/lista.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "orcamentos": orcamentos,
                 "titulo": "Orçamentos",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -47,7 +47,7 @@ async def listar_orcamentos(
 @router.get("/novo", response_class=HTMLResponse)
 async def novo_orcamento(
     request: Request,
-    usuario: dict = Depends(require_permission("orcamentos:write"))
+    user: dict = Depends(require_permission_web("orcamentos:write"))
 ):
     """
     Formulário para criar novo orçamento.
@@ -55,7 +55,7 @@ async def novo_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
+        service = OrcamentosService(db, user)
         clientes = service.listar_clientes_ativos()
 
         return templates.TemplateResponse(
@@ -63,11 +63,11 @@ async def novo_orcamento(
             name="orcamentos/formulario.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "clientes": clientes,
                 "orcamento": None,
                 "titulo": "Novo Orçamento",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -78,7 +78,7 @@ async def novo_orcamento(
 async def detalhar_orcamento(
     request: Request,
     orcamento_id: int,
-    usuario: dict = Depends(require_permission("orcamentos:read"))
+    user: dict = Depends(require_permission_web("orcamentos:read"))
 ):
     """
     Detalhes de um orçamento específico.
@@ -86,7 +86,7 @@ async def detalhar_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
+        service = OrcamentosService(db, user)
         orcamento = service.buscar_por_id(orcamento_id)
 
         if not orcamento:
@@ -97,10 +97,10 @@ async def detalhar_orcamento(
             name="orcamentos/detalhes.html",
             context={
                 "request": request,
-                "usuario": usuario,
+                "usuario": user,
                 "orcamento": orcamento,
                 "titulo": f"Orçamento #{orcamento_id}",
-                "permissoes": usuario.get("permissions", [])
+                "permissoes": user.get("permissions", [])
             }
         )
     finally:
@@ -110,7 +110,7 @@ async def detalhar_orcamento(
 @router.post("/salvar")
 async def salvar_orcamento(
     request: Request,
-    usuario: dict = Depends(require_permission("orcamentos:write"))
+    user: dict = Depends(require_permission_web("orcamentos:write"))
 ):
     """
     Salva um novo orçamento ou atualiza existente.
@@ -121,7 +121,7 @@ async def salvar_orcamento(
 
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
+        service = OrcamentosService(db, user)
         resultado = service.salvar_orcamento(dados)
 
         return RedirectResponse(
@@ -136,7 +136,7 @@ async def salvar_orcamento(
 async def aprovar_orcamento(
     request: Request,
     orcamento_id: int,
-    usuario: dict = Depends(require_permission("orcamentos:aprovar"))
+    user: dict = Depends(require_permission_web("orcamentos:aprovar"))
 ):
     """
     Aprova um orçamento.
@@ -144,8 +144,8 @@ async def aprovar_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
-        service.aprovar_orcamento(orcamento_id, usuario["id"])
+        service = OrcamentosService(db, user)
+        service.aprovar_orcamento(orcamento_id, user["id"])
 
         return RedirectResponse(
             url=f"/web/orcamentos/{orcamento_id}",
@@ -159,7 +159,7 @@ async def aprovar_orcamento(
 async def gerar_pdf_orcamento(
     request: Request,
     orcamento_id: int,
-    usuario: dict = Depends(require_permission("orcamentos:export"))
+    user: dict = Depends(require_permission_web("orcamentos:export"))
 ):
     """
     Gera PDF do orçamento.
@@ -167,7 +167,7 @@ async def gerar_pdf_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db)
+        service = OrcamentosService(db, user)
         pdf_bytes = service.gerar_pdf(orcamento_id)
 
         from fastapi.responses import StreamingResponse
