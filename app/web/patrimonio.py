@@ -14,7 +14,7 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 
-@router.get("/patrimonio")
+@router.get("/")
 async def patrimonio_page(request: Request, db: Session = Depends(get_db)):
     service = AtivosService(db)
     permissoes = service.buscar_permissoes()
@@ -25,7 +25,7 @@ async def patrimonio_page(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/patrimonio/novo")
+@router.get("/novo")
 async def novo_patrimonio_page(request: Request, db: Session = Depends(get_db)):
     service = AtivosService(db)
     permissoes = service.buscar_permissoes()

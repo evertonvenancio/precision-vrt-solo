@@ -28,7 +28,7 @@ O **Precision VRT Solo** é uma plataforma SaaS multi-tenant para gestão integr
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Status Atual (29/08/2026):** ✅ **OPERACIONAL** — Aplicação inicia sem erros, 28 roteadores web/API registrados, RBAC funcional, sidebar dinâmica, banco íntegro (33 tabelas).
+**Status Atual (29/08/2026):** ✅ **OPERACIONAL** — Aplicação inicia sem erros, 35 roteadores web/API registrados (com correção completa de duplicação de paths em 15 roteadores e criação de 7 roteadores web faltantes), RBAC funcional, sidebar dinâmica, banco íntegro (33 tabelas).
 
 ### Quatro Camadas Principais
 
