@@ -31,7 +31,8 @@ router = APIRouter()
 from app.template_config import templates  # compartilhado - globals de RBAC
 
 # Sistema de autenticação
-security = HTTPBearer()
+# Usa auto_error=False para permitir login via cookie sem header obrigatório
+security = HTTPBearer(auto_error=False)
 
 
 def get_token_from_cookie(request) -> str:
@@ -213,17 +214,17 @@ async def processar_login(
             key="refresh_token",
             value=refresh_token,
             httponly=True,
-            secure=True,
+            secure=False,  # Permitir HTTP para desenvolvimento
             samesite="lax",
             max_age=604800  # 7 dias
         )
-    
+
     # Armazenar session_id para controle de sessão
     response.set_cookie(
         key="session_id",
         value=session_id,
         httponly=True,
-        secure=True,
+        secure=False,  # Permitir HTTP para desenvolvimento
         samesite="lax"
     )
     
@@ -326,23 +327,36 @@ async def get_current_user_endpoint(request: Request, credentials: HTTPAuthoriza
     }
 
 @router.get("/me")
-async def get_current_user_complete(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
+async def get_current_user_complete(request: Request):
     """
     Endpoint de identidade completa do usuário autenticado.
-    Retorna todos os dados disponíveis do usuário.
+    Aceita token via cookie (access_token) ou header Authorization.
     """
-    user = get_current_user(credentials)
-    
+    # Tentar cookie primeiro
+    token = request.cookies.get("access_token")
+    if not token:
+        # Fallback para header
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header[7:]
+
+    if not token or not auth_service:
+        return {"success": False, "error": "Não autenticado"}
+
+    user = auth_service.get_current_user(token)
+    if not user:
+        return {"success": False, "error": "Token inválido ou expirado"}
+
     # Obter dados adicionais do banco
     from db.database import SessionLocal
     db = SessionLocal()
-    
+
     try:
         from sqlalchemy import text
-        result = db.execute(text('SELECT nome, email, ativo FROM usuarios WHERE id = :user_id'), 
+        result = db.execute(text('SELECT nome, email, ativo FROM usuarios WHERE id = :user_id'),
                            {'user_id': user['id']})
         user_info = result.fetchone()
-        
+
         if user_info:
             return {
                 "success": True,
