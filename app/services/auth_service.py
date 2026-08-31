@@ -128,10 +128,7 @@ class AuthService:
                 "email": None,
                 "role": "admin",
                 "permissions": [
-                    "dashboard:read",
-                    "dashboard:write",
-                    "usuarios:read",
-                    "usuarios:write",
+                    "*",
                 ],
                 "nome": username,
             }
@@ -193,10 +190,7 @@ class AuthService:
                 "email": None,
                 "role": "admin",
                 "permissions": [
-                    "dashboard:read",
-                    "dashboard:write",
-                    "usuarios:read",
-                    "usuarios:write",
+                    "*",
                 ],
                 "nome": row[1],
             }

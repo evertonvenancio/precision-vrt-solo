@@ -171,7 +171,10 @@ def _include_web_routers(app: FastAPI) -> None:
     app.include_router(comunicacao_router, prefix="/web/comunicacao", tags=["web-comunicacao"])
     print("[OK] Comunicacao router included")
 
-    # Carregar auditoria router
+    # Carregar empresas router
+    from app.web.empresas import router as empresas_router
+    app.include_router(empresas_router, prefix="/web", tags=["web-empresas"])
+    print("[OK] Empresas router included")
     from app.web.auditoria import router as auditoria_router
     app.include_router(auditoria_router, prefix="/web/auditoria", tags=["web-auditoria"])
     print("[OK] Auditoria router included")
@@ -210,6 +213,36 @@ def _include_web_routers(app: FastAPI) -> None:
     from app.web.extrator import router as extrator_router
     app.include_router(extrator_router, prefix="/web/extrator", tags=["web-extrator"])
     print("[OK] Extrator router included")
+
+    # Carregar agenda router
+    from app.web.agenda import router as agenda_router
+    app.include_router(agenda_router, prefix="/web/agenda", tags=["web-agenda"])
+    print("[OK] Agenda router included")
+
+    # Carregar patrimonio router
+    from app.web.patrimonio import router as patrimonio_router
+    app.include_router(patrimonio_router, prefix="/web/patrimonio", tags=["web-patrimonio"])
+    print("[OK] Patrimonio router included")
+
+    # Carregar cadastros router
+    from app.web.cadastros import router as cadastros_router
+    app.include_router(cadastros_router, prefix="/web/cadastros", tags=["web-cadastros"])
+    print("[OK] Cadastros router included")
+
+    # Carregar usuarios router
+    from app.web.usuarios import router as usuarios_router
+    app.include_router(usuarios_router, prefix="/web/usuarios", tags=["web-usuarios"])
+    print("[OK] Usuarios router included")
+
+    # Carregar produtos router
+    from app.web.produtos import router as produtos_router
+    app.include_router(produtos_router, prefix="/web/produtos", tags=["web-produtos"])
+    print("[OK] Produtos router included")
+
+    # Carregar fornecedores router
+    from app.web.fornecedores import router as fornecedores_router
+    app.include_router(fornecedores_router, prefix="/web/fornecedores", tags=["web-fornecedores"])
+    print("[OK] Fornecedores router included")
 
     # Carregar permissoes router
     from app.web.permissoes import router as permissoes_router

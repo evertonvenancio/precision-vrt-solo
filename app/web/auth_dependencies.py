@@ -41,8 +41,9 @@ async def get_current_user_web(request: Request) -> dict:
         from sqlalchemy import text
 
         db = SessionLocal()
-        result = db.execute(text('SELECT ativo, nome, email FROM usuarios WHERE id = :user_id LIMIT 1'),
-                           {'user_id': user['id']})
+        # Buscar por login (sub do token é o login)
+        result = db.execute(text('SELECT ativo, login FROM usuarios WHERE login = :login LIMIT 1'),
+                           {'login': user['username']})
         user_info = result.fetchone()
         db.close()
 
@@ -51,7 +52,7 @@ async def get_current_user_web(request: Request) -> dict:
 
         # Enriquecer user com dados do banco
         user["nome"] = user_info[1]
-        user["email"] = user_info[2]
+        user["email"] = None
         user["ativo"] = user_info[0]
 
     except Exception as e:
@@ -82,8 +83,8 @@ async def get_current_user_optional(request: Request) -> Optional[dict]:
         from sqlalchemy import text
 
         db = SessionLocal()
-        result = db.execute(text('SELECT ativo, nome, email FROM usuarios WHERE id = :user_id LIMIT 1'),
-                           {'user_id': user['id']})
+        result = db.execute(text('SELECT ativo, login FROM usuarios WHERE login = :login LIMIT 1'),
+                           {'login': user['username']})
         user_info = result.fetchone()
         db.close()
 
@@ -91,7 +92,7 @@ async def get_current_user_optional(request: Request) -> Optional[dict]:
             return None
 
         user["nome"] = user_info[1]
-        user["email"] = user_info[2]
+        user["email"] = None
         user["ativo"] = user_info[0]
 
     except Exception:
@@ -112,7 +113,7 @@ def require_permission_web(permission: str):
         # Verificar permissão via service
         from core.authorization.dependencies import has_permission, get_user_permissions
 
-        user_perms = get_user_permissions(request, user.get("permissions", []))
+        user_perms = get_user_permissions(request)
 
         if not has_permission(permission, user_perms):
             raise HTTPException(

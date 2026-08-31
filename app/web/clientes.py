@@ -24,7 +24,7 @@ async def clientes_page(
     """
     Lista de clientes - exige permissão clientes:read
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     permissoes = service.buscar_permissoes()
     clientes = service.listar()
     return templates.TemplateResponse(request=request, name="clientes.html", context={
@@ -43,7 +43,7 @@ async def novo_cliente_page(
     """
     Novo cliente - exige permissão clientes:write
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     permissoes = service.buscar_permissoes()
     return templates.TemplateResponse(request=request, name="novo_cliente.html", context={
         "cliente": None,
@@ -68,7 +68,7 @@ async def salvar_cliente(
     """
     Salvar novo cliente - exige permissão clientes:write
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     result = service.criar(nome, cpf_cnpj, telefone, email, cidade, estado, area_total_hectares)
     if result and isinstance(result, dict) and "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
@@ -85,7 +85,7 @@ async def editar_cliente_page(
     """
     Editar cliente - exige permissão clientes:write
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     permissoes = service.buscar_permissoes()
     cliente = service.obter(cliente_id)
     if not cliente:
@@ -114,7 +114,7 @@ async def processar_edicao_cliente(
     """
     Processar edição de cliente - exige permissão clientes:write
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     result = service.atualizar(cliente_id, nome, cpf_cnpj, telefone, email, cidade, estado, area_total_hectares)
     if result and isinstance(result, dict) and "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
@@ -131,6 +131,6 @@ async def excluir_cliente_route(
     """
     Excluir cliente - exige permissão clientes:delete
     """
-    service = ClientesService(db, user)
+    service = ClientesService(db)
     result = service.excluir(cliente_id, justificativa)
     return result

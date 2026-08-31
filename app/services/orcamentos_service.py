@@ -19,7 +19,7 @@ class OrcamentosService:
     Responsavel por toda consulta ao banco e regra de negocio.
     """
 
-    def __init__(self, db: Session, tenant_id: str = 'default'):
+    def __init__(self, db: Session, tenant_id: str = None):
         self.db = db
         self.tenant_id = tenant_id
 
@@ -37,9 +37,9 @@ class OrcamentosService:
         Returns:
             Lista de dicionarios com dados do orcamento + nome do cliente.
         """
-        query = self.db.query(OrcamentoSQL).filter(
-            OrcamentoSQL.tenant_id == self.tenant_id
-        )
+        query = self.db.query(OrcamentoSQL)
+        if self.tenant_id:
+            query = query.filter(OrcamentoSQL.tenant_id == self.tenant_id)
         if status:
             query = query.filter(OrcamentoSQL.status == status)
         query = query.order_by(OrcamentoSQL.criado_em.desc()).limit(limit)

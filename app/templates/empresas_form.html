@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from 'components/macros.html' import header_pagina %}
+
+{% block title %}{{ 'Editar' if empresa else 'Nova' }} Empresa{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    {{ header_pagina(
+        'Editar Empresa' if empresa else 'Nova Empresa',
+        'Cadastro ou edição de empresa (CNPJ) vinculada ao cliente.',
+        '#',
+        '',
+        ''
+    ) }}
+
+    <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-2xl mx-auto">
+            <form method="post"
+                  action="{{ '/web/clientes/' + cliente_id + '/empresas/' + empresa.id + '/editar' if empresa else '/web/clientes/' + cliente_id + '/empresas/novo' }}"
+                  class="bg-white dark:bg-gray-800 shadow-md rounded-lg border border-gray-200 dark:border-gray-700 p-6 space-y-6">
+
+                <div>
+                    <label for="cnpj" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CNPJ</label>
+                    <input type="text" name="cnpj" id="cnpj" required
+                           value="{{ empresa.cnpj if empresa else '' }}"
+                           class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-green-500 focus:ring-green-500"
+                           placeholder="00.000.000/0000-00" />
+                </div>
+
+                <div>
+                    <label for="nome_fantasia" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Fantasia</label>
+                    <input type="text" name="nome_fantasia" id="nome_fantasia" required
+                           value="{{ empresa.nome_fantasia if empresa else '' }}"
+                           class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-green-500 focus:ring-green-500" />
+                </div>
+
+                <div>
+                    <label for="razao_social" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Razão Social</label>
+                    <input type="text" name="razao_social" id="razao_social" required
+                           value="{{ empresa.razao_social if empresa else '' }}"
+                           class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 shadow-sm focus:border-green-500 focus:ring-green-500" />
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <a href="/web/clientes/{{ cliente_id }}/empresas" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">
+                        {{ 'Salvar Alterações' if empresa else 'Criar Empresa' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

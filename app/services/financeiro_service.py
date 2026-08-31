@@ -49,6 +49,16 @@ class FinanceiroService:
 
             orcamentos = []
             for row in result.fetchall():
+                cliente_nome = "N/A"
+                try:
+                    cli = self.db.execute(
+                        text("SELECT nome FROM clientes WHERE id = :id LIMIT 1"),
+                        {"id": row[2]}
+                    ).fetchone()
+                    if cli and cli[0]:
+                        cliente_nome = cli[0]
+                except Exception:
+                    pass
                 orcamentos.append({
                     "id": row[0],
                     "tenant_id": row[1],
@@ -60,7 +70,8 @@ class FinanceiroService:
                     "valor_total_liquido": float(row[7]) if row[7] else 0,
                     "status": row[8],
                     "criado_em": str(row[9]) if row[9] else None,
-                    "atualizado_em": str(row[10]) if row[10] else None
+                    "atualizado_em": str(row[10]) if row[10] else None,
+                    "cliente_nome": cliente_nome
                 })
             return orcamentos
         except Exception as e:

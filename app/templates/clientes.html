@@ -39,7 +39,8 @@
                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.cidade }}</td>
                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.telefone }}</td>
                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{{ cliente.area_total_hectares }}</td>
-                <td class="px-6 py-4 text-right">
+                <td class="px-6 py-4 text-right space-x-3">
+                    <a href="/web/clientes/{{ cliente.id }}/empresas" class="action-link mr-4">Empresas</a>
                     <a href="/clientes/{{ cliente.id }}/editar" class="action-link mr-4">Editar</a>
                     <button @click="open = true; clienteId = '{{ cliente.id }}'; clienteNome = '{{ cliente.nome }}'; senha = ''; justificativa = ''; erro = ''"
                             class="action-danger">Excluir</button>

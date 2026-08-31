@@ -11,7 +11,20 @@ from app.web.auth_dependencies import require_permission_web  # autenticação v
 from app.template_config import templates
 
 @router.get("/")
-async def usuarios_page(request: Request, db: Session = Depends(get_db)):
-    service = UsuariosService(db)
+async def usuarios_page(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: dict = Depends(require_permission_web("usuarios:read"))
+):
+    service = UsuariosService(db, user)
     permissoes = service.buscar_permissoes()
-    return templates.TemplateResponse(request=request, name="permissoes.html", context={"permissoes": permissoes})
+    usuarios = service.listar_usuarios()
+    return templates.TemplateResponse(
+        request=request,
+        name="permissoes.html",
+        context={
+            "usuarios": usuarios,
+            "permissoes": permissoes,
+            "usuario": user
+        }
+    )

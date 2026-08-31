@@ -26,7 +26,7 @@ async def listar_vendas(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         vendas = service.listar_vendas()
 
         return templates.TemplateResponse(
@@ -55,7 +55,7 @@ async def nova_venda(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         clientes = service.listar_clientes_ativos()
         orcamentos = service.listar_orcamentos_aprovados()
 
@@ -88,7 +88,7 @@ async def detalhar_venda(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         venda = service.buscar_por_id(venda_id)
 
         if not venda:
@@ -123,7 +123,7 @@ async def registrar_venda_avista(
 
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         venda = service.registrar_venda_avista(dados)
         db.commit()
 
@@ -152,7 +152,7 @@ async def registrar_venda_prazo(
 
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         venda = service.registrar_venda_prazo(dados)
         db.commit()
 
@@ -183,7 +183,7 @@ async def baixar_titulo(
 
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         service.baixar_titulo(titulo_id, dados)
         db.commit()
 
@@ -210,7 +210,7 @@ async def gerar_nota_fiscal(
     """
     db = SessionLocal()
     try:
-        service = VendasService(db, user)
+        service = VendasService(db)
         nf_bytes = service.gerar_nota_fiscal(venda_id)
 
         from fastapi.responses import StreamingResponse

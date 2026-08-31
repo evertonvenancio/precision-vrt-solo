@@ -7,6 +7,7 @@ Models representam apenas entidades persistidas, sem lógica de negócio.
 
 from .base import BaseModel
 from .cliente import Cliente
+from .empresa import Empresa
 from .propriedade import Propriedade
 from .talhao import Talhao
 from .projeto import Projeto
@@ -31,6 +32,7 @@ from .configuracoes import Configuracoes
 __all__ = [
     'BaseModel',
     'Cliente',
+    'Empresa',
     'Propriedade',
     'Talhao',
     'Projeto',

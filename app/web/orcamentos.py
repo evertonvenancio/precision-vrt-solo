@@ -26,7 +26,7 @@ async def listar_orcamentos(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         orcamentos = service.listar_orcamentos()
 
         return templates.TemplateResponse(
@@ -55,7 +55,7 @@ async def novo_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         clientes = service.listar_clientes_ativos()
 
         return templates.TemplateResponse(
@@ -86,7 +86,7 @@ async def detalhar_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         orcamento = service.buscar_por_id(orcamento_id)
 
         if not orcamento:
@@ -121,7 +121,7 @@ async def salvar_orcamento(
 
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         resultado = service.salvar_orcamento(dados)
 
         return RedirectResponse(
@@ -144,7 +144,7 @@ async def aprovar_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         service.aprovar_orcamento(orcamento_id, user["id"])
 
         return RedirectResponse(
@@ -167,7 +167,7 @@ async def gerar_pdf_orcamento(
     """
     db = SessionLocal()
     try:
-        service = OrcamentosService(db, user)
+        service = OrcamentosService(db)
         pdf_bytes = service.gerar_pdf(orcamento_id)
 
         from fastapi.responses import StreamingResponse
