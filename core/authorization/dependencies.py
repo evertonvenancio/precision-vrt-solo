@@ -165,13 +165,13 @@ PERMISSION_MAP = {
 # Estrutura do menu lateral para renderização dinâmica baseada em permissões
 SIDEBAR_MENU_STRUCTURE = [
     {
-        "group": "NAVEGAÇÃO",
+        "group": "DASHBOARD",
         "items": [
             {"key": "dashboard", "label": "Dashboard", "icon": "dashboard", "perm": "dashboard:read", "url": "/web/dashboard"},
         ]
     },
     {
-        "group": "RELACIONAMENTO COMERCIAL",
+        "group": "COMERCIAL",
         "items": [
             {"key": "clientes", "label": "Clientes", "icon": "users", "perm": "clientes:read", "url": "/web/clientes"},
             {"key": "orcamentos", "label": "Orçamentos", "icon": "file-text", "perm": "orcamentos:read", "url": "/web/orcamentos"},
@@ -181,7 +181,7 @@ SIDEBAR_MENU_STRUCTURE = [
         ]
     },
     {
-        "group": "OPERAÇÕES AGRONÔMICAS",
+        "group": "AGRONOMIA",
         "items": [
             {"key": "prescricao", "label": "Prescrição VRT", "icon": "map", "perm": "prescricao:read", "url": "/web/prescricao"},
             {"key": "compactacao", "label": "Compactação", "icon": "layers", "perm": "compactacao:read", "url": "/web/compactacao"},
@@ -192,24 +192,37 @@ SIDEBAR_MENU_STRUCTURE = [
         ]
     },
     {
-        "group": "CONHECIMENTO TÉCNICO",
+        "group": "CONHECIMENTO",
         "items": [
             {"key": "culturas", "label": "Culturas", "icon": "leaf", "perm": "culturas:read", "url": "/web/conhecimento/base-tecnica/culturas"},
             {"key": "metodologias", "label": "Metodologias", "icon": "book-open", "perm": "metodologias:read", "url": "/web/conhecimento/base-tecnica/metodologias"},
-            {"key": "bibliografia", "label": "Bibliografia", "icon": "book", "perm": "bibliografia:read", "url": "/web/conhecimento/base-tecnica/bibliografia"},
         ]
     },
     {
-        "group": "ADMINISTRAÇÃO & GESTÃO",
+        "group": "BIBLIOTECA",
+        "items": [
+            {"key": "bibliografia", "label": "Bibliografia & Legislação", "icon": "book", "perm": "bibliografia:read", "url": "/web/conhecimento/base-tecnica/bibliografia"},
+        ]
+    },
+    {
+        "group": "FINANCEIRO",
         "items": [
             {"key": "financeiro", "label": "Financeiro", "icon": "dollar-sign", "perm": "financeiro:read", "url": "/web/financeiro"},
+        ]
+    },
+    {
+        "group": "ADMINISTRAÇÃO",
+        "items": [
             {"key": "patrimonio", "label": "Patrimônio", "icon": "truck", "perm": "patrimonio:read", "url": "/web/patrimonio"},
-            {"key": "cadastros", "label": "Cadastros", "icon": "database", "perm": "cadastros:read", "url": "/web/cadastros"},
             {"key": "usuarios", "label": "Usuários", "icon": "user", "perm": "usuarios:read", "url": "/web/usuarios"},
             {"key": "equipes", "label": "Equipes", "icon": "users", "perm": "equipes:read", "url": "/web/equipes"},
-            {"key": "empresas", "label": "Empresas", "icon": "building", "perm": "empresas:read", "url": "/web/empresas"},
             {"key": "produtos", "label": "Produtos", "icon": "package", "perm": "produtos:read", "url": "/web/produtos"},
             {"key": "fornecedores", "label": "Fornecedores", "icon": "truck", "perm": "fornecedores:read", "url": "/web/fornecedores"},
+        ]
+    },
+    {
+        "group": "CONFIGURAÇÃO",
+        "items": [
             {"key": "configuracoes", "label": "Configurações", "icon": "settings", "perm": "configuracoes:read", "url": "/web/configuracoes"},
             {"key": "auditoria", "label": "Auditoria", "icon": "shield", "perm": "auditoria:read", "url": "/web/auditoria"},
         ]

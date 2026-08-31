@@ -24,10 +24,11 @@ from app.template_config import templates  # compartilhado - globals de RBAC
 async def culturas_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
+    artigos = service.listar(tenant_id="default", categoria=None)
     return templates.TemplateResponse(
         request=request,
         name="base_tecnica.html",
-        context={"titulo_pagina": "Culturas", "permissoes": permissoes}
+        context={"titulo_pagina": "Culturas e Exportação de Nutrientes", "artigos": artigos, "permissoes": permissoes}
     )
 
 
@@ -35,10 +36,11 @@ async def culturas_base_tecnica(request: Request, db: Session = Depends(get_db))
 async def metodologias_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
+    artigos = service.listar(tenant_id="default", categoria=None)
     return templates.TemplateResponse(
         request=request,
         name="base_tecnica.html",
-        context={"titulo_pagina": "Metodologias e Fórmulas", "permissoes": permissoes}
+        context={"titulo_pagina": "Metodologias de Cálculo", "artigos": artigos, "permissoes": permissoes}
     )
 
 
@@ -46,10 +48,11 @@ async def metodologias_base_tecnica(request: Request, db: Session = Depends(get_
 async def bibliografia_base_tecnica(request: Request, db: Session = Depends(get_db)):
     service = ConhecimentoService(db)
     permissoes = service.buscar_permissoes()
+    artigos = service.listar(tenant_id="default", categoria=None)
     return templates.TemplateResponse(
         request=request,
         name="base_tecnica.html",
-        context={"titulo_pagina": "Bibliografia e Legislação", "permissoes": permissoes}
+        context={"titulo_pagina": "Bibliografia e Referências Legais", "artigos": artigos, "permissoes": permissoes}
     )
 
 
