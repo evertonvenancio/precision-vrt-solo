@@ -1,7 +1,7 @@
 # AGENTS.md — Constituição de Governança do Agente
 
 **Projeto:** Precision VRT Solo  
-**Versão:** 1.0  
+**Versão:** 1.1  
 **Status:** 🟢 **VIGENTE** — Todo agente DEVE seguir estas regras antes de qualquer alteração
 
 ---
@@ -57,7 +57,7 @@ NÃO TOMAR DECISÃO DE ESCOPO.
 
 ## 📋 Documentos de Referência Obrigatórios
 
-Antes de executar QUALQUER tarefa, o agente DEVE ler:
+Antes de executar QUALQUER tarefa, o executor DEVE ler:
 
 | Documento | Caminho | Propósito |
 |-----------|---------|-----------|
@@ -96,9 +96,6 @@ Uma tarefa **só é considerada completa** quando **TODOS** os itens abaixo fore
 2. **Mensagem descritiva** em português ou inglês consistente
 3. **Nunca commitar:** `*.db`, `.env`, tokens, senhas, `__pycache__/`, `*.pyc`
 4. **Formato sugerido:** `[MÓDULO] Descrição clara do que mudou`
-   - `[AUTH] Corrigir sessão SQLite obsoleta no nível módulo`
-   - `[DOCS] Adicionar especificação mestre v1.0`
-   - `[DASHBOARD] Corrigir renderização do topbar`
 5. **Baseline antes de refatorações:** registrar hashes/timestamps dos arquivos alterados
 
 ---
@@ -174,12 +171,12 @@ Uma tarefa **só é considerada completa** quando **TODOS** os itens abaixo fore
 
 ## 📊 Matriz DECIDIDO × NÃO DECIDIDO
 
-| Classificação | O que significa | O que o agente faz |
+| Classificação | O que significa | O que o executor faz |
 |---------------|-----------------|---------------------|
 | 🟢 **DEFINIDO** | Pode implementar | Executa |
 | 🟡 **DEFINIDO, NÃO IMPLEMENTADO** | Requisito aprovado aguardando dev | Executa quando autorizado na fase |
 | 🔵 **RECOMENDAÇÃO** | Faz sentido, precisa aprovação | Reporta, **NÃO implementa** |
-| 🔴 **NÃO DEFINIDO** | Agente **NÃO pode decidir** | **PARA**, reporta, aguarda |
+| 🔴 **NÃO DEFINIDO** | Executor **NÃO pode decidir** | **PARA**, reporta, aguarda |
 | ⛔ **BLOQUEADO POR DEPENDÊNCIA** | Requer que outro componente exista primeiro | **NÃO implementa** até desbloqueio |
 
 ---
@@ -238,7 +235,7 @@ ERROR
 
 **Data:** YYYY-MM-DD HH:MM
 **Tarefa em execução:** [descrição]
-**Agente:** Claude Code (Hermes)
+**Executor:** Executor Técnico
 
 ### 1. Problema Identificado
 [Descrição clara do que foi encontrado]
@@ -295,4 +292,4 @@ ERROR
 ---
 
 > **Resumo em uma frase:**  
-> *O agente executa o que foi autorizado, para quando encontra algo fora do escopo, reporta com precisão cirúrgica, e aguarda. Nunca decide sozinho.*
+> *O executor executa o que foi autorizado, para quando encontra algo fora do escopo, reporta com precisão cirúrgica, e aguarda. Nunca decide sozinho.*
