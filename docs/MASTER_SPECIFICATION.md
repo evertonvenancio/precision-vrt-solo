@@ -8,7 +8,7 @@
 ---
 
 > **Regra Mãe:**  
-> **O Hermes (Claude Code) executa. Não decide escopo.**  
+> **O executor técnico executa. Não decide escopo.**  
 > Se precisar decidir, **para e pergunta**.  
 > Qualquer alteração fora dos arquivos explicitamente autorizados → **PARAR IMEDIATAMENTE**, gerar relatório técnico, aguardar autorização.
 
@@ -72,7 +72,7 @@ Precision VRT Solo (nome da evolução atual — **oficial neste repo**)
 - Coluna estrutural permanente
 - Estados: **expandido** (260px) / **recolhido** (64px)
 - Ícones **SVG** (proibido emojis)
-- Organização em grupos (conforme árvore abaixo)
+- Organização em 8 grupos (conforme árvore abaixo)
 - **Dinâmico**: construído a partir de `permissões + módulos habilitados + configuração + contexto`
 - Módulo sem acesso → **não aparece** (não apenas esconder conteúdo)
 
@@ -86,13 +86,13 @@ Precision VRT Solo (nome da evolução atual — **oficial neste repo**)
 ```
 DASHBOARD
 
-CRM
+COMERCIAL
  ├── Orçamentos
  ├── Vendas
  ├── Agenda
  └── Relatórios
 
-OPERAÇÕES AGRONÔMICAS
+AGRONOMIA
  ├── Recomendação
  ├── Prescrição VRT
  ├── Compactação
@@ -101,16 +101,19 @@ OPERAÇÕES AGRONÔMICAS
  ├── Sensoriamento
  └── Monitoramento
 
-BASE TÉCNICA
+CONHECIMENTO
  ├── Culturas
  ├── Metodologias
  └── Bibliografia
+
+BIBLIOTECA
+ └── (Estrutura de arquivos/documentos)
 
 FINANCEIRO
  ├── Financeiro
  └── Patrimônio
 
-CADASTROS
+ADMINISTRAÇÃO
  ├── Clientes
  ├── Usuários
  ├── Equipes
@@ -118,7 +121,8 @@ CADASTROS
  ├── Produtos
  └── Fornecedores
 
-CONFIGURAÇÕES
+CONFIGURAÇÃO
+ └── (Centro de Comando)
 ```
 
 ---
@@ -343,7 +347,7 @@ PADRÃO → EXCEÇÃO → JUSTIFICATIVA → AUTENTICAÇÃO → ALTERAÇÃO → A
 ## 10. Governança de Alterações (Constituição do Projeto)
 
 ### Regra de Ouro
-> **Nenhum agente de desenvolvimento pode ampliar o escopo por conta própria.**  
+> **Nenhum executor técnico pode ampliar o escopo por conta própria.**  
 > Se uma alteração exigir: outro arquivo, outro módulo, alteração de banco, API, arquitetura, contrato, migração, alteração de dados, mudança de regra → **PARAR.**
 
 ### Relatório Obrigatório ao Parar
@@ -401,12 +405,12 @@ Uma fase **só termina** quando **TODOS** forem satisfeitos:
 
 ## 13. Matriz DECIDIDO × NÃO DECIDIDO (Viva)
 
-| Classificação | Significado | Ação do Hermes |
+| Classificação | Significado | Ação do Executor |
 |---------------|-------------|----------------|
 | 🟢 **DEFINIDO** | Pode implementar | Executar |
 | 🟡 **DEFINIDO, NÃO IMPLEMENTADO** | Requisito aprovado aguardando dev | Aguardar autorização de fase |
 | 🔵 **RECOMENDAÇÃO** | Faz sentido, precisa aprovação | Reportar, não implementar |
-| 🔴 **NÃO DEFINIDO** | Hermes **não pode decidir** | Parar, reportar, aguardar |
+| 🔴 **NÃO DEFINIDO** | Executor **não pode decidir** | Parar, reportar, aguardar |
 | ⛔ **BLOQUEADO POR DEPENDÊNCIA** | Ex: Laudo depende de Prescrição final | Não implementar até desbloquear |
 
 ---
@@ -447,5 +451,4 @@ Separar em canais:
 
 ---
 
-**FIM DA ESPECIFICAÇÃO MESTRE v1.0**  
-*Este documento é a verdade contratual. Qualquer desvio requer autorização explícita por escrito.*
+**FIM DA ESPECIFICAÇÃO MESTRE v1.0**
