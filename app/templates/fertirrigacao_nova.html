@@ -1,25 +1,42 @@
 {% extends "base.html" %}
-
-{% block title %}Nova Fertirrigação{% endblock %}
+{% import "components/macros.html" as macros %}
 
 {% block content %}
-<div class="p-8">
-    <h1 class="text-2xl font-bold mb-4">Nova Fertirrigação</h1>
-    <p class="text-gray-500 dark:text-gray-400">Cálculo de recomendação de fertirrigação</p>
-    <form class="grid grid-cols-1 gap-4 max-w-2xl">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cultura</label>
-            <select class="mt-1 block w-full rounded border dark:border-gray-400">
-                <option>Soja</option>
-                <option>Milho</option>
-                <option>Trigo</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dose recomendada</label>
-            <input type="number" class="mt-1 block w-full rounded border dark:border-gray-400" placeholder="kg/ha">
-        </div>
-        <button type="submit" class="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Calcular</button>
-    </form>
+<div class="container mx-auto px-4 py-6">
+    {{ macros.header_pagina(titulo, "Cálculo de recomendação de fertirrigação.") }}
+
+    <div class="card mt-6 max-w-2xl p-6">
+        <form action="/web/fertirrigacao/processar" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Arquivo de Dados de Irrigação (.csv</label>
+                <input type="file" name="arquivo_irrigacao" accept=".csv" required
+                       class="w-full rounded border-gray-300 dark:bg-gray-700">
+           </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Arquivo de Fertilizante (opcional, .csv</label>
+                <input type="file" name="arquivo_fertilizante" accept=".csv"
+                       class="w-full rounded border-gray-300 dark:bg-gray-700">
+           </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Cultura</label>
+                <select name="cultura" class="w-full rounded border-gray-300 dark:bg-gray-700">
+                    <option value="">Selecione</option>
+                    <option value="soja">Soja</option>
+                    <option value="milho">Milho</option>
+                    <option value="trigo">Trigo</option>
+               </select>
+           </div>
+
+            <div class="pt-4 flex justify-end gap-3">
+                <a href="/web/fertirrigacao" class="px-4 py-2 text-gray-500">Cancelar</a>
+                <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-md font-bold hover:bg-green-700">
+                    Calcular Fertirrigação
+               </button>
+           </div>
+       </form>
+   </div>
 </div>
 {% endblock %}
