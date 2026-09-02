@@ -1,78 +1,113 @@
 """
-Precision VRT Solo - Rotas do Módulo Financeiro
-
-Responsabilidade exclusiva: receber requisição → chamar service → retornar response.
-Zero consulta ao banco. Zero regra de negócio.
+Precision VRT Solo - Rotas Web do Módulo Financeiro
+Integração completa com Vendas e Títulos Financeiros.
 """
-from fastapi import APIRouter, Request, Depends
-from sqlalchemy.orm import Session
 
-from db.database import get_db
+from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi.responses import HTMLResponse, RedirectResponse
+from datetime import date
+import logging
+
+from app.web.auth_dependencies import require_permission_web
 from app.services.financeiro_service import FinanceiroService
+from app.services.vendas_service import VendasService
+from db.database import SessionLocal
 
 router = APIRouter()
-from app.web.auth_dependencies import require_permission_web  # autenticação via cookie
-from app.template_config import templates  # compartilhado - globals de RBAC
+from app.template_config import templates
+
+logger = logging.getLogger(__name__)
 
 
+def _get_tenant_id(request: Request, user: dict) -> str:
+    if hasattr(request.state, "tenant_id") and request.state.tenant_id:
+        return str(request.state.tenant_id)
+    if isinstance(user, dict) and user.get("tenant_id"):
+        return str(user["tenant_id"])
+    return "default"
 
-@router.get("/")
-async def financeiro_page(
+
+@router.get("/contas-receber", response_class=HTMLResponse)
+async def listar_contas_receber(
     request: Request,
-    db: Session = Depends(get_db),
     user: dict = Depends(require_permission_web("financeiro:read"))
 ):
-    service = FinanceiroService(db, user)
-    permissoes = service.buscar_permissoes()
-    orcamentos = service.listar_orcamentos()
-    return templates.TemplateResponse(
-        request=request,
-        name="financeiro.html",
-        context={
-            "orcamentos": orcamentos,
-            "permissoes": permissoes,
-            "usuario": user
-        }
-    )
+    """Lista títulos a receber."""
+    tenant_id = _get_tenant_id(request, user)
+    db = SessionLocal()
+    try:
+        service = FinanceiroService(db, user_data=user)
+        contas = service.listar_contas_receber()
+
+        return templates.TemplateResponse(
+            request=request,
+            name="financeiro/contas_receber.html",
+            context={
+                "request": request,
+                "usuario": user,
+                "contas": contas,
+                "titulo": "Contas a Receber",
+                "hoje": date.today().isoformat(),
+                "permissoes": user.get("permissions", [])
+            }
+        )
+    finally:
+        db.close()
 
 
-@router.get("/novo-orcamento")
-async def novo_orcamento_page(request: Request, db: Session = Depends(get_db)):
-    service = FinanceiroService(db)
-    permissoes = service.buscar_permissoes()
-    clientes = service.listar_clientes_ativos()
-    return templates.TemplateResponse(request=request, name="novo_orcamento.html", context={"clientes": clientes, "permissoes": permissoes})
-
-
-@router.post("/novo-orcamento")
-async def salvar_orcamento(request: Request, db: Session = Depends(get_db)):
+@router.post("/baixar-titulo/{titulo_id}")
+async def baixar_titulo_financeiro(
+    request: Request,
+    titulo_id: str,
+    user: dict = Depends(require_permission_web("financeiro:write"))
+):
+    """Realiza a baixa de um título financeiro através do VendasService."""
     form_data = await request.form()
     dados = dict(form_data)
-    cliente_id = dados.get("cliente_id")
+    usuario_id = str(user.get("id"))
+    tenant_id = _get_tenant_id(request, user)
 
-    # Converter valores numéricos
+    db = SessionLocal()
     try:
-        dados["valor_total_bruto"] = float(dados.get("valor_total_bruto", 0))
-    except ValueError:
-        dados["valor_total_bruto"] = 0.0
+        # Reutilizando a lógica de VendasService conforme orientação
+        service = VendasService(db, tenant_id=tenant_id)
+        service.baixar_titulo(titulo_id, dados, usuario_id=usuario_id)
+        db.commit()
 
+        return RedirectResponse(
+            url="/web/financeiro/contas-receber",
+            status_code=303
+        )
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Erro ao baixar título: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        db.close()
+
+
+@router.get("/caixa", response_class=HTMLResponse)
+async def resumo_caixa(
+    request: Request,
+    user: dict = Depends(require_permission_web("financeiro:read"))
+):
+    """Resumo de caixa."""
+    tenant_id = _get_tenant_id(request, user)
+    db = SessionLocal()
     try:
-        dados["desconto_percentual"] = float(dados.get("desconto_percentual", 0))
-    except ValueError:
-        dados["desconto_percentual"] = 0.0
+        service = FinanceiroService(db, user_data=user)
+        resumo = service.obter_resumo_caixa()
 
-    service = FinanceiroService(db, user_data={"tenant_id": "default", "permissions": ["financeiro:write"], "user_id": 1})
-    resultado = service.salvar_orcamento(cliente_id, dados)
-
-    if resultado.get("success"):
-        return RedirectResponse(url="/financeiro", status_code=303)
-    else:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=400, detail=resultado.get("detail", "Erro ao salvar orçamento"))
-
-
-@router.get("/financeiro/caixa")
-async def caixa_page(request: Request, db: Session = Depends(get_db)):
-    service = FinanceiroService(db)
-    permissoes = service.buscar_permissoes()
-    return templates.TemplateResponse(request=request, name="financeiro.html", context={"permissoes": permissoes})
+        return templates.TemplateResponse(
+            request=request,
+            name="financeiro/caixa.html",
+            context={
+                "request": request,
+                "usuario": user,
+                "resumo": resumo,
+                "titulo": "Resumo de Caixa",
+                "permissoes": user.get("permissions", [])
+            }
+        )
+    finally:
+        db.close()

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as macros %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    {{ macros.header_pagina(titulo, "Saldo consolidado baseado em títulos reais.") }}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+        {{ macros.card_inicio("Total a Receber", "Total bruto dos títulos") }}
+        <h3 class="text-2xl font-bold text-blue-600">R$ {{ "{:,.2f}".format(resumo.total_receber)</h3>
+        {{ macros.card_fim() }}
+
+        {{ macros.card_inicio("Total Recebido", "Já liquidado") }}
+        <h3 class="text-2xl font-bold text-green-600">R$ {{ "{:,.2f}".format(resumo.total_recebido)</h3>
+        {{ macros.card_fim() }}
+
+        {{ macros.card_inicio("Saldo de Caixa") }}
+        <h3 class="text-2xl font-bold">R$ {{ "{:,.2f}".format(resumo.saldo_caixa)</h3>
+        {{ macros.card_fim() }}
+
+        {{ macros.card_inicio("Pendentes") }}
+        <h3 class="text-2xl font-bold text-yellow-600">{{ resumo.titulos_pendentes</h3>
+        {{ macros.card_fim() }}
+   </div>
+
+    <div class="mt-8">
+        <a href="/web/financeiro/contas-receber" class="text-blue-600 hover:text-blue-800 font-medium">
+            Ver Contas a Receber →
+       </a>
+   </div>
+</div>
+{% endblock %}

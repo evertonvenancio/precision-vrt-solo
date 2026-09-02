@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% import "components/macros.html" as macros %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    {{ macros.header_pagina(titulo, "Gestão de Contas a Receber provenientes de vendas.") }}
+
+    <div class="card mt-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead>
+                    <tr class="text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                        <th class="px-4 py-3">Cliente</th>
+                        <th class="px-4 py-3">Venda</th>
+                        <th class="px-4 py-3">Vencimento</th>
+                        <th class="px-4 py-3 text-right">Valor</th>
+                        <th class="px-4 py-3 text-right">Valor Pago</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for c in contas %}
+                    <tr class="text-sm">
+                        <td class="px-4 py-3">
+                            <span class="font-medium text-gray-900 dark:text-gray-100">{{ c.cliente_nome }}</span>
+                            <span class="block text-xs text-gray-500">{{ c.cliente_cpf_cnpj }}</span>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500">{{ c.venda_tipo }}</td>
+                        <td class="px-4 py-3 {{ 'text-red-600 font-bold' if c.esta_vencido else '' }}">
+                            {{ c.data_vencimento }}
+                        </td>
+                        <td class="px-4 py-3 text-right">R$ {{ "{:,.2f}".format(c.valor_original) }}</td>
+                        <td class="px-4 py-3 text-right text-green-600">
+                            {{ "R$ {:,.2f}".format(c.valor_liquidado) if c.valor_liquidado else "---" }}
+                        </td>
+                        <td class="px-4 py-3">
+                            {{ macros.badge_status(c.status) }}
+                        </td>
+                        <td class="px-4 py-3">
+                            {% if c.status != 'pago' %}
+                            <button @click="$dispatch('abrir-modal-baixa', {id: '{{ c.id }}', valor: '{{ c.valor_original }}'})"
+                                    class="text-blue-600 hover:text-blue-800 font-bold">
+                                Baixar
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Baixa (Reutilizando lógica similar à de Vendas) -->
+<div x-data="{ open: false, tituloId: '', valor: '0.00' }"
+     @abrir-modal-baixa.window="open = true; tituloId = $event.detail.id; valor = $event.detail.valor"
+     x-show="open"
+     class="fixed inset-0 z-50 overflow-y-auto"
+     style="display: none;">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 bg-black opacity-50"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-xl">
+            <h3 class="text-lg font-bold mb-4">Confirmar Recebimento</h3>
+            <form :action="'/web/financeiro/baixar-titulo/' + tituloId" method="POST">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Valor Recebido (R$)</label>
+                        <input type="text" name="valor_pago" :value="valor" class="w-full rounded border-gray-300 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Data do Pagamento</label>
+                        <input type="date" name="data_pagamento" value="{{ hoje }}" class="w-full rounded border-gray-300 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Método de Pagamento</label>
+                        <select name="metodo_pagamento" class="w-full rounded border-gray-300 dark:bg-gray-700">
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="pix">PIX</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="cartao">Cartão</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end gap-3">
+                    <button type="button" @click="open = false" class="px-4 py-2 text-gray-500">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md">Confirmar Baixa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
